@@ -110,7 +110,7 @@ openDB().then(allWorks).then(items=>items.forEach(addLocalCard)).catch(()=>conso
  <div class="gate-error" id="gateError">密码不正确，请重试。</div><div class="gate-warning">这是简单的前端密码入口，不适合保护机密作品。</div></div>
 </div>
 <script>
-(function(){const ACCESS_PASSWORD='cheng2026';const gate=document.getElementById('simpleGate');
+(function(){const ACCESS_PASSWORD='123456';const gate=document.getElementById('simpleGate');
  if(sessionStorage.getItem('portfolioGateUnlocked')==='yes'){gate.style.display='none';return;}
  document.getElementById('gateForm').addEventListener('submit',function(e){e.preventDefault();
  if(document.getElementById('gatePassword').value===ACCESS_PASSWORD){sessionStorage.setItem('portfolioGateUnlocked','yes');gate.style.display='none';}
