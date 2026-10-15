@@ -6,13 +6,15 @@
 
 /* 装饰背景：给资料卡与页面两侧留白增加轻盈的创作感图案 */
 body{background-image:radial-gradient(circle at 8% 18%,#ff6a0010 0 2px,transparent 3px),radial-gradient(circle at 92% 32%,#7867c018 0 2px,transparent 3px);background-size:34px 34px,42px 42px}
-.profile:before,.profile:after{content:"";position:absolute;pointer-events:none;z-index:-1;width:190px;height:190px;border-radius:42% 58% 60% 40%;border:1px solid #ff6a001a;transform:rotate(25deg)}
+.profile:before,.profile:after{content:"";position:absolute;pointer-events:none;z-index:0;width:190px;height:190px;border-radius:42% 58% 60% 40%;border:1px solid #ff6a001a;transform:rotate(25deg)}
 .profile:before{left:5%;top:18px;box-shadow:0 0 0 14px #ff6a0008,0 0 0 30px #ff6a0005}
 .profile:after{right:5%;bottom:10px;border-color:#7463bf20;box-shadow:0 0 0 14px #7463bf08,0 0 0 30px #7463bf05;transform:rotate(-20deg)}
 .wrap{position:relative}
+.wrap>*{position:relative;z-index:1}
+.profile>*{position:relative;z-index:1}.profile>div[style*="position:absolute"]{z-index:2}
 .wrap:before,.wrap:after{content:"";position:fixed;pointer-events:none;z-index:0;width:150px;height:150px;border:1px solid #ff6a0015;border-radius:50%;opacity:.8}
-.wrap:before{left:2.5vw;top:32%;box-shadow:inset 0 0 0 12px #ff6a0005,0 0 0 16px #ff6a0005}
-.wrap:after{right:2.5vw;top:52%;width:110px;height:110px;border-radius:28%;border-color:#7566bd20;transform:rotate(25deg);box-shadow:0 0 0 14px #7566bd06}
+.wrap:before{left:2.5vw;top:32%;border:2px solid #ff6a0040;box-shadow:inset 0 0 0 12px #ff6a000b,0 0 0 16px #ff6a000b}
+.wrap:after{right:2.5vw;top:52%;width:110px;height:110px;border-radius:28%;border:2px solid #7566bd40;transform:rotate(25deg);box-shadow:0 0 0 14px #7566bd0d}
 @media(max-width:900px){.wrap:before,.wrap:after{display:none}.profile:before{left:-95px}.profile:after{right:-95px}}
 
 </style></head><body><div class="wrap">
