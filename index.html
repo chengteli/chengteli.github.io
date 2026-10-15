@@ -21,7 +21,7 @@
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><div class="dialog"><h2 id="dialogTitle">私人访问尚未启用</h2><p>为保护作品，私人访问需要配置身份验证、访客审批和受保护的文件存储。当前 GitHub Pages 版本只是静态展示，不能安全地验证身份或隐藏原始作品文件。</p><button class="close" id="closeBtn">知道了</button></div></div>
 <script>
 const tabs=[...document.querySelectorAll('.tab')],works=[...document.querySelectorAll('.work')],title=document.getElementById('sectionTitle'),count=document.getElementById('count'),empty=document.getElementById('empty');
-function filter(cat){tabs.forEach(t=>t.classList.toggle('active',t.dataset.cat===cat));let n=0;works.forEach(w=>{const show=w.dataset.cat===cat;w.style.display=show?'':'none';if(show)n++});title.textContent=cat;count.textContent=n+' 件作品';empty.style.display=n?'none':'block'}
+function filter(cat){tabs.forEach(t=>t.classList.toggle('active',t.dataset.cat===cat));let n=0;document.querySelectorAll('.work').forEach(w=>{const show=w.dataset.cat===cat;w.style.display=show?'':'none';if(show)n++});title.textContent=cat;count.textContent=n+' 件作品';empty.style.display=n?'none':'block'}
 tabs.forEach(t=>t.addEventListener('click',()=>filter(t.dataset.cat)));
 const modal=document.getElementById('modal');document.getElementById('loginBtn').addEventListener('click',()=>modal.classList.add('open'));document.getElementById('closeBtn').addEventListener('click',()=>modal.classList.remove('open'));modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
 // 浏览器本地作品库：使用 IndexedDB 保存文件，不会自动上传到服务器。
