@@ -5,32 +5,26 @@
 @media(min-width:1500px){.wrap{padding-left:50px;padding-right:50px}}@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.art{aspect-ratio:1/1}.wrap{padding:16px 18px 0}}@media(max-width:520px){.wrap{padding:10px 10px 0}.profile{padding:30px 12px 24px}.avatar{width:72px;height:72px}.name{font-size:22px}.stats{gap:23px}.stat b{font-size:19px}.login{top:10px;right:10px;padding:7px 10px}.tabs{gap:3px;padding:5px}.tab{font-size:12px;padding:12px 3px}.grid{gap:10px}.work-info{padding:10px}.work-info h3{font-size:12px}.art{padding:10px}.art span{font-size:8px}}
 
 
-/* 参考海报式插画点缀：灰阶网格、抽象字形、柔和圆形与云朵；仅装饰留白，不改变主体布局 */
-body{
- background-color:#f4f4f5;
- background-image:radial-gradient(circle at 1px 1px,rgba(39,48,68,.07) .8px,transparent 1px),
- linear-gradient(90deg,transparent 49.7%,rgba(39,48,68,.035) 50%,transparent 50.3%),
- linear-gradient(transparent 49.7%,rgba(39,48,68,.035) 50%,transparent 50.3%);
- background-size:7px 7px,100px 100px,100px 100px;
-}
-.wrap{position:relative}
-.wrap:before,.wrap:after{position:fixed;pointer-events:none;z-index:0;display:block;opacity:.22;color:#252525}
+
+/* 轻量加入参考海报中的排版文字点缀，保持原网站布局不变 */
 .wrap:before{
- content:"GRID\A TYPE\A IMAGE";white-space:pre;left:1.8vw;top:23%;width:110px;height:190px;
- border:1px solid rgba(35,35,35,.16);padding:12px 8px;font-size:10px;font-weight:800;letter-spacing:2px;line-height:2.2;
- background:linear-gradient(135deg,transparent 48%,rgba(0,0,0,.04) 49%,transparent 50%);
+ content:"LAYOUT\A TYPOGRAPHY\A VISUAL\A COMMUNICATION";
+ white-space:pre;position:fixed;left:2vw;top:28%;width:112px;height:auto;
+ border:0;padding:0;background:transparent;box-shadow:none;border-radius:0;
+ color:rgba(35,38,45,.25);font-size:10px;line-height:2.1;letter-spacing:2px;font-weight:800;
+ pointer-events:none;z-index:0;display:block;opacity:1;
 }
 .wrap:after{
- content:"";right:2vw;top:48%;width:145px;height:145px;border:1px solid rgba(35,35,35,.15);border-radius:50%;
- background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.7),rgba(130,130,130,.08) 55%,transparent 70%);
- box-shadow:0 0 0 15px rgba(30,30,30,.025),0 0 0 32px rgba(30,30,30,.018);
+ content:"GRID / COLUMNS\A\A WHITE SPACE\A IS NOT EMPTY";
+ white-space:pre;position:fixed;right:2vw;top:53%;width:130px;height:auto;
+ border:0;padding:0;background:transparent;box-shadow:none;border-radius:0;
+ color:rgba(35,38,45,.23);font-size:9px;line-height:2.1;letter-spacing:1.4px;font-weight:700;
+ pointer-events:none;z-index:0;display:block;opacity:1;
 }
-.profile:before,.profile:after{content:"";position:absolute;pointer-events:none;z-index:0;width:170px;height:170px;border:1px solid rgba(35,35,35,.12);border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.5),rgba(0,0,0,.035) 70%);opacity:.7}
-.profile:before{left:7%;top:20px;box-shadow:0 0 0 12px rgba(0,0,0,.018),0 0 0 26px rgba(0,0,0,.012)}
-.profile:after{right:7%;bottom:8px;width:125px;height:125px;border-radius:42% 58% 60% 40%;transform:rotate(28deg);box-shadow:0 0 0 12px rgba(0,0,0,.018),0 0 0 26px rgba(0,0,0,.012)}
-.profile>*{position:relative;z-index:1}
-.wrap>*{position:relative;z-index:1}
-@media(max-width:900px){.wrap:before,.wrap:after{display:none}.profile:before{left:-100px}.profile:after{right:-100px}}
+.profile:before{content:"FORM  /  BALANCE";display:flex;align-items:flex-start;justify-content:flex-start;padding:10px;box-sizing:border-box;color:rgba(35,38,45,.17);font-size:9px;letter-spacing:1.4px;font-weight:700}
+.profile:after{content:"DESIGN";display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;box-sizing:border-box;color:rgba(35,38,45,.17);font-size:9px;letter-spacing:2px;font-weight:700}
+@media(max-width:900px){.wrap:before,.wrap:after{display:none}}
+
 </style>body><div class="wrap">
 <header class="profile"><div class="avatar" id="avatar" title="点击更换头像" style="cursor:pointer;overflow:hidden">陈</div><input id="avatarPicker" type="file" accept="image/*" hidden><h1 class="name" id="profileName">陈特利</h1><div class="tag" id="profileTag">3D角色 · 原画角色 · AI短剧</div><div class="meta" id="profileMeta">⌖ 佛山　·　个人创作作品集</div><div class="stats"><div class="stat"><b id="statWorks">12</b><span>作品</span></div><div class="stat"><b id="statExperience">10年</b><span>工作年限</span></div><div class="stat"><b id="statPassion">∞</b><span>创作热情</span></div></div><div style="position:absolute;right:20px;top:18px;display:flex;gap:7px"><button class="login" id="editProfileBtn" style="position:static">编辑资料</button><button class="login" id="loginBtn" style="position:static">私人访问</button></div></header>
 <nav class="tabs" id="categoryTabs" aria-label="作品分类"><button class="tab" data-cat="全部">全部作品</button><button class="tab" data-cat="3D角色">3D角色</button><button class="tab active" data-cat="原画角色">原画角色</button><button class="tab" data-cat="AI短剧">AI短剧</button><button class="tab" data-cat="场景">场景</button><button class="tab" data-cat="UI">UI</button><button class="tab add-category" id="addCategoryBtn" type="button">＋ 新建分类</button></nav>
