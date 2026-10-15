@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陈特利 · 个人作品集</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f5f7;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#2c2c2c;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:40px 24px}
+.profile{background:#fff;border-radius:16px;padding:48px 32px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#7ec8e3,#a8d8e8);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:48px;color:#fff;font-weight:600}
+.name{font-size:28px;font-weight:600;margin-bottom:12px}
+.tag{display:inline-block;background:#f0f0f2;color:#666;padding:5px 14px;border-radius:20px;font-size:13px;margin-bottom:14px}
+.meta{color:#888;font-size:14px;margin-bottom:28px}
+.stats{display:flex;justify-content:center;gap:60px;margin-bottom:32px}
+.stat b{display:block;font-size:28px;font-weight:600;color:#2c2c2c}
+.stat span{font-size:13px;color:#999}
+.btns{display:flex;justify-content:center;gap:12px}
+.btn{padding:10px 28px;border-radius:8px;font-size:14px;cursor:pointer;border:none;font-weight:500}
+.btn-primary{background:#ff5a36;color:#fff}
+.btn-gray{background:#f0f0f2;color:#666}
+.tabs{display:flex;justify-content:center;gap:24px;margin:32px 0 24px;flex-wrap:wrap}
+.tab{font-size:14px;color:#888;cursor:pointer;padding:6px 4px;border-bottom:2px solid transparent}
+.tab.active{color:#2c2c2c;font-weight:600;border-color:#ff5a36}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.work{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.work img,.work video{width:100%;display:block;aspect-ratio:3/4;object-fit:cover;background:#000}
+.work-info{padding:12px 14px}
+.work-info h3{font-size:14px;font-weight:500;margin-bottom:4px}
+.work-info span{font-size:12px;color:#999}
+.about{background:#fff;border-radius:16px;padding:32px;margin-top:24px}
+.about h2{font-size:18px;margin-bottom:12px}
+.about p{color:#666;font-size:14px;line-height:1.8}
+footer{text-align:center;color:#aaa;font-size:12px;padding:32px 0}
+@media(max-width:600px){.grid{grid-template-columns:1fr 1fr}.stats{gap:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="profile">
+    <div class="avatar">陈</div>
+    <div class="name">陈特利</div>
+    <div class="tag">3D角色 · 原画 · AI短剧</div>
+    <div class="meta">佛山 | 三维设计师 · 游戏美术</div>
+    <div class="stats">
+      <div class="stat"><b>12</b><span>作品</span></div>
+      <div class="stat"><b>5+</b><span>年经验</span></div>
+      <div class="stat"><b>∞</b><span>接单中</span></div>
+    </div>
+    <div class="btns">
+      <button class="btn btn-primary" onclick="alert('作品管理请访问在线应用')">上传作品</button>
+      <button class="btn btn-gray" onclick="alert('作品管理请访问在线应用')">创作中心</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab active">全部</div>
+    <div class="tab">3D角色</div>
+    <div class="tab">原画角色</div>
+    <div class="tab">AI短剧</div>
+    <div class="tab">场景</div>
+    <div class="tab">UI</div>
+  </div>
+  <div class="grid">
+    <div class="work">
+      <img src="https://aka.doubaocdn.com/s/NB3AeUf2Ut" alt="粉发朋克">
+      <div class="work-info"><h3>粉发朋克 · Punk Girl</h3><span>原画角色 · 三视图</span></div>
+    </div>
+    <div class="work">
+      <img src="https://aka.doubaocdn.com/s/TKWVbehFGU" alt="TICA">
+      <div class="work-info"><h3>TICA · 耳机少女</h3><span>原画角色 · 三视图</span></div>
+    </div>
+    <div class="work">
+      <video src="https://aka.doubaocdn.com/s/T5iiFqKzUP" controls></video>
+      <div class="work-info"><h3>角色动态 · 01</h3><span>AI 动态展示</span></div>
+    </div>
+    <div class="work">
+      <video src="https://aka.doubaocdn.com/s/aNpUWjdKUw" controls></video>
+      <div class="work-info"><h3>角色动态 · 02</h3><span>AI 动态展示</span></div>
+    </div>
+  </div>
+  <div class="about">
+    <h2>关于我</h2>
+    <p>游戏美术从业者，专注 3D 角色模型、角色原画与 AI 影像。从高模雕刻到镜头调度，负责把一个想法从白纸做到可动的画面。开放游戏角色外包、AI 短剧美术指导、概念原画合作。</p>
+  </div>
+  <footer>© 2026 陈特利 · 保留所有权利</footer>
+</div>
+</body>
+</html>
