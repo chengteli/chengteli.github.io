@@ -90,4 +90,30 @@ function ensureAllSampleDeleteButtons(){
 }
 ensureAllSampleDeleteButtons();
 openDB().then(allWorks).then(items=>items.forEach(addLocalCard)).catch(()=>console.warn('本地作品库不可用'));
+</script>
+<style>
+#simpleGate{position:fixed;inset:0;z-index:99999;background:#f4f4f5;display:flex;align-items:center;justify-content:center;padding:22px}
+#simpleGate .gate-card{width:min(390px,100%);background:#fff;border:1px solid #e7e8ed;border-radius:20px;padding:30px;box-shadow:0 12px 40px #27304412;text-align:center}
+#simpleGate .gate-icon{width:54px;height:54px;border-radius:16px;background:#fff1e8;color:#ff6a00;display:grid;place-items:center;margin:0 auto 16px;font-size:25px}
+#simpleGate h2{font-size:21px;margin:0 0 8px;color:#273044}
+#simpleGate p{font-size:13px;color:#858c9a;line-height:1.7;margin:0 0 18px}
+#simpleGate input{width:100%;padding:12px 14px;border:1px solid #dfe2e8;border-radius:10px;font-size:15px;outline:none}
+#simpleGate input:focus{border-color:#ff6a00}
+#simpleGate button{width:100%;margin-top:12px;padding:12px;border:0;border-radius:10px;background:#ff6a00;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
+#simpleGate .gate-error{display:none;color:#c53b36;font-size:12px;margin-top:10px}
+#simpleGate .gate-warning{font-size:11px;color:#9aa1ae;margin-top:16px}
+</style>
+<div id="simpleGate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+ <div class="gate-card"><div class="gate-icon">🔒</div><h2 id="gateTitle">私人作品集</h2>
+ <p>请输入访问密码，继续查看程特立的个人作品集。</p>
+ <form id="gateForm"><input id="gatePassword" type="password" placeholder="请输入访问密码" autocomplete="current-password" required><button type="submit">进入作品集</button></form>
+ <div class="gate-error" id="gateError">密码不正确，请重试。</div><div class="gate-warning">这是简单的前端密码入口，不适合保护机密作品。</div></div>
+</div>
+<script>
+(function(){const ACCESS_PASSWORD='cheng2026';const gate=document.getElementById('simpleGate');
+ if(sessionStorage.getItem('portfolioGateUnlocked')==='yes'){gate.style.display='none';return;}
+ document.getElementById('gateForm').addEventListener('submit',function(e){e.preventDefault();
+ if(document.getElementById('gatePassword').value===ACCESS_PASSWORD){sessionStorage.setItem('portfolioGateUnlocked','yes');gate.style.display='none';}
+ else{document.getElementById('gateError').style.display='block';}});
+})();
 </script></body></html>
