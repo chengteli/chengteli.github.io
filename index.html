@@ -50,5 +50,7 @@ document.getElementById('filePicker').addEventListener('change',async e=>{const 
 
 function attachSampleDeleteButtons(){document.querySelectorAll('#gallery>.work:not(.local-work)').forEach(card=>{if(card.querySelector('.remove-work'))return;card.style.position='relative';const btn=document.createElement('button');btn.className='remove-work';btn.textContent='删除';btn.title='从作品展示中删除';btn.addEventListener('click',()=>{if(!confirm('确定删除这件作品？'))return;const h=card.querySelector('h3')?.textContent||'';const hidden=JSON.parse(localStorage.getItem('chen-portfolio-hidden-samples')||'[]');if(!hidden.includes(h))hidden.push(h);localStorage.setItem('chen-portfolio-hidden-samples',JSON.stringify(hidden));card.remove();filter(document.querySelector('.tab.active')?.dataset.cat||'全部')});card.querySelector('.art')?.appendChild(btn)})}
 attachSampleDeleteButtons();
+// 将删除按钮固定显示在每张示例作品卡片右上角，方便直接操作。
+document.querySelectorAll('#gallery>.work:not(.local-work) .remove-work').forEach(btn=>{btn.style.display='block';btn.style.opacity='1';btn.style.background='#d9363e';btn.style.boxShadow='0 2px 8px #0003';btn.textContent='删除';});
 openDB().then(allWorks).then(items=>items.forEach(addLocalCard)).catch(()=>console.warn('本地作品库不可用'));
 </script></body></html>
