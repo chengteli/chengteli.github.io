@@ -48,6 +48,62 @@ body{
 .profile>*{position:relative;z-index:1}
 @media(max-width:900px){.wrap:before,.wrap:after{display:none}.profile:before{left:-110px}.profile:after{right:-110px}}
 
+
+/* Editorial graphic-design poster inspired theme */
+:root{--accent:#111;--ink:#111;--muted:#666;--surface:#f4f3ef;--bg:#d9d8d4}
+body{
+ background-color:#d9d8d4;
+ background-image:
+  radial-gradient(circle at 1px 1px,rgba(0,0,0,.12) .7px,transparent 1px),
+  linear-gradient(90deg,transparent 49.8%,rgba(0,0,0,.045) 50%,transparent 50.2%),
+  linear-gradient(transparent 49.8%,rgba(0,0,0,.045) 50%,transparent 50.2%);
+ background-size:5px 5px,120px 120px,120px 120px;
+ color:#111;
+}
+.wrap{max-width:1500px;padding-top:24px}
+.profile,.tabs,.work,.empty{background:#efeee9;border:1px solid rgba(0,0,0,.16);border-radius:2px;box-shadow:none}
+.profile{align-items:stretch;text-align:left;padding:28px 34px 24px;min-height:270px}
+.profile .avatar{align-self:flex-start;width:66px;height:66px;border-radius:0;background:#111;color:#f5f4ef;box-shadow:none;font-family:Georgia,serif}
+.profile .name{font-size:clamp(34px,5vw,64px);letter-spacing:-2px;line-height:.98;margin:14px 0 10px;font-weight:900;text-transform:none}
+.profile .tag{align-self:flex-start;border-radius:0;background:#111;color:#f5f4ef;padding:7px 10px;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.profile .meta{font-size:12px;color:#555;margin:12px 0 22px;letter-spacing:.4px}
+.stats{gap:0;width:min(540px,100%);border-top:1px solid #111;border-bottom:1px solid #111}
+.stat{flex:1;text-align:left;padding:10px 14px;border-right:1px solid #111}
+.stat:first-child{padding-left:0}.stat:last-child{border-right:0}
+.stat b{font-size:24px;letter-spacing:-1px}.stat span{color:#555;text-transform:uppercase;letter-spacing:1px;font-size:10px}
+.login{position:static;align-self:flex-start;border:1px solid #111;border-radius:0;background:transparent;color:#111;padding:8px 12px;letter-spacing:.5px}
+.profile>div[style*="position:absolute"]{top:20px!important;right:22px!important}
+.login:hover{background:#111;color:#f5f4ef}
+.tabs{grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:0;margin:16px 0;background:#efeee9}
+.tab{border-radius:0;border-right:1px solid rgba(0,0,0,.15);padding:14px 8px;color:#333;font-size:12px;letter-spacing:.5px}
+.tab:last-child{border-right:0}.tab:hover{background:#e2e0d9;color:#111}
+.tab.active{background:#111;color:#fff;font-weight:700}
+.tab.add-category{border:0;border-right:1px dashed #aaa}
+.notice{background:#e7e4dc;border:1px solid #aaa;border-radius:0;color:#555}
+.upload-note,.section-head span{color:#666}
+.upload-main{background:#111;color:#f4f3ef;border-radius:0;box-shadow:none;letter-spacing:.6px}
+.section-head{border-bottom:1px solid #111;padding:0 0 10px;margin-bottom:16px}
+.section-head h2{font-size:20px;font-weight:900;letter-spacing:-.5px}
+.grid{gap:12px}
+.work{border-radius:0;box-shadow:none;position:relative}
+.work:hover{transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,0,0,.12)}
+.art{border-radius:0;filter:grayscale(.7) contrast(1.06);background-color:#c8c6c0}
+.art:before{border-radius:50% 50% 5% 5%;background:linear-gradient(90deg,#d7d5cf,#888680 50%,#eceae4);box-shadow:0 0 0 1px #111,0 0 0 8px #ffffff35;filter:grayscale(1)}
+.art:after{background:rgba(0,0,0,.25);box-shadow:0 22px rgba(0,0,0,.10),0 44px rgba(0,0,0,.10),0 66px rgba(0,0,0,.10)}
+.art span{color:#111;background:#f4f3ef;padding:4px 6px;text-shadow:none;letter-spacing:1.4px;font-weight:700}
+.tone2,.tone3,.tone4,.tone5,.tone6,.tone7,.tone8{filter:grayscale(.75)}
+.work-info{background:#efeee9;border-top:1px solid #111;padding:13px}
+.work-info h3{font-size:14px;font-weight:800;letter-spacing:-.2px}
+.work-info span{color:#666}
+.remove-work{border-radius:0;background:#111!important;color:#fff!important;box-shadow:none!important}
+.upload-controls input,.upload-controls select{border-radius:0;border-color:#999;background:#efeee9}
+.dialog{border-radius:0;border:1px solid #111;background:#efeee9}
+footer{color:#555;letter-spacing:1px}
+.wrap:before{content:"GRID / TYPE / IMAGE";position:fixed;left:2vw;top:18%;width:120px;height:auto;border:0;border-radius:0;background:transparent;clip-path:none;box-shadow:none;color:#111;opacity:.55;font-size:10px;letter-spacing:2px;font-weight:800;writing-mode:vertical-rl}
+.wrap:after{content:"VISUAL\A COMMUNICATION";white-space:pre;position:fixed;right:2vw;top:56%;width:90px;height:90px;border:1px solid rgba(0,0,0,.2);border-radius:50%;background:transparent;clip-path:none;box-shadow:0 0 0 12px rgba(0,0,0,.025),0 0 0 26px rgba(0,0,0,.018);color:#111;display:grid;place-items:center;text-align:center;font-size:9px;letter-spacing:1px;opacity:.5}
+@media(max-width:900px){.wrap:before,.wrap:after{display:none}.profile{padding:26px 20px}.profile .name{font-size:38px}.profile>div[style*="position:absolute"]{top:10px!important;right:10px!important}.stat{padding:9px 8px}.stat b{font-size:19px}}
+@media(max-width:520px){.profile{padding:25px 14px 20px}.profile .name{font-size:34px}.profile .avatar{width:56px;height:56px}.stats{gap:0}.stat{padding:8px 6px}.tab{font-size:11px}.grid{gap:8px}.work-info h3{font-size:12px}}
+
 </style></head><body><div class="wrap">
 <header class="profile"><div class="avatar" id="avatar" title="点击更换头像" style="cursor:pointer;overflow:hidden">陈</div><input id="avatarPicker" type="file" accept="image/*" hidden><h1 class="name" id="profileName">陈特利</h1><div class="tag" id="profileTag">3D角色 · 原画角色 · AI短剧</div><div class="meta" id="profileMeta">⌖ 佛山　·　个人创作作品集</div><div class="stats"><div class="stat"><b id="statWorks">12</b><span>作品</span></div><div class="stat"><b id="statExperience">10年</b><span>工作年限</span></div><div class="stat"><b id="statPassion">∞</b><span>创作热情</span></div></div><div style="position:absolute;right:20px;top:18px;display:flex;gap:7px"><button class="login" id="editProfileBtn" style="position:static">编辑资料</button><button class="login" id="loginBtn" style="position:static">私人访问</button></div></header>
 <nav class="tabs" id="categoryTabs" aria-label="作品分类"><button class="tab" data-cat="全部">全部作品</button><button class="tab" data-cat="3D角色">3D角色</button><button class="tab active" data-cat="原画角色">原画角色</button><button class="tab" data-cat="AI短剧">AI短剧</button><button class="tab" data-cat="场景">场景</button><button class="tab" data-cat="UI">UI</button><button class="tab add-category" id="addCategoryBtn" type="button">＋ 新建分类</button></nav>
