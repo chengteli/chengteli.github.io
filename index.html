@@ -502,9 +502,9 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     try {
       const u = new URL(value);
       if (u.hostname === 'youtu.be') return u.pathname.split('/').filter(Boolean)[0] || null;
-      if (!/(^|\\.)youtube\\.com$/.test(u.hostname)) return null;
+      if (u.hostname !== 'youtube.com' && !u.hostname.endsWith('.youtube.com')) return null;
       if (u.pathname === '/watch') return u.searchParams.get('v');
-      const match = u.pathname.match(/^\\/(?:embed|shorts|live)\\/([^/?]+)/);
+      const match = u.pathname.match(/^\/(?:embed|shorts|live)\/([^/?]+)/);
       return match ? match[1] : null;
     } catch (_) { return null; }
   }
