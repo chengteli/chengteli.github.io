@@ -254,9 +254,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
        playOverlay=document.createElement('button');playOverlay.type='button';playOverlay.className='video-play-overlay';playOverlay.setAttribute('aria-label','播放视频');
        playOverlay.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg>';
        playOverlay.addEventListener('click',e=>{e.stopPropagation();if(media.paused){media.muted=false;media.play().then(()=>{playOverlay.hidden=true}).catch(()=>{playOverlay.hidden=false})}else{media.pause();playOverlay.hidden=false}});
-       media.addEventListener('play',()=>{playOverlay.hidden=true});
-       media.addEventListener('pause',()=>{playOverlay.hidden=false});
-       media.addEventListener('ended',()=>{playOverlay.hidden=false});
+       media.addEventListener('play',()=>{playOverlay.hidden=true;playOverlay.style.display='none'});
+       media.addEventListener('pause',()=>{playOverlay.hidden=false;playOverlay.style.display='flex'});
+       media.addEventListener('ended',()=>{playOverlay.hidden=false;playOverlay.style.display='flex'});
        visual.appendChild(playOverlay);playOverlay.style.display='flex';playOverlay.hidden=false;
      }
      const word=document.createElement('span');word.className='visual-word';word.textContent=isVideo?'AI VIDEO / UPLOADED':'IMAGE / UPLOADED';
