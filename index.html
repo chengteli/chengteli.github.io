@@ -1,201 +1,243 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f5f5"><title>程特立 · 个人作品集</title>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#11110f">
+<meta name="description" content="程特立的个人创作档案，探索角色艺术、世界构建与 AI 影像。">
+<title>程特立 — Visual Artist & AI Filmmaker</title>
 <style>
-:root{--accent:#ff6a00;--ink:#273044;--muted:#8b93a3;--surface:#fff;--bg:#f4f4f5}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}.wrap{max-width:1440px;margin:auto;padding:28px 4.2vw 0}.profile{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:center;background:var(--surface);border-radius:20px;padding:34px 20px 30px;box-shadow:0 2px 14px #20243406}.avatar{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#ffb28a,#f56e55 52%,#c95c89);color:#fff;font-size:33px;font-weight:700;box-shadow:0 5px 18px #ed765633}.name{font-size:25px;font-weight:700;margin:13px 0 7px;letter-spacing:.2px}.tag{font-size:13px;color:#687184;background:#f2f3f5;padding:7px 15px;border-radius:24px}.meta{font-size:13px;color:var(--muted);margin:12px 0 24px}.stats{display:flex;gap:clamp(24px,5vw,66px)}.stat{text-align:center;min-width:52px}.stat b{display:block;font-size:21px;line-height:1.3;font-weight:700}.stat span{display:block;margin-top:5px;color:var(--muted);font-size:12px}.login{position:absolute;right:20px;top:18px;border:1px solid #e6e7eb;background:white;border-radius:24px;padding:8px 14px;color:#505b6f;font-size:12px;cursor:pointer}.login:hover{border-color:var(--accent);color:var(--accent)}.tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;background:white;border-radius:15px;padding:7px;margin:20px 0 17px}.tab{border:0;border-radius:10px;background:transparent;padding:13px 8px;color:#6c7485;font-size:14px;cursor:pointer;transition:.18s}.tab:hover{background:#fff3eb;color:var(--accent)}.tab.active{background:var(--accent);color:#fff;font-weight:600}.tab.add-category{border:1px dashed #d7dbe2;color:#7d8594}.tab.add-category:hover{border-color:var(--accent);color:var(--accent)}.section-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 14px}.section-head h2{font-size:16px;margin:0;font-weight:650}.section-head span{font-size:12px;color:#9aa1ae}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.work{min-width:0;overflow:hidden;background:white;border-radius:13px;box-shadow:0 2px 10px #1e293b06;transition:transform .2s,box-shadow .2s}.work:hover{transform:translateY(-3px);box-shadow:0 8px 24px #1e293b12}.art{position:relative;aspect-ratio:3/3.5;overflow:hidden;display:flex;align-items:flex-end;padding:15px;background:linear-gradient(145deg,#20213a,#6d4779 48%,#e8a4a0)}.art:before{content:"";position:absolute;width:50%;height:68%;left:25%;top:12%;border-radius:48% 48% 25% 25%;background:linear-gradient(135deg,#f7d8d0,#b7a0b6 45%,#282b45);box-shadow:0 0 0 10px #fff1,0 0 0 22px #fff1;transform:rotate(-5deg)}.art:after{content:"";position:absolute;width:80%;height:1px;left:10%;top:20%;background:#ffffff55;box-shadow:0 22px #ffffff20,0 44px #ffffff20,0 66px #ffffff20}.art span{position:relative;z-index:1;color:#fff;font-size:10px;letter-spacing:1.8px;text-shadow:0 2px 6px #0007}.tone2{background:linear-gradient(145deg,#191c2e,#554b8e,#d99dc5)}.tone2:before{background:linear-gradient(135deg,#ead7c5,#b66d81 48%,#23243e);transform:rotate(7deg)}.tone3{background:linear-gradient(145deg,#d6c1a5,#766e73,#f1d7a8)}.tone3:before{background:linear-gradient(135deg,#f7dfc6,#b5a5a0,#514d57)}.tone4{background:linear-gradient(145deg,#a6c7c6,#e6c9a7,#587d70)}.tone4:before{background:linear-gradient(135deg,#f7d8bd,#5e8c83,#314d4c)}.tone5{background:linear-gradient(145deg,#111a35,#3e5f9a,#ec6e72)}.tone5:before{background:linear-gradient(135deg,#f8d2bd,#bc6874,#202d50)}.tone6{background:linear-gradient(145deg,#e9c6a0,#f4e8d7,#8fa9a3)}.tone6:before{background:linear-gradient(135deg,#fff0d9,#a8bcb1,#d9a783)}.tone7{background:linear-gradient(145deg,#151d2d,#3d5578,#a6c5ca)}.tone7:before{background:linear-gradient(135deg,#e9d6c3,#647c9d,#252c44)}.tone8{background:linear-gradient(145deg,#281d45,#874f9a,#e98b88)}.tone8:before{background:linear-gradient(135deg,#f8d8d2,#c57ba3,#34304c)}.work-info{padding:12px 13px 14px}.work-info h3{font-size:13px;font-weight:600;margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.work-info span{font-size:11px;color:#9aa1ae}.empty{display:none;text-align:center;padding:44px;color:#9aa1ae;background:#fff;border-radius:14px}footer{text-align:center;color:#a0a5b0;font-size:12px;padding:28px 0 32px}.modal{display:none;position:fixed;inset:0;z-index:5;background:#171b2a80;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.dialog{width:min(420px,100%);background:#fff;border-radius:18px;padding:25px;box-shadow:0 20px 80px #0002}.dialog h2{font-size:19px;margin:0 0 10px}.dialog p{font-size:13px;line-height:1.7;color:#687184;margin:0 0 18px}.dialog button{border:0;border-radius:9px;padding:10px 15px;cursor:pointer}.close{background:#f1f2f4;color:#586174}.uploadbar{display:flex;justify-content:flex-end;align-items:center;margin:0 0 12px}.upload-main{border:0;border-radius:10px;background:var(--accent);color:#fff;padding:11px 17px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px #ff6a002b}.upload-main:hover{filter:brightness(.96)}.upload-note{font-size:11px;color:#9aa1ae;margin-right:auto}.upload-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.upload-controls input,.upload-controls select{max-width:100%;border:1px solid #e4e6eb;border-radius:9px;padding:10px;background:#fff;color:#394357}.local-work{position:relative}.remove-work{position:absolute;right:9px;top:9px;border:0;border-radius:8px;background:#202333b8;color:#fff;padding:7px 9px;font-size:11px;cursor:pointer;z-index:2}.uploaded-media{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#eee}.notice{font-size:12px;color:#8b5a28;background:#fff7ed;border:1px solid #ffead5;border-radius:10px;padding:11px 14px;margin-bottom:14px}
-@media(min-width:1500px){.wrap{padding-left:50px;padding-right:50px}}@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.art{aspect-ratio:1/1}.wrap{padding:16px 18px 0}}@media(max-width:520px){.wrap{padding:10px 10px 0}.profile{padding:30px 12px 24px}.avatar{width:72px;height:72px}.name{font-size:22px}.stats{gap:23px}.stat b{font-size:19px}.login{top:10px;right:10px;padding:7px 10px}.tabs{gap:3px;padding:5px}.tab{font-size:12px;padding:12px 3px}.grid{gap:10px}.work-info{padding:10px}.work-info h3{font-size:12px}.art{padding:10px}.art span{font-size:8px}}
-
-
-
-/* 轻量加入参考海报中的排版文字点缀，保持原网站布局不变 */
-.wrap:before{
- content:"LAYOUT\A TYPOGRAPHY\A VISUAL\A COMMUNICATION";
- white-space:pre;position:fixed;left:2vw;top:28%;width:112px;height:auto;
- border:0;padding:0;background:transparent;box-shadow:none;border-radius:0;
- color:rgba(35,38,45,.25);font-size:10px;line-height:2.1;letter-spacing:2px;font-weight:800;
- pointer-events:none;z-index:0;display:block;opacity:1;
-}
-.wrap:after{
- content:"GRID / COLUMNS\A\A WHITE SPACE\A IS NOT EMPTY";
- white-space:pre;position:fixed;right:2vw;top:53%;width:130px;height:auto;
- border:0;padding:0;background:transparent;box-shadow:none;border-radius:0;
- color:rgba(35,38,45,.23);font-size:9px;line-height:2.1;letter-spacing:1.4px;font-weight:700;
- pointer-events:none;z-index:0;display:block;opacity:1;
-}
-.profile:before{content:"FORM  /  BALANCE";display:flex;align-items:flex-start;justify-content:flex-start;padding:10px;box-sizing:border-box;color:rgba(35,38,45,.17);font-size:9px;letter-spacing:1.4px;font-weight:700}
-.profile:after{content:"DESIGN";display:flex;align-items:flex-end;justify-content:flex-end;padding:10px;box-sizing:border-box;color:rgba(35,38,45,.17);font-size:9px;letter-spacing:2px;font-weight:700}
-@media(max-width:900px){.wrap:before,.wrap:after{display:none}}
-
-</style></head><body><div class="wrap">
-<header class="profile"><div class="avatar" id="avatar" title="点击更换头像" style="cursor:pointer;overflow:hidden">程</div><input id="avatarPicker" type="file" accept="image/*" hidden><h1 class="name" id="profileName">程特立</h1><div class="tag" id="profileTag">3D角色 · 原画角色 · AI短剧</div><div class="meta" id="profileMeta">⌖ 佛山　·　个人创作作品集</div><div class="stats"><div class="stat"><b id="statWorks">12</b><span>作品</span></div><div class="stat"><b id="statExperience">10年</b><span>工作年限</span></div><div class="stat"><b id="statPassion">∞</b><span>创作热情</span></div></div><div style="position:absolute;right:20px;top:18px;display:flex;gap:7px"><button class="login" id="editProfileBtn" style="position:static">编辑资料</button><button class="login" id="loginBtn" style="position:static">私人访问</button></div></header>
-<nav class="tabs" id="categoryTabs" aria-label="作品分类"><button class="tab" data-cat="全部">全部作品</button><button class="tab" data-cat="3D角色">3D角色</button><button class="tab active" data-cat="原画角色">原画角色</button><button class="tab" data-cat="AI短剧">AI短剧</button><button class="tab" data-cat="场景">场景</button><button class="tab" data-cat="UI">UI</button><button class="tab add-category" id="addCategoryBtn" type="button">＋ 新建分类</button></nav>
-<div class="notice">展示版说明：当前页面用于预览视觉与分类交互。私人登录、访客审批和私有作品存储尚未接入，请勿将敏感作品上传到此页面。</div>
-<div class="uploadbar"><span class="upload-note">上传后保存在当前浏览器中</span><button class="upload-main" id="uploadBtn">＋ 上传作品</button><input id="filePicker" type="file" accept="image/*,video/*" multiple hidden></div><div class="section-head"><h2 id="sectionTitle">原画角色</h2><span id="count">2 件作品</span></div>
-<main class="grid" id="gallery">
-<article class="work" data-cat="原画角色"><div class="art"><span>CHARACTER DESIGN</span></div><div class="work-info"><h3>角色设定 · Punk Girl</h3><span>原画角色 · 概念展示</span></div></article>
-<article class="work" data-cat="原画角色"><div class="art tone2"><span>MODEL SHEET</span></div><div class="work-info"><h3>潮流少女 · 角色三视图</h3><span>原画角色 · 概念展示</span></div></article>
-<article class="work" data-cat="3D角色"><div class="art tone3"><span>3D CHARACTER</span></div><div class="work-info"><h3>角色动态 · 01</h3><span>3D角色 · 概念展示</span></div></article>
-<article class="work" data-cat="3D角色"><div class="art tone4"><span>CREATOR STUDIO</span></div><div class="work-info"><h3>角色动态 · 02</h3><span>3D角色 · 概念展示</span></div></article>
-<article class="work" data-cat="AI短剧"><div class="art tone5"><span>AI FILM</span></div><div class="work-info"><h3>AI短剧 · 概念分镜</h3><span>AI短剧 · 概念展示</span></div></article>
-<article class="work" data-cat="场景"><div class="art tone6"><span>WORLD BUILDING</span></div><div class="work-info"><h3>场景设计 · 日光工作室</h3><span>场景 · 概念展示</span></div></article>
-<article class="work" data-cat="UI"><div class="art tone7"><span>UI / UX</span></div><div class="work-info"><h3>创作工具 · UI界面</h3><span>UI · 概念展示</span></div></article>
-<article class="work" data-cat="AI短剧"><div class="art tone8"><span>STORYBOARD</span></div><div class="work-info"><h3>高燃动画 · 分镜测试</h3><span>AI短剧 · 概念展示</span></div></article>
-</main><div class="empty" id="empty">该分类暂时没有展示作品。</div></div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><div class="dialog"><h2 id="dialogTitle">私人访问尚未启用</h2><p>为保护作品，私人访问需要配置身份验证、访客审批和受保护的文件存储。当前 GitHub Pages 版本只是静态展示，不能安全地验证身份或隐藏原始作品文件。</p><button class="close" id="closeBtn">知道了</button></div></div>
-<script>
-const tabs=[...document.querySelectorAll('.tab')],works=[...document.querySelectorAll('.work')],title=document.getElementById('sectionTitle'),count=document.getElementById('count'),empty=document.getElementById('empty');
-function currentTabs(){return [...document.querySelectorAll('.tab[data-cat]')]}function filter(cat){currentTabs().forEach(t=>t.classList.toggle('active',t.dataset.cat===cat));let n=0;document.querySelectorAll('.work').forEach(w=>{const show=cat==='全部'||w.dataset.cat===cat;w.style.display=show?'':'none';if(show)n++});title.textContent=cat==='全部'?'全部作品':cat;count.textContent=n+' 件作品';empty.style.display=n?'none':'block'}
-currentTabs().forEach(t=>t.addEventListener('click',()=>filter(t.dataset.cat)));document.getElementById('addCategoryBtn').addEventListener('click',()=>{const name=prompt('输入你想创建的分类名称（可自由命名）');if(!name||!name.trim())return;const cat=name.trim();if(currentTabs().some(t=>t.dataset.cat===cat)){alert('这个分类已经存在');return}const b=document.createElement('button');b.className='tab';b.dataset.cat=cat;b.textContent=cat;b.addEventListener('click',()=>filter(cat));document.getElementById('addCategoryBtn').before(b);filter(cat);});
-
-// 个人资料与头像保存在当前浏览器；不同设备不会自动同步。
-const profileFields=['profileName','profileTag','profileMeta','statExperience','statPassion'];
-function loadProfile(){try{const p=JSON.parse(localStorage.getItem('chen-portfolio-profile')||'{}');profileFields.forEach(id=>{if(p[id] && id!=='statExperience')document.getElementById(id).textContent=p[id]});const a=localStorage.getItem('chen-portfolio-avatar');if(a)document.getElementById('avatar').innerHTML='<img alt="个人头像" src="'+a+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">'}catch(e){}}
-function saveProfile(){const p={};profileFields.forEach(id=>p[id]=document.getElementById(id).textContent);localStorage.setItem('chen-portfolio-profile',JSON.stringify(p))}
-document.getElementById('editProfileBtn').addEventListener('click',()=>{const name=prompt('修改你的名字 / 昵称：',document.getElementById('profileName').textContent);if(name===null)return;const tag=prompt('修改个人标签（例如：3D角色 · 原画 · AI短剧）：',document.getElementById('profileTag').textContent);if(tag===null)return;const meta=prompt('修改所在地和简介：',document.getElementById('profileMeta').textContent);if(meta===null)return;const exp=prompt('修改工作年限（例如：10年、8年、自由职业）：',document.getElementById('statExperience').textContent);if(exp===null)return;const passion=prompt('修改第三项展示内容（例如：∞、持续创作）：',document.getElementById('statPassion').textContent);if(passion===null)return;document.getElementById('profileName').textContent=name.trim()||'未命名';document.getElementById('profileTag').textContent=tag.trim();document.getElementById('profileMeta').textContent=meta.trim();document.getElementById('statExperience').textContent=exp.trim();document.getElementById('statPassion').textContent=passion.trim();saveProfile();});
-document.getElementById('avatar').addEventListener('click',()=>document.getElementById('avatarPicker').click());
-document.getElementById('avatarPicker').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const picker=e.target;const avatar=document.getElementById('avatar');if(!f.type.startsWith('image/')){alert('请选择 JPG、PNG 或 WebP 图片');picker.value='';return}if(f.size>20*1024*1024){alert('原始图片超过 20MB，请先选择较小的图片');picker.value='';return}const previous=avatar.innerHTML;avatar.style.opacity='.6';try{const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('图片读取失败'));reader.readAsDataURL(f)});const img=await new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(new Error('无法解析这张图片，请换一张 JPG 或 PNG'));im.src=data});const max=512,scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));const ctx=canvas.getContext('2d');if(!ctx)throw new Error('浏览器不支持图片处理');ctx.drawImage(img,0,0,canvas.width,canvas.height);let compressed=canvas.toDataURL('image/jpeg',.82);if(compressed.length>900000)compressed=canvas.toDataURL('image/jpeg',.65);try{localStorage.setItem('chen-portfolio-avatar',compressed)}catch(storageError){throw new Error('浏览器本地空间不足。请清理网站数据后重试，或换用较小的图片。')}avatar.innerHTML='<img alt="个人头像" src="'+compressed+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';}catch(err){avatar.innerHTML=previous;alert('头像上传失败：'+(err&&err.message?err.message:'未知错误'))}finally{avatar.style.opacity='1';picker.value=''}});
-loadProfile();
-function loadHiddenSamples(){try{const hidden=JSON.parse(localStorage.getItem('chen-portfolio-hidden-samples')||'[]');document.querySelectorAll('#gallery>.work:not(.local-work)').forEach(card=>{const h=card.querySelector('h3')?.textContent||'';if(hidden.includes(h))card.remove()})}catch(e){}}
-loadHiddenSamples();
-const modal=document.getElementById('modal');document.getElementById('loginBtn').addEventListener('click',()=>modal.classList.add('open'));document.getElementById('closeBtn').addEventListener('click',()=>modal.classList.remove('open'));modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
-// 浏览器本地作品库：使用 IndexedDB 保存文件，不会自动上传到服务器。
-const DB_NAME='chen-portfolio-local',STORE='works';let db;
-function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>req.result.createObjectStore(STORE,{keyPath:'id'});req.onsuccess=()=>{db=req.result;resolve(db)};req.onerror=()=>reject(req.error)})}
-function transact(mode,fn){return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,mode),store=tx.objectStore(STORE);let result;try{result=fn(store)}catch(e){reject(e);return}tx.oncomplete=()=>resolve(result);tx.onerror=()=>reject(tx.error)})}
-function allWorks(){return new Promise((resolve,reject)=>{const req=db.transaction(STORE,'readonly').objectStore(STORE).getAll();req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
-function addLocalCard(item){const card=document.createElement('article');card.className='work local-work';card.dataset.cat=item.category;card.dataset.localId=item.id;
-const media=item.file.type.startsWith('video/')?document.createElement('video'):document.createElement('img');media.className='uploaded-media';media.src=URL.createObjectURL(item.file);if(media.tagName==='VIDEO'){media.controls=true;media.preload='metadata'}else media.alt=item.title;
-const remove=document.createElement('button');remove.className='remove-work';remove.textContent='删除';remove.title='仅从此浏览器删除';remove.onclick=async()=>{if(!confirm('从当前浏览器作品库删除这件作品？'))return;await transact('readwrite',s=>s.delete(item.id));card.remove();refreshCount();};
-const art=document.createElement('div');art.appendChild(media);art.appendChild(remove);const info=document.createElement('div');info.className='work-info';const h=document.createElement('h3');h.textContent=item.title;const small=document.createElement('span');small.textContent=item.category+' · 本地保存';info.append(h,small);card.append(art,info);document.getElementById('gallery').prepend(card);card.style.display=item.category===document.querySelector('.tab.active').dataset.cat?'':'none'}
-function refreshCount(){const cat=document.querySelector('.tab.active').dataset.cat;const n=[...works,...document.querySelectorAll('.local-work')].filter(w=>w.dataset.cat===cat&&w.style.display!=='none').length;count.textContent=n+' 件作品';empty.style.display=n?'none':'block'}
-document.getElementById('uploadBtn').addEventListener('click',()=>document.getElementById('filePicker').click());
-document.getElementById('filePicker').addEventListener('change',async e=>{const files=[...e.target.files];if(!files.length)return;let category=prompt('输入作品分类名称。可选择已有分类，也可以自由新建，例如：角色设计、商业项目、练习作品。','原画角色');if(!category||!category.trim()){e.target.value='';return}category=category.trim();if(!currentTabs().some(t=>t.dataset.cat===category)){const b=document.createElement('button');b.className='tab';b.dataset.cat=category;b.textContent=category;b.addEventListener('click',()=>filter(category));document.getElementById('addCategoryBtn').before(b)}try{for(const file of files){if(!file.type.startsWith('image/')&&!file.type.startsWith('video/'))continue;if(file.size>80*1024*1024){alert(file.name+' 超过 80MB，已跳过');continue}const title=prompt('给作品命名（自由填写）：',file.name.replace(/\\.[^.]+$/,''))||file.name;const item={id:crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random(),title,category,file,created:Date.now()};await transact('readwrite',s=>s.put(item));addLocalCard(item)}filter(document.querySelector('.tab.active').dataset.cat);alert('作品已保存到当前浏览器。注意：其他设备和访客看不到这些上传内容。')}catch(err){alert('保存失败，可能是浏览器存储空间不足。请尝试较小的文件。')}e.target.value=''});
-
-function attachSampleDeleteButtons(){document.querySelectorAll('#gallery>.work:not(.local-work)').forEach(card=>{if(card.querySelector('.remove-work'))return;card.style.position='relative';const btn=document.createElement('button');btn.className='remove-work';btn.textContent='删除';btn.title='从作品展示中删除';btn.addEventListener('click',()=>{if(!confirm('确定删除这件作品？'))return;const h=card.querySelector('h3')?.textContent||'';const hidden=JSON.parse(localStorage.getItem('chen-portfolio-hidden-samples')||'[]');if(!hidden.includes(h))hidden.push(h);localStorage.setItem('chen-portfolio-hidden-samples',JSON.stringify(hidden));card.remove();filter(document.querySelector('.tab.active')?.dataset.cat||'全部')});card.querySelector('.art')?.appendChild(btn)})}
-attachSampleDeleteButtons();
-// 统一给所有现有示例作品卡片显示删除按钮；页面加载时再次检查，避免遗漏。
-function ensureAllSampleDeleteButtons(){
- document.querySelectorAll('#gallery>.work:not(.local-work)').forEach(card=>{
-  if(card.querySelector('.remove-work'))return;
-  const btn=document.createElement('button');btn.className='remove-work';btn.textContent='删除';btn.title='删除这件示例作品';
-  btn.addEventListener('click',()=>{
-   if(!confirm('确定从作品集移除这件作品吗？'))return;
-   const h=card.querySelector('h3')?.textContent||'';
-   const hidden=JSON.parse(localStorage.getItem('chen-portfolio-hidden-samples')||'[]');
-   if(!hidden.includes(h))hidden.push(h);
-   localStorage.setItem('chen-portfolio-hidden-samples',JSON.stringify(hidden));
-   card.remove();filter(document.querySelector('.tab.active')?.dataset.cat||'全部');
-  });
-  const art=card.querySelector('.art');if(art){art.appendChild(btn);btn.style.display='block';btn.style.opacity='1';btn.style.background='#d9363e';btn.style.zIndex='4';}
- });
-}
-ensureAllSampleDeleteButtons();
-openDB().then(allWorks).then(items=>items.forEach(addLocalCard)).catch(()=>console.warn('本地作品库不可用'));
-</script>
-<style>
-#simpleGate{position:fixed;inset:0;z-index:99999;background:#f4f4f5;display:flex;align-items:center;justify-content:center;padding:22px}
-#simpleGate .gate-card{width:min(390px,100%);background:#fff;border:1px solid #e7e8ed;border-radius:20px;padding:30px;box-shadow:0 12px 40px #27304412;text-align:center}
-#simpleGate .gate-icon{width:54px;height:54px;border-radius:16px;background:#fff1e8;color:#ff6a00;display:grid;place-items:center;margin:0 auto 16px;font-size:25px}
-#simpleGate h2{font-size:21px;margin:0 0 8px;color:#273044}
-#simpleGate p{font-size:13px;color:#858c9a;line-height:1.7;margin:0 0 18px}
-#simpleGate input{width:100%;padding:12px 14px;border:1px solid #dfe2e8;border-radius:10px;font-size:15px;outline:none}
-#simpleGate input:focus{border-color:#ff6a00}
-#simpleGate button{width:100%;margin-top:12px;padding:12px;border:0;border-radius:10px;background:#ff6a00;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
-#simpleGate .gate-error{display:none;color:#c53b36;font-size:12px;margin-top:10px}
-#simpleGate .gate-warning{font-size:11px;color:#9aa1ae;margin-top:16px}
+:root{color-scheme:dark;--bg:#11110f;--panel:#191916;--panel2:#20201c;--ink:#f0eee7;--muted:#a09e93;--line:#393830;--hot:#ff7047;--acid:#d7f36a;--serif:Georgia,"Noto Serif SC","Songti SC",serif;--sans:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:5;opacity:.09;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E")}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offset:4px}
+.shell{width:min(1380px,100% - 64px);margin:auto}
+.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:relative;z-index:10}
+.brand{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:700;letter-spacing:.06em}
+.brand-mark{display:grid;place-items:center;width:30px;height:30px;border-radius:50% 50% 45% 55%;background:var(--hot);color:#19130f;font-size:14px;font-weight:900;transform:rotate(-9deg)}
+.brand small{display:block;font-size:9px;color:var(--muted);font-weight:500;letter-spacing:.16em;margin-top:1px}
+.nav{display:flex;align-items:center;gap:30px;color:#bcb9ae;font-size:12px}
+.nav a{transition:color .35s cubic-bezier(.25,.1,.25,1)}
+.nav a:hover{color:var(--acid)}
+.nav .contact-link{border:1px solid #5a594e;border-radius:99px;padding:10px 15px;color:var(--ink)}
+.menu-btn{display:none;background:none;color:var(--ink);border:1px solid var(--line);border-radius:50%;width:42px;height:42px}
+.hero{position:relative;min-height:570px;padding:90px 0 66px;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:35px}
+.eyebrow{display:flex;align-items:center;gap:11px;color:var(--acid);font-size:10px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+.eyebrow:before{content:"";width:28px;height:1px;background:var(--acid)}
+.hero h1{font-size:clamp(58px,8vw,116px);letter-spacing:-.085em;line-height:.94;margin:28px 0 25px;font-weight:650}
+.hero h1 span{display:block;font-family:var(--serif);font-weight:400;font-style:italic;letter-spacing:-.075em;color:var(--hot);padding-left:9%}
+.hero-copy{max-width:420px;color:#b1afa4;font-size:14px;line-height:1.95}
+.hero-actions{display:flex;align-items:center;gap:22px;margin-top:31px}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:47px;padding:0 19px;border-radius:99px;background:var(--acid);color:#191b10;font-size:12px;font-weight:800;transition:transform .4s cubic-bezier(.34,1.56,.64,1),background .3s}
+.pill:hover{transform:translateY(-3px) rotate(-1deg);background:#e6ff87}
+.text-link{font-size:12px;color:#c9c6ba;border-bottom:1px solid #77766b;padding:6px 0}
+.text-link:hover{color:var(--hot);border-color:var(--hot)}
+.arrow{font-size:17px;line-height:0}
+.hero-art{position:relative;min-height:410px;isolation:isolate}
+.hero-art:before{content:"";position:absolute;width:360px;height:360px;max-width:90%;aspect-ratio:1;top:8%;left:13%;border-radius:44% 56% 48% 52% / 55% 38% 62% 45%;background:conic-gradient(from 230deg at 52% 48%,#303a2b,#a2b26a 16%,#d3c5a1 29%,#f27b4f 46%,#743f34 63%,#24271e 80%,#84905a);filter:saturate(.86);transform:rotate(-18deg);animation:float 9s ease-in-out infinite}
+.hero-art:after{content:"";position:absolute;width:260px;height:360px;top:7%;left:27%;border-radius:48% 48% 22% 22%;background:radial-gradient(ellipse at 48% 20%,#e8d3b3 0 7%,transparent 7.5%),radial-gradient(ellipse at 47% 29%,#24211e 0 17%,transparent 17.5%),linear-gradient(115deg,transparent 0 15%,#d0a47c 16% 31%,#37382c 32% 54%,#161715 55%);clip-path:polygon(33% 0,69% 3%,88% 20%,80% 38%,97% 100%,3% 100%,19% 40%,12% 21%);opacity:.88;mix-blend-mode:screen}
+.hero-stamp{position:absolute;right:0;top:12%;z-index:2;width:100px;height:100px;border:1px solid #777b56;border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--acid);font-size:9px;line-height:1.5;letter-spacing:.13em;transform:rotate(12deg)}
+.hero-caption{position:absolute;left:4%;bottom:2%;z-index:2;font-family:var(--serif);font-style:italic;color:#b8b39e;font-size:14px}
+.hero-index{position:absolute;right:3%;bottom:0;font-size:10px;color:#77766d;letter-spacing:.18em}
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:17px 0;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;color:#9b998e;font-size:9px;letter-spacing:.18em;text-transform:uppercase}
+.marquee b{color:var(--hot);font-weight:500}
+.section{padding:94px 0}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:34px}
+.kicker{color:var(--hot);font-size:10px;letter-spacing:.18em;font-weight:700}
+.section h2{font-size:clamp(35px,5vw,60px);letter-spacing:-.065em;line-height:1.03;margin:12px 0 0;font-weight:600}
+.section h2 em{font-family:var(--serif);font-weight:400;color:#9da46e}
+.section-intro{max-width:300px;color:var(--muted);font-size:12px;line-height:1.9;margin:0 0 4px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 25px}
+.filter{border:1px solid #3b3a32;color:#bcb9ae;background:transparent;border-radius:99px;padding:10px 15px;font-size:11px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.filter:hover,.filter.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
+.project{grid-column:span 4;min-width:0;cursor:pointer;animation:rise .65s both;animation-delay:var(--delay,0ms)}
+.project:nth-child(1),.project:nth-child(4){grid-column:span 7}
+.project:nth-child(2),.project:nth-child(5){grid-column:span 5}
+.project[hidden]{display:none}
+.project-visual{position:relative;overflow:hidden;isolation:isolate;min-height:300px;aspect-ratio:1.08;border-radius:4px;background:#282a24;border:1px solid #34352d}
+.project:nth-child(1) .project-visual,.project:nth-child(4) .project-visual{aspect-ratio:1.52}
+.project-visual:before,.project-visual:after{content:"";position:absolute;inset:0;pointer-events:none}
+.project-visual:after{background:linear-gradient(180deg,transparent 45%,#0c0d0bd9);opacity:.7}
+.project-visual .orb{position:absolute;width:56%;aspect-ratio:1;border-radius:50%;left:21%;top:9%;background:radial-gradient(circle at 34% 28%,#f5d4a5,#c76c4b 24%,#4c3030 52%,#171a19 70%);box-shadow:0 0 90px #d57a4b25;transition:transform .7s cubic-bezier(.25,.1,.25,1)}
+.project:hover .orb{transform:scale(1.07) rotate(7deg)}
+.visual-01{background:radial-gradient(ellipse at 75% 12%,#6a6e4e,transparent 44%),linear-gradient(140deg,#2b332a,#131512 67%)}
+.visual-01 .orb{width:43%;left:28%;top:5%;height:92%;aspect-ratio:auto;border-radius:48% 48% 17% 17%;background:radial-gradient(ellipse at 49% 19%,#edc9a1 0 9%,transparent 9.5%),radial-gradient(ellipse at 50% 29%,#26241f 0 20%,transparent 21%),linear-gradient(105deg,#20221d,#b7a17b 39%,#353a2d 61%,#151714);clip-path:polygon(28% 0,70% 0,91% 19%,76% 40%,100% 100%,0 100%,24% 40%,9% 19%)}
+.visual-01:before{background:repeating-linear-gradient(105deg,transparent 0 45px,#d3c8a019 46px 47px)}
+.visual-02{background:linear-gradient(145deg,#b7a28d,#6b4b42 49%,#25221f)}
+.visual-02 .orb{width:64%;left:18%;top:14%;background:radial-gradient(circle at 35% 29%,#f7dfbd 0 10%,transparent 10.5%),radial-gradient(ellipse at 51% 40%,#9d5646 0 24%,transparent 25%),linear-gradient(135deg,#e2b99a,#8d4d40 55%,#28201f);border-radius:45% 55% 55% 45%}
+.visual-03{background:linear-gradient(150deg,#1d2632,#566c75 54%,#b7b7a0)}
+.visual-03 .orb{background:radial-gradient(circle at 35% 30%,#e4d2b4 0 8%,transparent 8.5%),linear-gradient(110deg,#c1d0c4,#657f86 42%,#1c303a 43%);border-radius:42% 42% 13% 13%;clip-path:polygon(28% 0,72% 0,90% 30%,100% 100%,0 100%,10% 30%)}
+.visual-04{background:radial-gradient(ellipse at 50% 20%,#6e4b7c,transparent 50%),linear-gradient(135deg,#191625,#49314e 58%,#df8b70)}
+.visual-04 .orb{background:radial-gradient(circle at 50% 25%,#f3d4c0 0 9%,transparent 9.5%),linear-gradient(120deg,#c98b8e,#443148 49%,#1b1928);border-radius:46% 46% 12% 12%;clip-path:polygon(25% 0,75% 0,91% 24%,75% 44%,100% 100%,0 100%,25% 44%,9% 24%)}
+.visual-05{background:linear-gradient(160deg,#d0b28d,#716b5c 47%,#29372f)}
+.visual-05 .orb{background:radial-gradient(circle at 50% 26%,#f0d3ac 0 12%,transparent 12.5%),linear-gradient(100deg,#b7b99c,#d9c29b 50%,#485b4b);border-radius:40% 40% 4% 4%;clip-path:polygon(33% 0,67% 0,81% 24%,100% 100%,0 100%,19% 24%)}
+.visual-06{background:linear-gradient(140deg,#171b20,#3a4d4d 55%,#b5b9a0)}
+.visual-06 .orb{width:72%;left:14%;top:20%;aspect-ratio:1.3;border-radius:0;background:repeating-linear-gradient(90deg,#182126 0 2px,transparent 2px 31px),linear-gradient(145deg,#9db8ad,#2c5355 56%,#192729);transform:perspective(240px) rotateY(-18deg)}
+.project:hover .visual-06 .orb{transform:perspective(240px) rotateY(-8deg) scale(1.05)}
+.visual-07{background:linear-gradient(135deg,#332b22,#9a603f 47%,#d3ad7e)}
+.visual-07 .orb{background:radial-gradient(circle at 36% 25%,#fff0cb 0 8%,transparent 8.5%),linear-gradient(135deg,#f0cf9d,#a75d38 48%,#342720)}
+.visual-08{background:linear-gradient(135deg,#17171e,#41445c 50%,#bd8a7b)}
+.visual-08 .orb{background:radial-gradient(circle at 48% 23%,#f1d3bd 0 10%,transparent 10.5%),linear-gradient(130deg,#e3a9a0,#66526c 48%,#25212d);border-radius:50% 50% 8% 8%;clip-path:polygon(27% 0,73% 0,90% 24%,100% 100%,0 100%,10% 24%)}
+.visual-word{position:absolute;z-index:2;left:18px;top:17px;font-size:9px;letter-spacing:.18em;color:#f4e9d4}
+.visual-number{position:absolute;z-index:2;right:17px;top:15px;color:#ffffffa6;font-size:10px;letter-spacing:.1em}
+.visual-bottom{position:absolute;z-index:2;left:18px;right:18px;bottom:16px;display:flex;align-items:end;justify-content:space-between;gap:12px}
+.visual-bottom strong{font-family:var(--serif);font-size:clamp(22px,3vw,38px);font-weight:400;line-height:1.05;letter-spacing:-.04em}
+.visual-bottom span{font-size:9px;letter-spacing:.12em;color:#e5d9c4}
+.project-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:15px 1px 3px}
+.project-meta h3{margin:0;font-size:14px;font-weight:600}
+.project-meta p{margin:5px 0 0;color:var(--muted);font-size:11px}
+.project-meta .open{width:29px;height:29px;flex:0 0 29px;display:grid;place-items:center;border:1px solid #4b4a40;border-radius:50%;color:var(--acid);transition:background .3s,color .3s,transform .4s cubic-bezier(.34,1.56,.64,1)}
+.project:hover .open{background:var(--acid);color:#17180f;transform:rotate(45deg)}
+.about{display:grid;grid-template-columns:.75fr 1.25fr;gap:10%;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:72px 0}
+.about-label{font-size:10px;letter-spacing:.2em;color:var(--acid)}
+.about h2{font-size:clamp(34px,4.7vw,62px);letter-spacing:-.07em;line-height:1.08;margin:18px 0 0}
+.about h2 em{font-family:var(--serif);font-weight:400;color:var(--hot)}
+.about-copy{max-width:590px;color:#b9b6ab;font-size:14px;line-height:2}
+.about-copy p{margin:0 0 18px}
+.capabilities{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.capabilities span{border:1px solid #45443a;border-radius:3px;padding:8px 11px;color:#d3d0c4;font-size:10px}
+.contact{padding:92px 0 74px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:25px}
+.contact .kicker{color:var(--acid)}
+.contact h2{font-size:clamp(45px,8vw,100px);line-height:.95;letter-spacing:-.085em;margin:16px 0 0}
+.contact h2 em{font-family:var(--serif);font-weight:400;color:var(--hot)}
+.contact-right{display:flex;flex-direction:column;align-items:flex-start;gap:17px;max-width:240px}
+.contact-right p{color:var(--muted);font-size:12px;line-height:1.8;margin:0}
+.footer{border-top:1px solid var(--line);padding:20px 0 26px;display:flex;justify-content:space-between;gap:16px;color:#77766c;font-size:10px;letter-spacing:.06em}
+.footer span:last-child{color:#aaa79b}
+.dialog-backdrop{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:22px;background:#080908d9;backdrop-filter:blur(12px)}
+.dialog-backdrop.open{display:flex}
+.dialog{width:min(680px,100%);max-height:min(82vh,800px);overflow:auto;background:#1c1c18;border:1px solid #45443a;padding:clamp(22px,5vw,42px);position:relative;animation:dialogIn .4s cubic-bezier(.34,1.56,.64,1)}
+.dialog-close{position:absolute;top:14px;right:14px;width:40px;height:40px;border:1px solid #4a493e;background:transparent;color:var(--ink);border-radius:50%;cursor:pointer}
+.dialog .kicker{margin-top:12px}
+.dialog h2{font-size:clamp(34px,6vw,55px);letter-spacing:-.06em;line-height:1.05;margin:13px 0}
+.dialog p{color:#b7b4a9;font-size:13px;line-height:1.9}
+.dialog-note{margin-top:22px;padding-top:15px;border-top:1px solid var(--line);color:var(--acid);font-size:10px;letter-spacing:.13em}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.25,.1,.25,1),transform .7s cubic-bezier(.25,.1,.25,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes float{0%,100%{transform:rotate(-18deg) translateY(0)}50%{transform:rotate(-13deg) translateY(-12px)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dialogIn{from{opacity:0;transform:translateY(15px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:900px){.shell{width:calc(100% - 40px)}.hero{min-height:520px;grid-template-columns:1fr .8fr;padding:68px 0 55px}.hero-art{min-height:330px}.hero-art:before{width:300px}.hero-art:after{height:300px;width:210px}.hero-stamp{width:78px;height:78px;font-size:8px}.project-grid{gap:15px}.project:nth-child(n){grid-column:span 6}.project-visual,.project:nth-child(n) .project-visual{aspect-ratio:1.08;min-height:250px}.about{gap:7%}}
+@media(max-width:620px){.shell{width:calc(100% - 32px)}.topbar{height:65px}.nav{display:none;position:absolute;top:64px;left:0;right:0;padding:20px;background:#171714;border:1px solid var(--line);flex-direction:column;align-items:stretch;gap:16px}.nav.open{display:flex}.nav .contact-link{text-align:center}.menu-btn{display:block}.hero{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:65px 0 35px;min-height:0}.hero h1{font-size:clamp(62px,17vw,94px);margin:25px 0 20px}.hero-copy{max-width:390px}.hero-art{min-height:300px;width:100%;margin-top:20px}.hero-art:before{width:265px;left:16%;top:2%}.hero-art:after{width:190px;height:300px;left:30%;top:0}.hero-stamp{right:3%;top:4%}.hero-caption{left:2%;bottom:0}.hero-index{right:2%;bottom:0}.marquee{justify-content:flex-start;gap:14px 20px;font-size:8px}.section{padding:68px 0}.section-head{display:block;margin-bottom:25px}.section-intro{margin-top:17px;max-width:390px}.filters{gap:6px}.filter{padding:9px 12px}.project-grid{grid-template-columns:1fr;gap:25px}.project:nth-child(n){grid-column:span 1}.project-visual,.project:nth-child(n) .project-visual{aspect-ratio:1.16;min-height:250px}.project:nth-child(1) .project-visual,.project:nth-child(4) .project-visual{aspect-ratio:1.2}.project:nth-child(n) .visual-bottom strong{font-size:31px}.about{grid-template-columns:1fr;gap:27px;padding:50px 0}.about h2{max-width:430px}.about-copy{font-size:13px}.contact{grid-template-columns:1fr;gap:28px;padding:68px 0 52px}.contact-right{max-width:360px}.footer{flex-direction:column;gap:7px}.dialog{padding:26px 22px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
 </style>
-<div id="simpleGate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
- <div class="gate-card"><div class="gate-icon">🔒</div><h2 id="gateTitle">私人作品集</h2>
- <p>请输入访问密码，继续查看程特立的个人作品集。</p>
- <form id="gateForm"><input id="gatePassword" type="password" placeholder="请输入访问密码" autocomplete="current-password" required><button type="submit">进入作品集</button></form>
- <div class="gate-error" id="gateError">密码不正确，请重试。</div><div class="gate-warning">这是简单的前端密码入口，不适合保护机密作品。</div></div>
+</head>
+<body>
+<header class="shell topbar">
+  <a class="brand" href="#top" aria-label="回到首页"><span class="brand-mark">程</span><span>CHENG TELI<small>VISUAL ARTIST / AI FILMMAKER</small></span></a>
+  <nav class="nav" id="nav" aria-label="主导航"><a href="#work">精选作品</a><a href="#about">关于我</a><a href="#contact" class="contact-link">联系合作 ↗</a></nav>
+  <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false">☰</button>
+</header>
+<main id="top">
+<section class="shell hero">
+  <div class="hero-content">
+    <div class="eyebrow">Independent creative practice · Foshan</div>
+    <h1>造梦，<span>成像。</span></h1>
+    <p class="hero-copy">我是程特立，专注角色艺术、视觉概念与 AI 影像创作。把脑海里的情绪、人物与世界，变成值得停留的画面。</p>
+    <div class="hero-actions"><a class="pill" href="#work">探索作品 <span class="arrow">↘</span></a><a class="text-link" href="#about">认识创作者</a></div>
+  </div>
+  <div class="hero-art" aria-label="抽象角色艺术视觉" role="img"><div class="hero-stamp">IMAGINE<br>· MAKE ·<br>REPEAT</div><div class="hero-caption">A world of my own / 001</div><div class="hero-index">CT—26 / VISUAL DIARY</div></div>
+</section>
+<div class="shell marquee"><span>Character design</span><b>✳</b><span>World building</span><b>✳</b><span>AI filmmaking</span><b>✳</b><span>Visual storytelling</span><b>✳</b><span>Made with curiosity</span></div>
+<section class="shell section" id="work">
+  <div class="section-head reveal"><div><div class="kicker">01 / SELECTED WORK</div><h2>作品，<em>即世界。</em></h2></div><p class="section-intro">从角色的一次凝视，到一个完整的想象宇宙。这里收录不同方向的创作探索。</p></div>
+  <div class="filters reveal" role="group" aria-label="筛选作品">
+    <button class="filter active" data-filter="all" aria-pressed="true">全部探索 · 08</button><button class="filter" data-filter="character" aria-pressed="false">角色设计</button><button class="filter" data-filter="film" aria-pressed="false">AI 影像</button><button class="filter" data-filter="world" aria-pressed="false">场景与视觉</button>
+  </div>
+  <div class="project-grid" id="projectGrid">
+    <article class="project reveal" style="--delay:40ms" data-category="character" tabindex="0" role="button" aria-label="查看项目：游侠，角色概念">
+      <div class="project-visual visual-01"><span class="visual-word">CHARACTER STUDY / 01</span><span class="visual-number">CT—001</span><span class="orb"></span><div class="visual-bottom"><strong>游侠<br>WANDERER</strong><span>CHARACTER / 2026</span></div></div>
+      <div class="project-meta"><div><h3>角色概念 · 游侠</h3><p>轮廓、材质与人物气质的探索</p></div><span class="open">↗</span></div>
+    </article>
+    <article class="project reveal" style="--delay:100ms" data-category="character" tabindex="0" role="button" aria-label="查看项目：赤色回响，角色概念">
+      <div class="project-visual visual-02"><span class="visual-word">PORTRAIT / 02</span><span class="visual-number">CT—002</span><span class="orb"></span><div class="visual-bottom"><strong>赤色回响</strong><span>PORTRAIT STUDY</span></div></div>
+      <div class="project-meta"><div><h3>人物设定 · 赤色回响</h3><p>以色彩构建人物的内在情绪</p></div><span class="open">↗</span></div>
+    </article>
+    <article class="project reveal" style="--delay:160ms" data-category="film" tabindex="0" role="button" aria-label="查看项目：失重之城，AI影像">
+      <div class="project-visual visual-03"><span class="visual-word">AI FILM / 03</span><span class="visual-number">CT—003</span><span class="orb"></span><div class="visual-bottom"><strong>失重之城</strong><span>MOTION / STORY</span></div></div>
+      <div class="project-meta"><div><h3>AI 影像 · 失重之城</h3><p>镜头节奏与超现实空间实验</p></div><span class="open">↗</span></div>
+    </article>
+    <article class="project reveal" style="--delay:60ms" data-category="film" tabindex="0" role="button" aria-label="查看项目：最后一位守夜人，动画分镜">
+      <div class="project-visual visual-04"><span class="visual-word">STORYBOARD / 04</span><span class="visual-number">CT—004</span><span class="orb"></span><div class="visual-bottom"><strong>最后一位<br>守夜人</strong><span>SEQUENCE DESIGN</span></div></div>
+      <div class="project-meta"><div><h3>动画分镜 · 最后一位守夜人</h3><p>动作设计、光影与叙事张力</p></div><span class="open">↗</span></div>
+    </article>
+    <article class="project reveal" style="--delay:120ms" data-category="world" tabindex="0" role="button" aria-label="查看项目：雾隐山谷，场景设计">
+      <div class="project-visual visual-05"><span class="visual-word">WORLD BUILDING / 05</span><span class="visual-number">CT—005</span><span class="orb"></span><div class="visual-bottom"><strong>雾隐山谷</strong><span>ENVIRONMENT</span></div></div>
+      <div class="project-meta"><div><h3>场景概念 · 雾隐山谷</h3><p>自然形态与东方幻想空间</p></div><span class="open">↗</span></div>
+    </article>
+    <article class="project reveal" style="--delay:180ms" data-category="world" tabindex="0" role="button" aria-label="查看项目：静默界面，视觉系统">
+      <div class="project-visual visual-06"><span class="visual-word">VISUAL SYSTEM / 06</span><span class="visual-number">CT—006</span><span class="orb"></span><div class="visual-bottom"><strong>静默界面</strong><span>FORM / FUNCTION</span></div></div>
+      <div class="project-meta"><div><h3>视觉系统 · 静默界面</h3><p>秩序、网格与数字体验</p></div><span class="open">↗</span></div>
+    </article>
+    <article class="project reveal" style="--delay:80ms" data-category="character" tabindex="0" role="button" aria-label="查看项目：金色年代，角色造型">
+      <div class="project-visual visual-07"><span class="visual-word">COSTUME STUDY / 07</span><span class="visual-number">CT—007</span><span class="orb"></span><div class="visual-bottom"><strong>金色年代</strong><span>SHAPE / TEXTURE</span></div></div>
+      <div class="project-meta"><div><h3>造型研究 · 金色年代</h3><p>服装语言与材质搭配练习</p></div><span class="open">↗</span></div>
+    </article>
+    <article class="project reveal" style="--delay:140ms" data-category="film" tabindex="0" role="button" aria-label="查看项目：梦境档案，影像实验">
+      <div class="project-visual visual-08"><span class="visual-word">MOTION EXPERIMENT / 08</span><span class="visual-number">CT—008</span><span class="orb"></span><div class="visual-bottom"><strong>梦境档案</strong><span>AI / VISUAL POEM</span></div></div>
+      <div class="project-meta"><div><h3>影像实验 · 梦境档案</h3><p>用动态画面记录模糊的梦</p></div><span class="open">↗</span></div>
+    </article>
+  </div>
+</section>
+<section class="shell about reveal" id="about">
+  <div><div class="about-label">02 / THE CREATOR</div><h2>保持好奇，<br>持续<em>创造。</em></h2></div>
+  <div class="about-copy"><p>你好，我是程特立，一名持续探索视觉表达的创作者。我关注人物为什么动人、一个场景如何讲故事，以及新工具怎样把想象带到现实。</p><p>我的创作围绕角色设计、概念视觉与 AI 短片展开。比起追逐单一风格，我更在意作品有没有自己的气质，以及每个画面是否服务于一个真实的想法。</p><div class="capabilities"><span>角色概念</span><span>3D 视觉探索</span><span>AI 视频创作</span><span>分镜与叙事</span><span>视觉设计</span></div></div>
+</section>
+<section class="shell contact reveal" id="contact">
+  <div><div class="kicker">03 / LET'S MAKE SOMETHING</div><h2>有想法？<br><em>一起实现。</em></h2></div>
+  <div class="contact-right"><p>欢迎交流创作、视觉项目或 AI 影像合作。让好奇心成为下一个项目的起点。</p><a class="pill" href="mailto:hello@example.com" id="emailLink">聊聊你的想法 <span class="arrow">↗</span></a><span style="font-size:10px;color:#79786e">邮箱请替换为你的真实联系方式</span></div>
+</section>
+</main>
+<footer class="shell footer"><span>© 2026 CHENG TELI / PERSONAL PORTFOLIO</span><span>Built around curiosity. Made with intention.</span></footer>
+<div class="dialog-backdrop" id="projectDialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+  <div class="dialog"><button class="dialog-close" id="dialogClose" aria-label="关闭项目详情">×</button><div class="kicker" id="dialogKicker">PROJECT / 01</div><h2 id="dialogTitle">项目名称</h2><p id="dialogText">项目说明</p><div class="dialog-note">CONCEPT PREVIEW · 请替换为你的真实项目图与介绍</div></div>
 </div>
 <script>
-(function(){const ACCESS_PASSWORD='123456';const gate=document.getElementById('simpleGate');
- if(sessionStorage.getItem('portfolioGateUnlocked')==='yes'){gate.style.display='none';return;}
- document.getElementById('gateForm').addEventListener('submit',function(e){e.preventDefault();
- if(document.getElementById('gatePassword').value===ACCESS_PASSWORD){sessionStorage.setItem('portfolioGateUnlocked','yes');gate.style.display='none';}
- else{document.getElementById('gateError').style.display='block';}});
+(function(){
+ const filterButtons=[...document.querySelectorAll('.filter')];
+ const projects=[...document.querySelectorAll('.project')];
+ filterButtons.forEach(button=>button.addEventListener('click',()=>{
+   const filter=button.dataset.filter;
+   filterButtons.forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
+   projects.forEach(project=>{project.hidden=filter!=='all'&&project.dataset.category!==filter});
+ }));
+ const nav=document.getElementById('nav'),menu=document.getElementById('menuBtn');
+ menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'×':'☰'});
+ nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰'}));
+ const data={
+  '游侠':{kicker:'CHARACTER STUDY / 01',title:'游侠 · 角色概念',text:'围绕孤独感与探索欲展开的人物概念练习。通过剪影、层次材质与克制的色彩，塑造角色的第一印象。当前视觉为页面内的概念占位图，可在正式发布前替换成完整作品。'},
+  '赤色回响':{kicker:'PORTRAIT / 02',title:'赤色回响 · 人物设定',text:'以暖色和柔硬对比探索人物气质，重点关注面部情绪、造型语言与画面重心。当前视觉为概念占位图。'},
+  '失重之城':{kicker:'AI FILM / 03',title:'失重之城 · AI 影像',text:'一组关于漂浮城市与失重空间的影像实验构想。正式作品可在这里展示短片、制作流程、关键帧与镜头拆解。当前视觉为概念占位图。'},
+  '最后一位':{kicker:'STORYBOARD / 04',title:'最后一位守夜人 · 动画分镜',text:'围绕动作节奏、光影变化和场景关系展开的叙事分镜方向。可继续补充故事梗概、分镜序列与最终视频。当前视觉为概念占位图。'},
+  '雾隐山谷':{kicker:'WORLD BUILDING / 05',title:'雾隐山谷 · 场景概念',text:'以自然地貌、雾气和东方幻想为灵感的环境设计方向。可在此展示气氛图、色彩脚本与场景细节。当前视觉为概念占位图。'},
+  '静默界面':{kicker:'VISUAL SYSTEM / 06',title:'静默界面 · 视觉系统',text:'探索数字界面中的秩序、留白与视觉层级。当前视觉为概念占位图，后续可替换为真实 UI 项目或设计过程。'},
+  '金色年代':{kicker:'COSTUME STUDY / 07',title:'金色年代 · 造型研究',text:'围绕复古色彩、服装轮廓和材质组合展开的造型研究。当前视觉为概念占位图。'},
+  '梦境档案':{kicker:'MOTION EXPERIMENT / 08',title:'梦境档案 · 影像实验',text:'以模糊记忆和梦境片段为主题的视觉诗实验方向。可在此加入动态影像、生成工具和创作笔记。当前视觉为概念占位图。'}
+ };
+ const dialog=document.getElementById('projectDialog'),close=document.getElementById('dialogClose');
+ function openProject(project){
+   const title=project.querySelector('.project-meta h3').textContent;
+   const key=Object.keys(data).find(k=>title.includes(k))||'游侠';const item=data[key];
+   document.getElementById('dialogKicker').textContent=item.kicker;
+   document.getElementById('dialogTitle').textContent=item.title;
+   document.getElementById('dialogText').textContent=item.text;
+   dialog.classList.add('open');document.body.style.overflow='hidden';close.focus();
+ }
+ function closeProject(){dialog.classList.remove('open');document.body.style.overflow=''}
+ projects.forEach(project=>{project.addEventListener('click',()=>openProject(project));project.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openProject(project)}})});
+ close.addEventListener('click',closeProject);dialog.addEventListener('click',e=>{if(e.target===dialog)closeProject()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰'}});
+ const revealItems=[...document.querySelectorAll('.reveal')];
+ if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12});
+  revealItems.forEach(item=>observer.observe(item));
+ }else revealItems.forEach(item=>item.classList.add('visible'));
 })();
 </script>
-<style id="portfolio-polish">
-:root{--accent:#ef6b35;--ink:#20252b;--muted:#747b84;--surface:#fffdf9;--bg:#f2f0eb;--line:#e6e0d6}
-html{scroll-behavior:smooth;scroll-padding-top:24px}
-body{background:var(--bg);color:var(--ink);font-family:Inter,"Helvetica Neue",Arial,"Microsoft YaHei",sans-serif;font-size:15px;line-height:1.55}
-.wrap{position:relative;z-index:1;max-width:1280px;padding:34px 5vw 0}
-.wrap:before{content:"PORTFOLIO / 2026";position:absolute;left:5vw;top:8px;display:block;width:auto;color:#85847e;font-size:10px;line-height:1.2;letter-spacing:2px;font-weight:700;white-space:normal;opacity:.9}
-.wrap:after{content:"SELECTED WORKS";position:absolute;right:5vw;top:8px;display:block;width:auto;color:#85847e;font-size:10px;line-height:1.2;letter-spacing:2px;font-weight:700;white-space:normal;opacity:.9}
-.profile{display:grid;grid-template-columns:116px minmax(0,1fr);grid-template-rows:auto auto auto auto;align-items:center;justify-items:start;column-gap:25px;row-gap:7px;min-height:245px;padding:34px 34px 30px;margin-top:16px;border:1px solid #e9e2d7;border-radius:18px;background:var(--surface);box-shadow:0 8px 28px #29271d08;overflow:hidden}
-.profile:before{content:"CREATIVE PRACTICE";position:absolute;top:22px;left:auto;right:28px;display:block;padding:0;color:#b3aa9c;font-size:10px;letter-spacing:2px;font-weight:700}
-.profile:after{content:"";display:none}
-.avatar{grid-column:1;grid-row:1/5;width:104px;height:104px;border-radius:24px;background:linear-gradient(145deg,#ffbe94,#ef6b35 60%,#b94731);box-shadow:0 8px 24px #ef6b3529;font-size:37px}
-.name{grid-column:2;grid-row:1;margin:0;font-size:clamp(28px,3vw,40px);font-weight:750;letter-spacing:-1.2px;line-height:1.15}
-.tag{grid-column:2;grid-row:2;background:#f6e9df;color:#8d4c31;border:1px solid #f1d9c8;border-radius:5px;padding:5px 10px;font-size:12px;letter-spacing:.2px}
-.meta{grid-column:2;grid-row:3;margin:2px 0 5px;font-size:13px;color:#85817a}
-.stats{grid-column:2;grid-row:4;gap:clamp(24px,4vw,56px)}
-.stat{text-align:left;min-width:55px}
-.stat b{font-size:21px;color:#24282d}
-.stat span{font-size:11px;letter-spacing:.6px;color:#8b8a84}
-.login{border-radius:7px;padding:9px 13px;border-color:#e8ded2;background:#fffdf9;color:#4b4c4b;font-size:12px;min-height:38px}
-.login:hover{border-color:var(--accent);background:#fff4ec}
-.tabs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#d4c8ba transparent;align-items:center;background:transparent;border-radius:0;padding:0 0 10px;margin:28px 0 20px}
-.tab{flex:0 0 auto;border:1px solid transparent;border-radius:7px;padding:11px 17px;color:#6f706d;font-size:13px;white-space:nowrap;min-height:44px}
-.tab:hover{background:#fff7f0;color:var(--accent)}
-.tab.active{background:#262a2f;color:#fff;border-color:#262a2f}
-.tab.add-category{border:1px dashed #c9c1b6;color:#76736c;background:transparent}
-.notice{border:1px solid #ecd6c4;background:#fff8f1;color:#85553a;border-radius:9px;padding:12px 15px;font-size:12px;line-height:1.7}
-.uploadbar{align-items:center;margin:8px 0 18px;gap:12px}
-.upload-note{font-size:12px;color:#8b8982}
-.upload-main{border-radius:7px;background:var(--accent);box-shadow:none;min-height:44px;padding:12px 17px}
-.upload-main:hover{filter:brightness(.94);transform:translateY(-1px)}
-.section-head{margin:0 1px 16px;padding-bottom:13px;border-bottom:1px solid #dfd9cf}
-.section-head h2{font-size:19px;font-weight:700;letter-spacing:-.4px}
-.section-head span{font-size:12px;color:#89867f}
-.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-.work{border:1px solid #e9e3d9;border-radius:11px;background:var(--surface);box-shadow:0 4px 14px #29271d05;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
-.work:hover{transform:translateY(-4px);border-color:#d7c7b6;box-shadow:0 12px 26px #29271d10}
-.art{aspect-ratio:4/4.4;padding:17px;background:linear-gradient(145deg,#252b39,#64546b 52%,#d99a83)}
-.art:before{opacity:.86}
-.art:after{opacity:.6}
-.work-info{padding:15px 15px 17px}
-.work-info h3{font-size:14px;line-height:1.45;margin-bottom:7px;color:#272b30}
-.work-info span{font-size:12px;color:#8c8982}
-.empty{border:1px dashed #d8d0c4;background:#faf8f3;border-radius:12px;color:#858078}
-footer{color:#8d8981;border-top:1px solid #e0d9ce;margin-top:22px;letter-spacing:.3px}
-.modal{backdrop-filter:blur(5px)}
-.dialog{border:1px solid #e8e0d5;border-radius:14px}
-.dialog button{min-height:42px}
-#simpleGate{background:#f2f0eb}
-#simpleGate .gate-card{border:1px solid #e6dfd4;border-radius:16px;box-shadow:0 18px 55px #29271d0c}
-#simpleGate .gate-icon{border-radius:12px}
-#simpleGate input{min-height:46px}
-#simpleGate button{min-height:46px;border-radius:8px;background:#ef6b35}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #e98b60;outline-offset:3px}
-@media(max-width:900px){.wrap{padding:28px 18px 0}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.profile{margin-top:14px}.wrap:before{left:18px}.wrap:after{right:18px}}
-@media(max-width:600px){
- .wrap{padding:26px 12px 0}
- .profile{grid-template-columns:72px minmax(0,1fr);column-gap:14px;min-height:0;padding:28px 15px 20px;row-gap:8px;border-radius:13px}
- .profile:before{top:12px;right:13px;font-size:8px;letter-spacing:1px}
- .avatar{width:68px;height:68px;border-radius:18px;font-size:28px}
- .name{font-size:25px;letter-spacing:-.7px;padding-right:0}
- .tag{font-size:11px;padding:5px 7px;white-space:normal}
- .meta{font-size:11px;margin:0}
- .stats{gap:18px;flex-wrap:wrap}
- .stat{min-width:40px}.stat b{font-size:17px}.stat span{font-size:10px}
- .profile>div[style*="position:absolute"]{top:12px!important;right:12px!important;gap:5px!important}
- .login{padding:6px 8px;min-height:34px;font-size:10px}
- .tabs{margin:20px 0 16px;gap:4px}
- .tab{padding:10px 12px;font-size:12px}
- .uploadbar{align-items:flex-start;flex-direction:column}
- .upload-note{margin-right:0}
- .upload-main{width:100%}
- .grid{gap:10px}
- .work-info{padding:11px 10px 13px}
- .work-info h3{font-size:12px}
- .work-info span{font-size:10px}
- .art{padding:10px}
- .art span{font-size:8px;letter-spacing:1px}
- .notice{font-size:11px}
-}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
-</style>
-</body></html>
+</body>
+</html>
