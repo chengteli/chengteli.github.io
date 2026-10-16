@@ -127,10 +127,10 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
 .drop-overlay{position:fixed;inset:18px;z-index:1000;display:none;align-items:center;justify-content:center;border:3px dashed var(--acid);border-radius:18px;background:rgba(12,13,10,.9);backdrop-filter:blur(12px);pointer-events:none}.drop-overlay.visible{display:flex}.drop-overlay-inner{text-align:center;color:var(--ink);padding:30px}.drop-overlay-inner .drop-icon{font-size:56px;line-height:1.2;color:var(--acid)}.drop-overlay-inner strong{display:block;font-size:clamp(22px,4vw,40px);margin:14px 0 6px}.drop-overlay-inner span{color:var(--muted);font-size:13px}body.is-dragging{outline:3px solid var(--acid);outline-offset:-6px}.share-btn{border:1px solid var(--acid);background:var(--acid);color:#17180f;border-radius:999px;padding:10px 16px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}.share-btn:hover{filter:brightness(1.06)}.share-dialog{position:fixed;inset:0;z-index:2000;background:#080908d9;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(9px)}.share-dialog.open{display:flex}.share-card{width:min(470px,100%);background:#1c1c18;border:1px solid #45443a;padding:26px;box-shadow:0 24px 90px #0008}.share-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.share-card h3{margin:0;font-size:25px}.share-close{border:1px solid #45443a;border-radius:50%;width:36px;height:36px;background:transparent;color:var(--ink);cursor:pointer;font-size:20px}.share-card p{font-size:12px;color:var(--muted);line-height:1.8}.share-field-label{display:block;font-size:12px;margin:18px 0 7px;color:var(--ink)}.share-input-row{display:flex;gap:8px}.share-input-row input{flex:1;min-width:0;background:#11110f;color:var(--ink);border:1px solid #555448;border-radius:5px;padding:12px;font:inherit;font-size:12px}.share-copy{border:1px solid var(--acid);background:var(--acid);color:#17180f;border-radius:5px;padding:0 13px;font:inherit;font-size:12px;cursor:pointer}.share-note{border-top:1px solid #393830;margin-top:20px;padding-top:12px;font-size:11px;color:#aaa798;line-height:1.7}.topbar{gap:14px}.nav{align-items:center}@media(max-width:700px){.share-btn{padding:9px 12px}.topbar{flex-wrap:wrap}.share-dialog{padding:12px}.share-card{padding:20px}}.access-gate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:22px;background:#11110f}.access-gate[hidden]{display:none!important}.access-card{width:min(420px,100%);padding:32px;background:#1b1b17;border:1px solid #454439}.access-card h1{font-size:28px;margin:12px 0}.access-card p,.access-foot{color:var(--muted);font-size:13px}.access-card label{display:block;margin:16px 0 7px}.access-card input{width:100%;padding:13px;background:#10100e;color:var(--ink);border:1px solid #555448;border-radius:5px;font:inherit}.access-submit{width:100%;margin-top:13px;padding:13px;border:0;border-radius:999px;background:var(--acid);color:#17180f;font-weight:700;cursor:pointer}.access-error{min-height:22px;color:#ff8064;font-size:12px;margin-top:8px}.access-brand{color:var(--acid);font-size:11px;letter-spacing:.16em;font-weight:700}</style>
 </head>
-<body><div class="access-gate" id="accessGate"><form class="access-card" id="accessForm"><div class="access-brand">CHENG TELI / PRIVATE VIEW</div><h1>输入访问密码</h1><p>请输入分享者提供的密码，查看个人作品集。</p><label for="accessPassword">访问密码</label><input id="accessPassword" type="password" placeholder="请输入密码" required><button class="access-submit" type="submit">进入作品集 ↗</button><div class="access-error" id="accessError"></div><div class="access-foot">如需密码，请向分享者索取。</div></form></div>
+<body><div class="access-gate" id="accessGate" hidden><form class="access-card" id="accessForm"><div class="access-brand">CHENG TELI / PRIVATE VIEW</div><h1>输入访问密码</h1><p>请输入分享者提供的密码，查看个人作品集。</p><label for="accessPassword">访问密码</label><input id="accessPassword" type="password" placeholder="请输入密码" required><button class="access-submit" type="submit">进入作品集 ↗</button><div class="access-error" id="accessError"></div><div class="access-foot">如需密码，请向分享者索取。</div></form></div>
 <header class="shell topbar">
   <a class="brand" href="#top" aria-label="回到首页"><span class="brand-mark">程</span><span>CHENG TELI<small>VISUAL ARTIST / AI FILMMAKER</small></span></a>
-  <button class="share-btn" id="shareOpen" type="button">分享链接 ↗</button><nav class="nav" id="nav" aria-label="主导航"><a href="#work">精选作品</a><a href="#about">关于我</a><a href="#contact" class="contact-link">联系合作 ↗</a></nav>
+  <button class="share-btn" id="adminOpen" type="button">管理员登录</button><button class="share-btn" id="shareOpen" type="button">分享链接 ↗</button><nav class="nav" id="nav" aria-label="主导航"><a href="#work">精选作品</a><a href="#about">关于我</a><a href="#contact" class="contact-link">联系合作 ↗</a></nav>
   <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false">☰</button>
 </header>
 <div class="share-dialog" id="shareDialog" role="dialog" aria-modal="true" aria-labelledby="shareTitle"><div class="share-card"><div class="share-card-head"><h3 id="shareTitle">分享我的作品集</h3><button class="share-close" id="shareClose" type="button" aria-label="关闭">×</button></div><p>随时复制作品集链接和固定分享密码，发给需要查看作品的人。</p><label class="share-field-label" for="shareUrl">作品集链接</label><div class="share-input-row"><input id="shareUrl" readonly value="https://chengteli.github.io/"><button class="share-copy" id="copyShareUrl" type="button">复制链接</button></div><label class="share-field-label" for="sharePassword">分享密码</label><div class="share-input-row"><input id="sharePassword" type="text" value="123456" autocomplete="off"><button class="share-copy" id="copySharePassword" type="button">复制密码</button></div><div class="share-note">分享链接：https://chengteli.github.io/　分享密码：123456。注意：当前网站仍是公开网页，这个密码用于分享告知，并不会真正拦截未输入密码的访问者。</div></div></div>
@@ -152,7 +152,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
     <button class="filter create-category" id="addCategoryBtn" type="button">＋ 新建分类</button>
     <label class="filter upload-work" for="workUpload">↑ 上传 AI 视频 / 图片</label><input id="workUpload" type="file" accept="image/*,video/*" multiple hidden>
   </div>
-  <div class="upload-note">上传后可立即在当前页面预览；目前为本机临时预览，刷新页面或换设备不会保留，也不会自动同步给访客。</div>
+  <div class="upload-note">上传后保存到云端，刷新页面后仍可查看；管理员登录后可上传、重命名和删除。</div>
   <div class="project-grid" id="projectGrid">
     <article class="project reveal" style="--delay:40ms" data-category="character" tabindex="0" role="button" aria-label="查看项目：游侠，角色概念">
       <div class="project-visual visual-01"><span class="visual-word">CHARACTER STUDY / 01</span><span class="visual-number">CT—001</span><span class="orb"></span><div class="visual-bottom"><strong>游侠<br>WANDERER</strong><span>CHARACTER / 2026</span></div></div>
@@ -329,5 +329,254 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
  }else revealItems.forEach(item=>item.classList.add('visible'));
 })();
 </script>
+
+<style>
+#adminOpen{background:transparent;color:var(--acid);border-color:#6b7547}
+#adminDialog{position:fixed;inset:0;z-index:2100;display:none;align-items:center;justify-content:center;padding:18px;background:#080908e8;backdrop-filter:blur(9px)}
+#adminDialog.open{display:flex}
+.admin-card{width:min(460px,100%);background:#1c1c18;border:1px solid #45443a;padding:26px}
+.admin-card h3{margin:0;font-size:25px}.admin-card p{color:var(--muted);font-size:12px;line-height:1.8}
+.admin-card label{display:block;font-size:12px;margin:14px 0 6px}
+.admin-card input{width:100%;background:#11110f;color:var(--ink);border:1px solid #555448;border-radius:5px;padding:12px;font:inherit}
+.admin-actions{display:flex;gap:8px;margin-top:16px}.admin-actions button{border:1px solid var(--acid);background:var(--acid);color:#17180f;border-radius:999px;padding:10px 15px;cursor:pointer;font-weight:700}.admin-actions button.secondary{background:transparent;color:var(--ink);border-color:#555448}
+.admin-status{font-size:12px;min-height:20px;margin-top:10px;color:var(--acid)}
+.cloud-badge{font-size:10px;color:var(--acid);letter-spacing:.08em}
+.project-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.project-action{border:1px solid #4b4a3f;background:#1c1c18;color:var(--ink);border-radius:99px;padding:7px 11px;font-size:11px;cursor:pointer}
+.project-action.delete{color:#ff8a70;border-color:#6c4036}
+body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.is-admin) .project-actions{display:none!important}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div id="adminDialog" role="dialog" aria-modal="true" aria-labelledby="adminDialogTitle">
+ <form class="admin-card" id="adminForm">
+  <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
+  <p>登录后可管理作品。访客无需登录即可浏览公开作品。</p>
+  <label for="adminEmail">管理员邮箱</label><input id="adminEmail" type="email" autocomplete="username" required placeholder="输入创建 Supabase 用户时使用的邮箱">
+  <label for="adminPassword">密码</label><input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Supabase 账号密码">
+  <div class="admin-actions"><button type="submit" id="adminSubmit">登录</button><button type="button" class="secondary" id="adminLogout" hidden>退出登录</button></div>
+  <div class="admin-status" id="adminStatus" role="status"></div>
+ </form>
+</div>
+<script>
+(function(){
+  const SUPABASE_URL = 'https://rtsvmmxwlufrmwuwvtbp.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_68V6BJS_6H-lN51csOvSZg_VSQT0NRa';
+  const ADMIN_UID = 'fa045953-4acb-4987-9ed1-e645bd5aefd8';
+  const BUCKET = 'portfolio-media';
+  const client = window.supabase && window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const dialog = document.getElementById('adminDialog');
+  const form = document.getElementById('adminForm');
+  const status = document.getElementById('adminStatus');
+  const loginButton = document.getElementById('adminOpen');
+  const logoutButton = document.getElementById('adminLogout');
+  const uploadInput = document.getElementById('workUpload');
+  const confirmButton = document.getElementById('pickerConfirm');
+  const grid = document.getElementById('projectGrid');
+  const filters = document.getElementById('filters');
+  let currentUser = null;
+  let queuedFiles = [];
+  let cloudItems = new Map();
+  let busy = false;
+
+  if (!client) {
+    loginButton.textContent = '云端连接失败';
+    loginButton.title = 'Supabase SDK 加载失败，请刷新页面后重试';
+    return;
+  }
+
+  const say = (message, isError=false) => {
+    status.textContent = message;
+    status.style.color = isError ? '#ff8064' : 'var(--acid)';
+  };
+  const isAdmin = () => !!currentUser && currentUser.id === ADMIN_UID;
+  const setAdminUi = () => {
+    document.body.classList.toggle('is-admin', isAdmin());
+    loginButton.textContent = isAdmin() ? '管理员已登录' : '管理员登录';
+    logoutButton.hidden = !isAdmin();
+    document.getElementById('adminEmail').disabled = isAdmin();
+    document.getElementById('adminPassword').disabled = isAdmin();
+    document.getElementById('adminSubmit').hidden = isAdmin();
+    if (isAdmin()) say('管理员已登录，可以管理云端作品。');
+  };
+  const openAdmin = () => { dialog.classList.add('open'); if (!isAdmin()) document.getElementById('adminEmail').focus(); };
+  loginButton.addEventListener('click', openAdmin);
+  document.getElementById('adminClose').addEventListener('click', () => dialog.classList.remove('open'));
+  dialog.addEventListener('click', e => { if (e.target === dialog) dialog.classList.remove('open'); });
+
+  async function checkSession() {
+    const {data, error} = await client.auth.getSession();
+    if (error) console.warn('Supabase session:', error.message);
+    currentUser = data?.session?.user || null;
+    setAdminUi();
+    await loadItems();
+  }
+  client.auth.onAuthStateChange((_event, session) => {
+    currentUser = session?.user || null;
+    setAdminUi();
+    if (!busy) loadItems();
+  });
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (busy) return;
+    busy = true; say('正在登录…');
+    try {
+      const {data, error} = await client.auth.signInWithPassword({
+        email: document.getElementById('adminEmail').value.trim(),
+        password: document.getElementById('adminPassword').value
+      });
+      if (error) throw error;
+      if (!data.user || data.user.id !== ADMIN_UID) {
+        await client.auth.signOut();
+        currentUser = null; setAdminUi();
+        throw new Error('此账号不是已授权的管理员账号。');
+      }
+      currentUser = data.user; setAdminUi(); say('登录成功。');
+      document.getElementById('adminPassword').value = '';
+      dialog.classList.remove('open');
+      await loadItems();
+    } catch (err) {
+      say(err.message || '登录失败，请检查邮箱和密码。', true);
+    } finally { busy = false; }
+  });
+  logoutButton.addEventListener('click', async () => {
+    await client.auth.signOut(); currentUser = null; setAdminUi(); say('已退出登录。'); dialog.classList.remove('open'); await loadItems();
+  });
+
+  function categoryLabel(key) {
+    const button = filters.querySelector('[data-filter="' + CSS.escape(key) + '"]');
+    return button ? button.textContent.trim() : key || '未分类';
+  }
+  function categoryKey(name) {
+    const known = [...filters.querySelectorAll('button[data-filter]')].find(b => b.textContent.trim() === name);
+    if (known) return known.dataset.filter;
+    const key = 'cloud-' + name.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff-]/g,'-').slice(0,30);
+    let button = filters.querySelector('[data-filter="' + CSS.escape(key) + '"]');
+    if (!button) {
+      button = document.createElement('button');
+      button.className = 'filter'; button.dataset.filter = key; button.textContent = name;
+      button.setAttribute('aria-pressed','false');
+      button.addEventListener('click', () => {
+        filters.querySelectorAll('button[data-filter]').forEach(b => {const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+        document.querySelectorAll('.project').forEach(p => p.hidden = key !== 'all' && p.dataset.category !== key);
+      });
+      filters.insertBefore(button, document.getElementById('addCategoryBtn'));
+    }
+    return key;
+  }
+  function mediaUrl(path) {
+    return client.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  }
+  function createCard(item) {
+    const category = categoryKey(item.category || '未分类');
+    const isVideo = item.media_type === 'video';
+    const project = document.createElement('article');
+    project.className = 'project is-uploaded visible';
+    project.dataset.category = category; project.dataset.cloudId = item.id;
+    const visual = document.createElement('div'); visual.className = 'project-visual visual-06';
+    const media = document.createElement(isVideo ? 'video' : 'img');
+    media.className = 'project-media'; media.src = item.media_url;
+    if (isVideo) { media.controls = true; media.playsInline = true; media.preload = 'metadata'; }
+    else media.alt = item.title || '作品图片';
+    const word = document.createElement('span'); word.className = 'visual-word'; word.textContent = isVideo ? 'AI VIDEO / CLOUD' : 'IMAGE / CLOUD';
+    const number = document.createElement('span'); number.className = 'visual-number'; number.textContent = 'CT—CLOUD';
+    const bottom = document.createElement('div'); bottom.className = 'visual-bottom';
+    const title = document.createElement('strong'); title.textContent = item.title || '未命名作品';
+    const type = document.createElement('span'); type.textContent = isVideo ? 'AI VIDEO' : 'IMAGE';
+    bottom.append(title,type); visual.append(media,word,number,bottom);
+    const meta = document.createElement('div'); meta.className = 'project-meta';
+    const info = document.createElement('div'); const h = document.createElement('h3'); h.textContent = item.title || '未命名作品';
+    const p = document.createElement('p'); p.textContent = '分类：' + (item.category || '未分类') + ' · 云端作品';
+    info.append(h,p); meta.append(info);
+    const actions = document.createElement('div'); actions.className = 'project-actions';
+    const rename = document.createElement('button'); rename.type='button'; rename.className='project-action'; rename.textContent='✎ 重新命名';
+    const remove = document.createElement('button'); remove.type='button'; remove.className='project-action delete'; remove.textContent='× 删除作品';
+    rename.addEventListener('click', async e => {
+      e.stopPropagation(); if (!isAdmin()) return;
+      const next = prompt('请输入新的作品名称：', h.textContent);
+      if (!next || !next.trim()) return;
+      const {error} = await client.from('portfolio_items').update({title:next.trim().slice(0,80)}).eq('id',item.id);
+      if (error) return alert('重命名失败：' + error.message);
+      item.title = next.trim().slice(0,80); h.textContent = item.title; title.textContent = item.title;
+    });
+    remove.addEventListener('click', async e => {
+      e.stopPropagation(); if (!isAdmin() || !confirm('确定从云端删除这个作品吗？')) return;
+      const path = item.media_url.split('/storage/v1/object/public/' + BUCKET + '/')[1];
+      const {error:dbError} = await client.from('portfolio_items').delete().eq('id',item.id);
+      if (dbError) return alert('删除记录失败：' + dbError.message);
+      if (path) { const {error:storageError} = await client.storage.from(BUCKET).remove([decodeURIComponent(path)]); if (storageError) console.warn(storageError.message); }
+      project.remove(); cloudItems.delete(item.id);
+    });
+    actions.append(rename,remove);
+    project.append(visual,meta,actions);
+    return project;
+  }
+  async function loadItems() {
+    const {data,error} = await client.from('portfolio_items').select('*').order('created_at',{ascending:false});
+    if (error) { console.warn('Cloud portfolio load failed:', error.message); return; }
+    grid.querySelectorAll('[data-cloud-id]').forEach(el => el.remove());
+    cloudItems.clear();
+    (data || []).forEach(item => {
+      cloudItems.set(item.id,item);
+      const card = createCard(item);
+      grid.prepend(card);
+    });
+    document.querySelectorAll('.project').forEach(p => { if (p.dataset.category) p.hidden = false; });
+  }
+
+  async function uploadQueuedFiles() {
+    if (!isAdmin()) { openAdmin(); say('请先登录已授权的管理员账号。',true); return; }
+    if (!queuedFiles.length) { say('没有检测到待上传文件。',true); return; }
+    if (busy) return;
+    busy = true; confirmButton.disabled = true; say('正在上传文件到云端…');
+    const select = document.getElementById('uploadCategorySelect');
+    const chosenOption = select?.selectedOptions?.[0];
+    let category = chosenOption?.textContent?.trim() || 'AI 影像';
+    const customName = document.getElementById('uploadNewCategory').value.trim();
+    if (customName) category = customName.slice(0,24);
+    try {
+      for (const file of queuedFiles) {
+        if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) continue;
+        const safeName = file.name.normalize('NFKC').replace(/[^a-zA-Z0-9._-]/g,'_').slice(-90) || 'media';
+        const path = currentUser.id + '/' + Date.now() + '-' + Math.random().toString(36).slice(2,8) + '-' + safeName;
+        const {error:uploadError} = await client.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type || undefined});
+        if (uploadError) throw uploadError;
+        const url = mediaUrl(path);
+        const title = file.name.replace(/\.[^.]+$/,'').slice(0,80) || '未命名作品';
+        const {data,error:insertError} = await client.from('portfolio_items').insert({
+          title, category, description:'', media_url:url, media_type:file.type.startsWith('video/')?'video':'image'
+        }).select().single();
+        if (insertError) {
+          await client.storage.from(BUCKET).remove([path]);
+          throw insertError;
+        }
+        cloudItems.set(data.id,data);
+        grid.prepend(createCard(data));
+      }
+      say('上传完成，作品已保存到云端。');
+      document.getElementById('uploadNewCategory').value='';
+      document.getElementById('categoryPicker')?.classList.remove('open');
+      const picker = document.querySelector('.category-picker');
+      if (picker) picker.classList.remove('open');
+      queuedFiles = [];
+    } catch (err) {
+      say('上传失败：' + (err.message || '请检查网络、存储桶和权限策略。'),true);
+      alert('云端上传失败：' + (err.message || '请检查 Supabase 配置。'));
+    } finally { busy = false; confirmButton.disabled = false; }
+  }
+
+  // Track files from both the file picker and drag-and-drop workflow.
+  uploadInput.addEventListener('change', e => { queuedFiles = [...(e.target.files || [])]; }, true);
+  document.addEventListener('drop', e => {
+    if (e.dataTransfer?.files?.length) queuedFiles = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'));
+  }, true);
+  // Capture before the original local-preview handler; prevent temporary-only uploads.
+  confirmButton.addEventListener('click', e => {
+    e.preventDefault(); e.stopImmediatePropagation(); uploadQueuedFiles();
+  }, true);
+
+  checkSession();
+})();
+</script>
+
 </body>
 </html>
