@@ -345,6 +345,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 .project-action{border:1px solid #4b4a3f;background:#1c1c18;color:var(--ink);border-radius:99px;padding:7px 11px;font-size:11px;cursor:pointer}
 .project-action.delete{color:#ff8a70;border-color:#6c4036}
 body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.is-admin) .project-actions{display:none!important}
+.project-visual iframe.project-media{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+#externalVideoPanel[hidden]{display:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
@@ -352,6 +354,14 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
  <form class="admin-card" id="adminForm">
   <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
   <p>登录后可管理作品。访客无需登录即可浏览公开作品。</p>
+  <div id="externalVideoPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
+   <strong style="font-size:13px">添加外部视频（不占 Supabase 空间）</strong>
+   <p style="margin:6px 0">先把大视频上传到 YouTube，建议设为“不公开列出”，再粘贴视频链接。</p>
+   <label for="externalVideoTitle">作品名称</label><input id="externalVideoTitle" type="text" maxlength="80" placeholder="例如：国漫打斗短片">
+   <label for="externalVideoUrl">YouTube 视频链接</label><input id="externalVideoUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." >
+   <label for="externalVideoCategory">作品分类</label><input id="externalVideoCategory" type="text" maxlength="24" value="AI 影像" placeholder="例如：AI 影像">
+   <div class="admin-actions"><button type="button" id="externalVideoSave">添加视频到作品集</button></div>
+  </div>
   <label for="adminEmail">管理员邮箱</label><input id="adminEmail" type="email" autocomplete="username" required placeholder="输入创建 Supabase 用户时使用的邮箱">
   <label for="adminPassword">密码</label><input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Supabase 账号密码">
   <div class="admin-actions"><button type="submit" id="adminSubmit">登录</button><button type="button" class="secondary" id="adminLogout" hidden>退出登录</button></div>
@@ -397,6 +407,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     document.getElementById('adminEmail').disabled = isAdmin();
     document.getElementById('adminPassword').disabled = isAdmin();
     document.getElementById('adminSubmit').hidden = isAdmin();
+    document.getElementById('externalVideoPanel').hidden = !isAdmin();
     if (isAdmin()) say('管理员已登录，可以管理云端作品。');
   };
   const openAdmin = () => { dialog.classList.add('open'); if (!isAdmin()) document.getElementById('adminEmail').focus(); };
@@ -442,6 +453,29 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
   logoutButton.addEventListener('click', async () => {
     await client.auth.signOut(); currentUser = null; setAdminUi(); say('已退出登录。'); dialog.classList.remove('open'); await loadItems();
   });
+  document.getElementById('externalVideoSave').addEventListener('click', async () => {
+    if (!isAdmin()) return say('请先登录管理员账号。', true);
+    const title = document.getElementById('externalVideoTitle').value.trim();
+    const url = document.getElementById('externalVideoUrl').value.trim();
+    const category = document.getElementById('externalVideoCategory').value.trim() || 'AI 影像';
+    if (!title) return say('请填写作品名称。', true);
+    const videoId = getYouTubeId(url);
+    if (!videoId) return say('请填写有效的 YouTube 视频链接（youtube.com 或 youtu.be）。', true);
+    const saveButton = document.getElementById('externalVideoSave');
+    saveButton.disabled = true; say('正在添加视频作品…');
+    try {
+      const {error} = await client.from('portfolio_items').insert({
+        title: title.slice(0,80), category: category.slice(0,24), description: '',
+        media_url: 'https://www.youtube.com/watch?v=' + videoId, media_type: 'video'
+      });
+      if (error) throw error;
+      document.getElementById('externalVideoTitle').value = '';
+      document.getElementById('externalVideoUrl').value = '';
+      say('视频作品已添加到作品集。');
+      await loadItems();
+    } catch (err) { say('添加失败：' + (err.message || '请稍后重试'), true); }
+    finally { saveButton.disabled = false; }
+  });
 
   function categoryLabel(key) {
     const button = filters.querySelector('[data-filter="' + CSS.escape(key) + '"]');
@@ -464,20 +498,39 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     }
     return key;
   }
+  function getYouTubeId(value) {
+    try {
+      const u = new URL(value);
+      if (u.hostname === 'youtu.be') return u.pathname.split('/').filter(Boolean)[0] || null;
+      if (!/(^|\\.)youtube\\.com$/.test(u.hostname)) return null;
+      if (u.pathname === '/watch') return u.searchParams.get('v');
+      const match = u.pathname.match(/^\\/(?:embed|shorts|live)\\/([^/?]+)/);
+      return match ? match[1] : null;
+    } catch (_) { return null; }
+  }
   function mediaUrl(path) {
     return client.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
   }
   function createCard(item) {
     const category = categoryKey(item.category || '未分类');
     const isVideo = item.media_type === 'video';
+    const youtubeId = isVideo ? getYouTubeId(item.media_url) : null;
     const project = document.createElement('article');
     project.className = 'project is-uploaded visible';
     project.dataset.category = category; project.dataset.cloudId = item.id;
     const visual = document.createElement('div'); visual.className = 'project-visual visual-06';
-    const media = document.createElement(isVideo ? 'video' : 'img');
-    media.className = 'project-media'; media.src = item.media_url;
-    if (isVideo) { media.controls = true; media.playsInline = true; media.preload = 'metadata'; }
-    else media.alt = item.title || '作品图片';
+    const media = document.createElement(youtubeId ? 'iframe' : (isVideo ? 'video' : 'img'));
+    media.className = 'project-media';
+    if (youtubeId) {
+      media.src = 'https://www.youtube-nocookie.com/embed/' + youtubeId;
+      media.title = item.title || '作品视频'; media.loading = 'lazy';
+      media.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      media.allowFullscreen = true; media.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+    } else {
+      media.src = item.media_url;
+      if (isVideo) { media.controls = true; media.playsInline = true; media.preload = 'metadata'; }
+      else media.alt = item.title || '作品图片';
+    }
     const word = document.createElement('span'); word.className = 'visual-word'; word.textContent = isVideo ? 'AI VIDEO / CLOUD' : 'IMAGE / CLOUD';
     const number = document.createElement('span'); number.className = 'visual-number'; number.textContent = 'CT—CLOUD';
     const bottom = document.createElement('div'); bottom.className = 'visual-bottom';
