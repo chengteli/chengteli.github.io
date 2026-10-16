@@ -247,7 +247,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
      const url=URL.createObjectURL(file),isVideo=file.type.startsWith('video/');
      const project=document.createElement('article');project.className='project reveal is-uploaded visible';project.dataset.category=categoryKey;project.tabIndex=0;project.setAttribute('role','group');
      const visual=document.createElement('div');visual.className='project-visual visual-06';
-     const media=document.createElement(isVideo?'video':'img');media.className='project-media';media.src=url;if(isVideo){media.controls=true;media.muted=true;media.playsInline=true}else media.alt=file.name;
+     const media=document.createElement(isVideo?'video':'img');media.className='project-media';media.src=url;if(isVideo){media.controls=true;media.muted=false;media.defaultMuted=false;media.volume=1;media.playsInline=true;media.setAttribute('controls','');media.setAttribute('preload','metadata')}else media.alt=file.name;
      visual.appendChild(media);
      const word=document.createElement('span');word.className='visual-word';word.textContent=isVideo?'AI VIDEO / UPLOADED':'IMAGE / UPLOADED';
      const number=document.createElement('span');number.className='visual-number';number.textContent='CT—NEW';
