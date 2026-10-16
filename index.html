@@ -54,7 +54,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 25px}
 .filter{border:1px solid #3b3a32;color:#bcb9ae;background:transparent;border-radius:99px;padding:10px 15px;font-size:11px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 .filter:hover,.filter.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.create-category{border-style:dashed;color:var(--acid)}.upload-work{cursor:pointer;background:var(--acid);color:#17180f;border-color:var(--acid);font-weight:700}.upload-note{font-size:11px;color:#8f8d82;margin:-12px 0 24px}.project-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.project-media video{width:100%;height:100%;object-fit:cover}.project.is-uploaded .project-visual:after{z-index:2}.project.is-uploaded .visual-bottom,.project.is-uploaded .visual-word,.project.is-uploaded .visual-number{z-index:3}.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
+.create-category{border-style:dashed;color:var(--acid)}.upload-work{cursor:pointer;background:var(--acid);color:#17180f;border-color:var(--acid);font-weight:700}.upload-note{font-size:11px;color:#8f8d82;margin:-12px 0 24px}.project-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.project-media video{width:100%;height:100%;object-fit:cover}.project.is-uploaded .project-visual:has(video){cursor:pointer}.video-play-overlay{position:absolute;z-index:4;left:50%;top:50%;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;border:1px solid #ffffffb8;background:#11110fc9;color:#fff;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 8px 35px #0008;transition:transform .2s,background .2s}.video-play-overlay:hover{transform:translate(-50%,-50%) scale(1.08);background:#d7f36a;color:#17180f}.video-play-overlay svg{width:27px;height:27px;margin-left:4px}.video-play-overlay[hidden]{display:none}.project.is-uploaded .project-visual:has(video) .visual-bottom{bottom:58px}.project.is-uploaded .project-visual:after{z-index:2}.project.is-uploaded .visual-bottom,.project.is-uploaded .visual-word,.project.is-uploaded .visual-number{z-index:3}.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
 .project{grid-column:span 4;min-width:0;cursor:pointer;animation:rise .65s both;animation-delay:var(--delay,0ms)}
 .project:nth-child(1),.project:nth-child(4){grid-column:span 7}
 .project:nth-child(2),.project:nth-child(5){grid-column:span 5}
@@ -249,6 +249,16 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
      const visual=document.createElement('div');visual.className='project-visual visual-06';
      const media=document.createElement(isVideo?'video':'img');media.className='project-media';media.src=url;if(isVideo){media.controls=true;media.muted=false;media.defaultMuted=false;media.volume=1;media.playsInline=true;media.setAttribute('controls','');media.setAttribute('preload','metadata')}else media.alt=file.name;
      visual.appendChild(media);
+     let playOverlay=null;
+     if(isVideo){
+       playOverlay=document.createElement('button');playOverlay.type='button';playOverlay.className='video-play-overlay';playOverlay.setAttribute('aria-label','播放视频');
+       playOverlay.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg>';
+       playOverlay.addEventListener('click',e=>{e.stopPropagation();if(media.paused){media.muted=false;media.play().then(()=>{playOverlay.hidden=true}).catch(()=>{playOverlay.hidden=false})}else{media.pause();playOverlay.hidden=false}});
+       media.addEventListener('play',()=>{playOverlay.hidden=true});
+       media.addEventListener('pause',()=>{playOverlay.hidden=false});
+       media.addEventListener('ended',()=>{playOverlay.hidden=false});
+       visual.appendChild(playOverlay);
+     }
      const word=document.createElement('span');word.className='visual-word';word.textContent=isVideo?'AI VIDEO / UPLOADED':'IMAGE / UPLOADED';
      const number=document.createElement('span');number.className='visual-number';number.textContent='CT—NEW';
      const bottom=document.createElement('div');bottom.className='visual-bottom';const title=document.createElement('strong');title.textContent=file.name.replace(/\\.[^.]+$/,'').slice(0,50);const type=document.createElement('span');type.textContent=isVideo?'AI VIDEO':'IMAGE';bottom.append(title,type);visual.append(word,number,bottom);
