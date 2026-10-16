@@ -347,6 +347,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.is-admin) .project-actions{display:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
 <div id="adminDialog" role="dialog" aria-modal="true" aria-labelledby="adminDialogTitle">
  <form class="admin-card" id="adminForm">
   <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
@@ -538,8 +539,45 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
         if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) continue;
         const safeName = file.name.normalize('NFKC').replace(/[^a-zA-Z0-9._-]/g,'_').slice(-90) || 'media';
         const path = currentUser.id + '/' + Date.now() + '-' + Math.random().toString(36).slice(2,8) + '-' + safeName;
-        const {error:uploadError} = await client.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type || undefined});
-        if (uploadError) throw uploadError;
+        // Use TUS resumable uploads for larger media; standard uploads are less reliable on unstable connections.
+        if (file.size > 6 * 1024 * 1024) {
+          if (!window.tus || !window.tus.Upload) throw new Error('大文件上传组件加载失败，请刷新页面后重试。');
+          const {data: sessionData, error: sessionError} = await client.auth.getSession();
+          if (sessionError) throw sessionError;
+          const accessToken = sessionData?.session?.access_token;
+          if (!accessToken) throw new Error('登录状态已失效，请重新登录管理员账号。');
+          const projectRef = 'rtsvmmxwlufrmwuwvtbp';
+          await new Promise((resolve, reject) => {
+            const upload = new window.tus.Upload(file, {
+              endpoint: 'https://' + projectRef + '.storage.supabase.co/storage/v1/upload/resumable',
+              retryDelays: [0, 3000, 5000, 10000, 20000],
+              headers: {
+                authorization: 'Bearer ' + accessToken,
+                apikey: SUPABASE_PUBLISHABLE_KEY,
+                'x-upsert': 'false'
+              },
+              uploadDataDuringCreation: true,
+              removeFingerprintOnSuccess: true,
+              chunkSize: 6 * 1024 * 1024,
+              metadata: {
+                bucketName: BUCKET,
+                objectName: path,
+                contentType: file.type || 'application/octet-stream',
+                cacheControl: '3600'
+              },
+              onError: reject,
+              onProgress: (bytesUploaded, bytesTotal) => {
+                const percent = Math.round(bytesUploaded / bytesTotal * 100);
+                say('正在上传 ' + file.name + '：' + percent + '%');
+              },
+              onSuccess: resolve
+            });
+            upload.start();
+          });
+        } else {
+          const {error:uploadError} = await client.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type || undefined});
+          if (uploadError) throw uploadError;
+        }
         const url = mediaUrl(path);
         const title = file.name.replace(/\.[^.]+$/,'').slice(0,80) || '未命名作品';
         const {data,error:insertError} = await client.from('portfolio_items').insert({
@@ -559,8 +597,10 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
       if (picker) picker.classList.remove('open');
       queuedFiles = [];
     } catch (err) {
-      say('上传失败：' + (err.message || '请检查网络、存储桶和权限策略。'),true);
-      alert('云端上传失败：' + (err.message || '请检查 Supabase 配置。'));
+      console.error('Cloud portfolio upload failed:', err);
+      const details = [err?.message, err?.statusCode ? '状态码：' + err.statusCode : '', err?.code ? '错误码：' + err.code : ''].filter(Boolean).join('；') || '未知错误。请检查 Storage 限制、网络和 RLS 策略。';
+      say('上传失败：' + details, true);
+      alert('云端上传失败：' + details);
     } finally { busy = false; confirmButton.disabled = false; }
   }
 
