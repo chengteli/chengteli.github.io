@@ -54,7 +54,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 25px}
 .filter{border:1px solid #3b3a32;color:#bcb9ae;background:transparent;border-radius:99px;padding:10px 15px;font-size:11px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 .filter:hover,.filter.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
+.create-category{border-style:dashed;color:var(--acid)}.upload-work{cursor:pointer;background:var(--acid);color:#17180f;border-color:var(--acid);font-weight:700}.upload-note{font-size:11px;color:#8f8d82;margin:-12px 0 24px}.project-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.project-media video{width:100%;height:100%;object-fit:cover}.project.is-uploaded .project-visual:after{z-index:2}.project.is-uploaded .visual-bottom,.project.is-uploaded .visual-word,.project.is-uploaded .visual-number{z-index:3}.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
 .project{grid-column:span 4;min-width:0;cursor:pointer;animation:rise .65s both;animation-delay:var(--delay,0ms)}
 .project:nth-child(1),.project:nth-child(4){grid-column:span 7}
 .project:nth-child(2),.project:nth-child(5){grid-column:span 5}
@@ -146,9 +146,12 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 <div class="shell marquee"><span>Character design</span><b>✳</b><span>World building</span><b>✳</b><span>AI filmmaking</span><b>✳</b><span>Visual storytelling</span><b>✳</b><span>Made with curiosity</span></div>
 <section class="shell section" id="work">
   <div class="section-head reveal"><div><div class="kicker">01 / SELECTED WORK</div><h2>作品，<em>即世界。</em></h2></div><p class="section-intro">从角色的一次凝视，到一个完整的想象宇宙。这里收录不同方向的创作探索。</p></div>
-  <div class="filters reveal" role="group" aria-label="筛选作品">
-    <button class="filter active" data-filter="all" aria-pressed="true">全部探索 · 08</button><button class="filter" data-filter="character" aria-pressed="false">角色设计</button><button class="filter" data-filter="film" aria-pressed="false">AI 影像</button><button class="filter" data-filter="world" aria-pressed="false">场景与视觉</button>
+  <div class="filters reveal" role="group" aria-label="筛选作品" id="filters">
+    <button class="filter active" data-filter="all" aria-pressed="true">全部作品</button><button class="filter" data-filter="character" aria-pressed="false">角色设计</button><button class="filter" data-filter="film" aria-pressed="false">AI 影像</button><button class="filter" data-filter="world" aria-pressed="false">场景与视觉</button>
+    <button class="filter create-category" id="addCategoryBtn" type="button">＋ 新建分类</button>
+    <label class="filter upload-work" for="workUpload">↑ 上传 AI 视频 / 图片</label><input id="workUpload" type="file" accept="image/*,video/*" multiple hidden>
   </div>
+  <div class="upload-note">上传后可立即在当前页面预览；目前为本机临时预览，刷新页面或换设备不会保留，也不会自动同步给访客。</div>
   <div class="project-grid" id="projectGrid">
     <article class="project reveal" style="--delay:40ms" data-category="character" tabindex="0" role="button" aria-label="查看项目：游侠，角色概念">
       <div class="project-visual visual-01"><span class="visual-word">CHARACTER STUDY / 01</span><span class="visual-number">CT—001</span><span class="orb"></span><div class="visual-bottom"><strong>游侠<br>WANDERER</strong><span>CHARACTER / 2026</span></div></div>
@@ -199,13 +202,52 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 </div>
 <script>
 (function(){
- const filterButtons=[...document.querySelectorAll('.filter')];
+ const filters=document.getElementById('filters');
+ const filterButtons=[...filters.querySelectorAll('button[data-filter]')];
  const projects=[...document.querySelectorAll('.project')];
- filterButtons.forEach(button=>button.addEventListener('click',()=>{
-   const filter=button.dataset.filter;
-   filterButtons.forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
-   projects.forEach(project=>{project.hidden=filter!=='all'&&project.dataset.category!==filter});
- }));
+ let activeFilter='all';
+ function applyFilter(filter){
+   activeFilter=filter;
+   filters.querySelectorAll('button[data-filter]').forEach(b=>{const active=b.dataset.filter===filter;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
+   document.querySelectorAll('.project').forEach(project=>{project.hidden=filter!=='all'&&project.dataset.category!==filter});
+ }
+ filterButtons.forEach(button=>button.addEventListener('click',()=>applyFilter(button.dataset.filter)));
+ document.getElementById('addCategoryBtn').addEventListener('click',()=>{
+   const name=prompt('请输入新分类名称，例如：国漫打斗、AI短片、角色海报');
+   if(!name||!name.trim())return;
+   const label=name.trim().slice(0,24),key='custom-'+Date.now();
+   const button=document.createElement('button');button.className='filter';button.dataset.filter=key;button.textContent=label;button.setAttribute('aria-pressed','false');
+   button.addEventListener('click',()=>applyFilter(key));filters.insertBefore(button,document.getElementById('addCategoryBtn'));
+   const upload=document.getElementById('workUpload');upload.dataset.newCategory=key;
+   applyFilter(key);
+ });
+ document.getElementById('workUpload').addEventListener('change',event=>{
+   const files=[...event.target.files||[]];if(!files.length)return;
+   let category=activeFilter;
+   if(category==='all'||!category){category=prompt('这些作品放在哪个分类？输入已有分类名称；留空使用“AI 影像 / 图片”');}
+   let categoryKey=activeFilter;
+   if(!categoryKey||categoryKey==='all'){
+     const matching=[...filters.querySelectorAll('button[data-filter]')].find(b=>b.textContent.trim()===category);
+     categoryKey=matching?matching.dataset.filter:'film';
+   }
+   files.forEach((file,index)=>{
+     if(!file.type.startsWith('image/')&&!file.type.startsWith('video/'))return;
+     const url=URL.createObjectURL(file),isVideo=file.type.startsWith('video/');
+     const project=document.createElement('article');project.className='project reveal is-uploaded visible';project.dataset.category=categoryKey;project.tabIndex=0;project.setAttribute('role','button');project.setAttribute('aria-label','查看上传作品：'+file.name);
+     const visual=document.createElement('div');visual.className='project-visual visual-06';
+     const media=document.createElement(isVideo?'video':'img');media.className='project-media';media.src=url;if(isVideo){media.controls=true;media.muted=true;media.playsInline=true}else media.alt=file.name;
+     visual.appendChild(media);
+     const word=document.createElement('span');word.className='visual-word';word.textContent=isVideo?'AI VIDEO / UPLOADED':'IMAGE / UPLOADED';
+     const number=document.createElement('span');number.className='visual-number';number.textContent='CT—NEW';
+     const bottom=document.createElement('div');bottom.className='visual-bottom';const title=document.createElement('strong');title.textContent=file.name.replace(/\.[^.]+$/,'').slice(0,50);const type=document.createElement('span');type.textContent=isVideo?'AI VIDEO':'IMAGE';bottom.append(title,type);visual.append(word,number,bottom);
+     const meta=document.createElement('div');meta.className='project-meta';const info=document.createElement('div');const h=document.createElement('h3');h.textContent=file.name;const p=document.createElement('p');p.textContent='本机临时预览 · '+(isVideo?'视频':'图片');info.append(h,p);meta.append(info);
+     project.append(visual,meta);document.getElementById('projectGrid').prepend(project);
+     project.addEventListener('click',()=>{if(isVideo){media.controls=true;media.play().catch(()=>{})}else{openProject(project)}});
+     project.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(isVideo)media.play().catch(()=>{});else openProject(project)}});
+     if(activeFilter!=='all'&&activeFilter!==categoryKey)project.hidden=true;
+   });
+   event.target.value='';
+ });
  const nav=document.getElementById('nav'),menu=document.getElementById('menuBtn');
  menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'×':'☰'});
  nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰'}));
