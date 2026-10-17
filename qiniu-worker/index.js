@@ -31,7 +31,7 @@ function json(data, status = 200, origin = "") {
 function b64url(bytes) {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_");
 }
 function b64text(text) {
   return b64url(new TextEncoder().encode(text));
