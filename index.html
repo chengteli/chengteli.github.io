@@ -290,7 +290,7 @@ body:not(.is-admin) .project-media { user-select:none; -webkit-user-select:none;
      }
      const word=document.createElement('span');word.className='visual-word';word.textContent=isVideo?'AI VIDEO / UPLOADED':'IMAGE / UPLOADED';
      const number=document.createElement('span');number.className='visual-number';number.textContent='CT—NEW';
-     const bottom=document.createElement('div');bottom.className='visual-bottom';const title=document.createElement('strong');title.textContent=file.name.replace(/\\.[^.]+$/,'').slice(0,50);const type=document.createElement('span');type.textContent=isVideo?'AI VIDEO':'IMAGE';bottom.append(title,type);visual.append(word,number,bottom);
+     const bottom=document.createElement('div');bottom.className='visual-bottom';const title=document.createElement('strong');title.textContent=file.name.replace(/\\.[^.]+$/,'').slice(0,50);const type=document.createElement('span');type.textContent=isVideo?'AI VIDEO':'IMAGE';bottom.append(title,type);visual.append(word,number);
      const meta=document.createElement('div');meta.className='project-meta';const info=document.createElement('div');const h=document.createElement('h3');h.textContent=title.textContent;const p=document.createElement('p');p.textContent='分类：'+(filters.querySelector('[data-filter="'+categoryKey+'"]')?.textContent||'AI 影像')+' · 本机临时预览';info.append(h,p);meta.append(info);
      const actions=document.createElement('div');actions.className='project-actions';
      const rename=document.createElement('button');rename.type='button';rename.className='project-action';rename.textContent='✎ 重新命名';
@@ -726,7 +726,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     const bottom = document.createElement('div'); bottom.className = 'visual-bottom';
     const title = document.createElement('strong'); title.textContent = item.title || '未命名作品';
     const type = document.createElement('span'); type.textContent = isVideo ? 'AI VIDEO' : 'IMAGE';
-    bottom.append(title,type); visual.append(media,word,number,bottom);
+    bottom.append(title,type); visual.append(media,word,number);
     if (isVideo && !youtubeId) {
       const playOverlay = document.createElement('button');
       playOverlay.type = 'button'; playOverlay.className = 'video-play-overlay';
