@@ -357,38 +357,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
  <form class="admin-card" id="adminForm">
   <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
 
-  <div id="aboutEditPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
-   <strong style="font-size:13px">编辑「关于创作者」文字</strong>
-   <p style="margin:6px 0">登录管理员后可直接编辑页面中的标题、介绍和标签。</p>
-   <div class="admin-actions"><button type="button" id="aboutEditToggle">开启页面编辑</button><button type="button" class="secondary" id="aboutEditSave">保存文字</button><button type="button" class="secondary" id="aboutEditCancel">取消编辑</button></div>
-   <div class="admin-status" id="aboutEditStatus" role="status">编辑内容仅保存在当前浏览器。</div>
-  </div>
-  <div id="contactEditPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
-   <strong style="font-size:13px">编辑「联系合作」文字</strong>
-   <p style="margin:6px 0">开启后可直接点击页面下方联系区域的标题、介绍、按钮文字和邮箱提示进行修改。</p>
-   <div class="admin-actions"><button type="button" id="contactEditToggle">开启联系区编辑</button><button type="button" class="secondary" id="contactEditSave">保存联系区文字</button><button type="button" class="secondary" id="contactEditCancel">取消编辑</button></div>
-   <div class="admin-status" id="contactEditStatus" role="status">当前保存方式为本地浏览器。</div>
-  </div>
-  <div id="externalVideoPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
-   <strong style="font-size:13px">添加外部视频（不占 Supabase 空间）</strong>
-   <p style="margin:6px 0">先把大视频上传到 YouTube，建议设为“不公开列出”，再粘贴视频链接。</p>
-   <label for="externalVideoTitle">作品名称</label><input id="externalVideoTitle" type="text" maxlength="80" placeholder="例如：国漫打斗短片">
-   <label for="externalVideoUrl">YouTube 视频链接</label><input id="externalVideoUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." >
-   <label for="externalVideoCategory">作品分类</label><input id="externalVideoCategory" type="text" maxlength="24" value="AI 影像" placeholder="例如：AI 影像">
-   <div class="admin-actions"><button type="button" id="externalVideoSave">添加视频到作品集</button></div>
-  </div>
-  <div id="qiniuVideoPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
-   <strong style="font-size:13px">七牛云大视频上传</strong>
-   <p style="margin:6px 0">支持分片上传与断点续传。上传完成后自动加入作品集；大文件上传时间取决于网络和七牛云配置。</p>
-   <label for="qiniuVideoTitle">作品名称</label><input id="qiniuVideoTitle" type="text" maxlength="80" placeholder="例如：国漫打斗长视频">
-   <label for="qiniuVideoCategory">作品分类</label><input id="qiniuVideoCategory" type="text" maxlength="24" value="AI 影像" placeholder="例如：AI 影像">
-   <label for="qiniuVideoFile">选择视频文件</label><input id="qiniuVideoFile" type="file" accept="video/*,.mp4,.mov,.m4v,.webm,.mkv,.avi">
-   <div style="height:8px;background:#333;border-radius:8px;overflow:hidden;margin:12px 0 6px"><div id="qiniuUploadBar" style="height:100%;width:0;background:#b8d8a7;transition:width .2s"></div></div>
-   <div id="qiniuUploadStatus" class="admin-status" role="status">等待选择视频。</div>
-   <div class="admin-actions"><button type="button" id="qiniuVideoUpload">上传到七牛云并添加作品</button></div>
-  </div>
-  <label for="adminEmail">管理员邮箱</label><input id="adminEmail" type="email" autocomplete="username" required placeholder="输入创建 Supabase 用户时使用的邮箱">
-  <label for="adminPassword">密码</label><input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Supabase 账号密码">
+  <p id="adminLoginHint" style="color:#a6a397;font-size:13px;margin:8px 0 16px">请使用管理员账号和密码登录。</p>
   <div class="admin-actions"><button type="submit" id="adminSubmit">登录</button><button type="button" class="secondary" id="adminLogout" hidden>退出登录</button></div>
   <div class="admin-status" id="adminStatus" role="status"></div>
  </form>
