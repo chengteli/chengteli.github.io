@@ -334,10 +334,10 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 #adminOpen{background:transparent;color:var(--acid);border-color:#6b7547}
 #adminDialog{position:fixed;inset:0;z-index:2100;display:none;align-items:center;justify-content:center;padding:18px;background:#080908e8;backdrop-filter:blur(9px)}
 #adminDialog.open{display:flex}
-.admin-card{width:min(460px,100%);background:#1c1c18;border:1px solid #45443a;padding:26px}
-.admin-card h3{margin:0;font-size:25px}.admin-card p{color:var(--muted);font-size:12px;line-height:1.8}
-.admin-card label{display:block;font-size:12px;margin:14px 0 6px}
-.admin-card input{width:100%;background:#11110f;color:var(--ink);border:1px solid #555448;border-radius:5px;padding:12px;font:inherit}
+.admin-card{width:min(380px,100%);max-height:calc(100vh - 32px);overflow-y:auto;background:#1c1c18;border:1px solid #45443a;padding:20px}
+.admin-card h3{margin:0;font-size:22px}.admin-card p{color:var(--muted);font-size:12px;line-height:1.6;margin:8px 0}
+.admin-card label{display:block;font-size:12px;margin:10px 0 5px}
+.admin-card input{width:100%;background:#11110f;color:var(--ink);border:1px solid #555448;border-radius:5px;padding:10px;font:inherit}
 .admin-actions{display:flex;gap:8px;margin-top:16px}.admin-actions button{border:1px solid var(--acid);background:var(--acid);color:#17180f;border-radius:999px;padding:10px 15px;cursor:pointer;font-weight:700}.admin-actions button.secondary{background:transparent;color:var(--ink);border-color:#555448}
 .admin-status{font-size:12px;min-height:20px;margin-top:10px;color:var(--acid)}
 .cloud-badge{font-size:10px;color:var(--acid);letter-spacing:.08em}
@@ -347,6 +347,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.is-admin) .project-actions{display:none!important}
 .project-visual iframe.project-media{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 #externalVideoPanel[hidden]{display:none!important}
+#qiniuVideoPanel[hidden]{display:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
@@ -354,7 +355,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
 <div id="adminDialog" role="dialog" aria-modal="true" aria-labelledby="adminDialogTitle">
  <form class="admin-card" id="adminForm">
   <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
-  <p>登录后可管理作品。访客无需登录即可浏览公开作品。</p>
+
   <div id="externalVideoPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
    <strong style="font-size:13px">添加外部视频（不占 Supabase 空间）</strong>
    <p style="margin:6px 0">先把大视频上传到 YouTube，建议设为“不公开列出”，再粘贴视频链接。</p>
