@@ -7,6 +7,7 @@ This Cloudflare Worker is the secure API gateway for https://chengteli.github.io
 Set Worker variables:
 - `QINIU_BUCKET` = `cheng-portfolio`
 - `QINIU_DOMAIN` = `https://tn1fk7ro8.hn-bkt.clouddn.com`
+- `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `ADMIN_UID` = current portfolio admin-auth settings. The Worker validates the supplied bearer token with Supabase Auth and only accepts the configured admin user. These are public project settings, not secrets.
 
 Add these as **encrypted secrets**:
 - `QINIU_ACCESS_KEY`
