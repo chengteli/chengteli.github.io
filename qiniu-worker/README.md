@@ -1,34 +1,30 @@
-# Qiniu Kodo upload-token Worker
+# Qiniu-only portfolio API
 
-This is the server-side token issuer for the static portfolio at https://chengteli.github.io.
-It keeps Qiniu Access Key / Secret Key out of the public GitHub Pages code and verifies the current Supabase user against the configured admin UID.
+This Cloudflare Worker is the secure API gateway for https://chengteli.github.io. Qiniu Kodo is intended to store uploaded images/videos and the shared `portfolio-data/site-data.json` metadata file. Supabase is not required by this Worker.
 
-## Configure in Cloudflare Workers
+## Cloudflare Worker configuration
 
-1. Create a Worker and paste the contents of `index.js` (or deploy this file with Wrangler).
-2. Add Worker variables:
-   - `QINIU_BUCKET` = `cheng-portfolio`
-   - `QINIU_DOMAIN` = `https://tn1fk7ro8.hn-bkt.clouddn.com`
-   - `SUPABASE_URL` = `https://rtsvmmxwlufrmwuwvtbp.supabase.co`
-   - `SUPABASE_ADMIN_UID` = `fa045953-4acb-4987-9ed1-e645bd5aefd8`
-   - `SUPABASE_ANON_KEY` = the project's public Supabase publishable/anon key (optional for Auth user lookup; if configured, use the existing public key)
-3. Add **encrypted secrets**, not plain variables:
-   - `QINIU_ACCESS_KEY`
-   - `QINIU_SECRET_KEY`
-4. Deploy. The endpoint will be `https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/upload-token`.
-5. Set the endpoint URL in the portfolio frontend configuration after deployment.
+Set Worker variables:
+- `QINIU_BUCKET` = `cheng-portfolio`
+- `QINIU_DOMAIN` = `https://tn1fk7ro8.hn-bkt.clouddn.com`
 
-## API
+Add these as **encrypted secrets**:
+- `QINIU_ACCESS_KEY`
+- `QINIU_SECRET_KEY`
+- `ADMIN_PASSWORD` — choose a strong admin password; do not reuse a public password.
+- `ADMIN_SESSION_SECRET` — a separate, long random secret used to sign short-lived admin sessions.
 
-POST `/upload-token`, with:
-- `Authorization: Bearer <Supabase access token>`
-- JSON: `{"fileName":"clip.mp4","size":12345,"contentType":"video/mp4"}`
+Do not put any of these secrets in GitHub Pages frontend code.
 
-Returns a one-hour token scoped to a unique object key, with insert-only permissions and a file-size ceiling matching the requested file. The endpoint rejects requests without a valid Supabase session for the configured administrator and allows browser requests only from the portfolio origin.
+## Endpoints
 
-## Notes
+- `GET /items`: read public site metadata from `portfolio-data/site-data.json` on the Qiniu domain. Returns an empty starter object if the file does not exist yet.
+- `POST /admin-login`: JSON `{"password":"..."}`; returns a signed 12-hour session token.
+- `POST /upload-token`: requires `Authorization: Bearer <session-token>`; JSON `{"fileName":"clip.mp4","size":12345,"contentType":"video/mp4"}`; returns a Qiniu upload token scoped to a unique image/video object.
+- `POST /data-token`: requires the same admin session; returns a token scoped to `portfolio-data/site-data.json` so the frontend can upload the shared metadata JSON.
 
-- The frontend should use the Qiniu JavaScript SDK resumable/chunk upload flow; the simple multipart upload API is limited to 1 GB.
-- The 50 GB ceiling is a policy maximum, not a promise that every account, browser, network, or Qiniu upload mode can complete a file that large.
-- Configure Qiniu Kodo CORS to allow origin `https://chengteli.github.io` if the selected upload SDK requires it.
-- Public objects at the configured domain can be watched by anyone who knows the URL. Do not upload private videos.
+Browser access is limited to the portfolio origin `https://chengteli.github.io`. Configure Qiniu Kodo CORS for that origin if needed.
+
+## Important migration note
+
+The frontend must call these endpoints and upload metadata JSON to Qiniu before the site is fully migrated away from Supabase. Updating this Worker alone does not complete the website migration. Existing Qiniu objects and old Supabase records are not automatically copied or deleted. The 50 GB upload ceiling is a policy limit, not a guarantee that all account/browser/network combinations can upload files that large.
