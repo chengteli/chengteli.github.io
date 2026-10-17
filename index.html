@@ -367,6 +367,17 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qiniu-js@3/dist/qiniu.min.js"></script>
+<div id="adminEditTools" hidden style="position:fixed;right:18px;bottom:18px;z-index:120;max-width:min(440px,calc(100vw - 36px));max-height:70vh;overflow:auto;background:#1c1c18;border:1px solid #45443a;padding:16px;color:#f4f1e8">
+ <strong>管理员页面编辑</strong>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+  <button type="button" id="aboutEditToggle">编辑创作者文字</button><button type="button" id="aboutEditSave">保存创作者文字</button><button type="button" id="aboutEditCancel" class="secondary">取消创作者编辑</button>
+ </div><p id="aboutEditStatus" class="admin-status">创作者文字编辑未开启。</p>
+ <hr style="border-color:#45443a;margin:12px 0">
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+  <button type="button" id="contactEditToggle">编辑联系区文字</button><button type="button" id="contactEditSave">保存联系区文字</button><button type="button" id="contactEditCancel" class="secondary">取消联系区编辑</button>
+ </div><p id="contactEditStatus" class="admin-status">联系区文字编辑未开启。</p>
+ <p style="font-size:12px;color:#a6a397">文字保存目前仅在当前浏览器生效。</p>
+</div>
 <div id="adminDialog" role="dialog" aria-modal="true" aria-labelledby="adminDialogTitle">
  <form class="admin-card" id="adminForm">
   <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
@@ -422,6 +433,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     if (password) password.disabled = admin;
     if (submit) submit.hidden = admin;
     ['externalVideoPanel','qiniuVideoPanel','aboutEditPanel','contactEditPanel'].forEach(id => { const el=document.getElementById(id); if(el) el.hidden=!admin; });
+    const editTools=document.getElementById('adminEditTools'); if(editTools) editTools.hidden=!admin;
     document.querySelectorAll('.upload-work,#addCategoryBtn,.project-actions').forEach(el => { el.hidden = !admin; });
     if (isAdmin()) say('管理员已登录。');
   };
