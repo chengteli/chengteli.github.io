@@ -311,12 +311,10 @@ body:not(.is-admin) .project-media { user-select:none; -webkit-user-select:none;
  picker.querySelector('#pickerCancel').addEventListener('click',hidePicker);
  picker.addEventListener('click',e=>{if(e.target===picker)hidePicker()});
  picker.querySelector('#pickerConfirm').addEventListener('click',()=>{
-    const files=pendingFiles.slice();
-    if(!files.length)return;
-    window.__portfolioFilesToUpload=files;
-    window.dispatchEvent(new CustomEvent('portfolio-cloud-upload-request',{detail:{files}}));
+    if(!pendingFiles.length)return;
+    queuedFiles = pendingFiles.slice();
     hidePicker();
-    picker.querySelector('#uploadNewCategory').value='';
+    uploadQueuedFiles();
   });
   document.getElementById('workUpload').addEventListener('change',event=>{const files=[...event.target.files||[]];if(files.length)showPicker(files);event.target.value=''});
  const dropOverlay=document.createElement('div');dropOverlay.className='drop-overlay';dropOverlay.innerHTML='<div class="drop-overlay-inner"><div class="drop-icon">↓</div><strong>松开鼠标，添加作品</strong><span>支持拖入多个视频和图片文件</span></div>';document.body.appendChild(dropOverlay);
@@ -324,7 +322,7 @@ body:not(.is-admin) .project-media { user-select:none; -webkit-user-select:none;
  document.addEventListener('dragenter',e=>{if(!e.dataTransfer||![...e.dataTransfer.types].includes('Files'))return;e.preventDefault();dragDepth++;dropOverlay.classList.add('visible');document.body.classList.add('is-dragging')});
  document.addEventListener('dragover',e=>{if(e.dataTransfer&&[...e.dataTransfer.types].includes('Files')){e.preventDefault();e.dataTransfer.dropEffect='copy'}});
  document.addEventListener('dragleave',e=>{if(!e.dataTransfer||![...e.dataTransfer.types].includes('Files'))return;dragDepth=Math.max(0,dragDepth-1);if(dragDepth===0){dropOverlay.classList.remove('visible');document.body.classList.remove('is-dragging')}});
- document.addEventListener('drop',e=>{if(!e.dataTransfer||!e.dataTransfer.files.length)return;e.preventDefault();e.stopPropagation();dragDepth=0;dropOverlay.classList.remove('visible');document.body.classList.remove('is-dragging');const files=[...e.dataTransfer.files].filter(file=>file.type.startsWith('image/')||file.type.startsWith('video/'));if(!files.length){alert('请拖入视频或图片文件。');return;}if(!document.body.classList.contains('is-admin')){alert('请先登录管理员账号，再拖入文件上传到云端。');return;}pendingFiles=files;refreshCategoryOptions();const select=picker.querySelector('#uploadCategorySelect');const current=activeFilter!=='all'&&[...select.options].some(o=>o.value===activeFilter)?activeFilter:'film';select.value=current;picker.querySelector('#uploadNewCategory').value='';window.__portfolioFilesToUpload=files;window.dispatchEvent(new CustomEvent('portfolio-cloud-upload-request',{detail:{files}}));});
+ document.addEventListener('drop',e=>{if(!e.dataTransfer||!e.dataTransfer.files.length)return;e.preventDefault();e.stopPropagation();dragDepth=0;dropOverlay.classList.remove('visible');document.body.classList.remove('is-dragging');const files=[...e.dataTransfer.files].filter(file=>file.type.startsWith('image/')||file.type.startsWith('video/'));if(!files.length){alert('请拖入视频或图片文件。');return;}if(!document.body.classList.contains('is-admin')){alert('请先登录管理员账号，再拖入文件上传到云端。');return;}showPicker(files);const select=picker.querySelector('#uploadCategorySelect');const current=activeFilter!=='all'&&[...select.options].some(o=>o.value===activeFilter)?activeFilter:'film';select.value=current;});
 
  const shareDialog=document.getElementById('shareDialog');
  document.getElementById('shareOpen').addEventListener('click',()=>{shareDialog.classList.add('open');document.getElementById('sharePassword').focus()});
@@ -885,12 +883,6 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     } finally { busy = false; confirmButton.disabled = false; }
   }
 
-  // Send selected files through the authenticated cloud upload path only.
-  window.addEventListener('portfolio-cloud-upload-request', e => {
-    queuedFiles = Array.isArray(e.detail?.files) ? e.detail.files : [];
-    window.__portfolioFilesToUpload = queuedFiles;
-    uploadQueuedFiles();
-  });
   uploadInput.addEventListener('change', e => { queuedFiles = [...(e.target.files || [])]; }, true);
   document.addEventListener('drop', e => {
     if (e.dataTransfer?.files?.length) queuedFiles = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'));
