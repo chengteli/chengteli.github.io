@@ -312,9 +312,13 @@ body:not(.is-admin) .project-media { user-select:none; -webkit-user-select:none;
  picker.addEventListener('click',e=>{if(e.target===picker)hidePicker()});
  picker.querySelector('#pickerConfirm').addEventListener('click',()=>{
     if(!pendingFiles.length)return;
-    queuedFiles = pendingFiles.slice();
+    const files = pendingFiles.slice();
     hidePicker();
-    uploadQueuedFiles();
+    if (typeof window.__portfolioUploadQueuedFiles === 'function') {
+      window.__portfolioUploadQueuedFiles(files);
+    } else {
+      alert('上传组件尚未就绪，请刷新页面后重试。');
+    }
   });
   document.getElementById('workUpload').addEventListener('change',event=>{const files=[...event.target.files||[]];if(files.length)showPicker(files);event.target.value=''});
  const dropOverlay=document.createElement('div');dropOverlay.className='drop-overlay';dropOverlay.innerHTML='<div class="drop-overlay-inner"><div class="drop-icon">↓</div><strong>松开鼠标，添加作品</strong><span>支持拖入多个视频和图片文件</span></div>';document.body.appendChild(dropOverlay);
@@ -901,6 +905,11 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
       alert('云端上传失败：' + details);
     } finally { busy = false; confirmButton.disabled = false; }
   }
+
+  window.__portfolioUploadQueuedFiles = files => {
+    queuedFiles = Array.isArray(files) ? files.slice() : [];
+    return uploadQueuedFiles();
+  };
 
   uploadInput.addEventListener('change', e => { queuedFiles = [...(e.target.files || [])]; }, true);
   document.addEventListener('drop', e => {
