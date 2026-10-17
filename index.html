@@ -311,43 +311,14 @@ body:not(.is-admin) .project-media { user-select:none; -webkit-user-select:none;
  picker.querySelector('#pickerCancel').addEventListener('click',hidePicker);
  picker.addEventListener('click',e=>{if(e.target===picker)hidePicker()});
  picker.querySelector('#pickerConfirm').addEventListener('click',()=>{
-   let categoryKey=picker.querySelector('#uploadCategorySelect').value||'film';
-   const customName=picker.querySelector('#uploadNewCategory').value.trim();
-   if(customName)categoryKey=addCategory(customName);
-   const files=pendingFiles.slice();hidePicker();
-   files.forEach(file=>{
-     if(!file.type.startsWith('image/')&&!file.type.startsWith('video/'))return;
-     const url=URL.createObjectURL(file),isVideo=file.type.startsWith('video/');
-     const project=document.createElement('article');project.className='project reveal is-uploaded visible';project.dataset.category=categoryKey;project.tabIndex=0;project.setAttribute('role','group');
-     const visual=document.createElement('div');visual.className='project-visual visual-06';
-     const media=document.createElement(isVideo?'video':'img');media.className='project-media';media.src=url;if(isVideo){media.controls=true;media.muted=false;media.defaultMuted=false;media.volume=1;media.playsInline=true;media.setAttribute('controls','');media.setAttribute('preload','metadata')}else media.alt=file.name;
-     visual.appendChild(media);
-     let playOverlay=null;
-     if(isVideo){
-       playOverlay=document.createElement('button');playOverlay.type='button';playOverlay.className='video-play-overlay';playOverlay.setAttribute('aria-label','播放视频');
-       playOverlay.innerHTML='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg>';
-       playOverlay.addEventListener('click',e=>{e.stopPropagation();if(media.paused){media.muted=false;media.play().then(()=>{playOverlay.hidden=true}).catch(()=>{playOverlay.hidden=false})}else{media.pause();playOverlay.hidden=false}});
-       media.addEventListener('play',()=>{playOverlay.hidden=true;playOverlay.style.display='none'});
-       media.addEventListener('pause',()=>{playOverlay.hidden=false;playOverlay.style.display='flex'});
-       media.addEventListener('ended',()=>{playOverlay.hidden=false;playOverlay.style.display='flex'});
-       visual.appendChild(playOverlay);playOverlay.style.display='flex';playOverlay.hidden=false;
-     }
-     const word=document.createElement('span');word.className='visual-word';word.textContent=isVideo?'AI VIDEO / UPLOADED':'IMAGE / UPLOADED';
-     const number=document.createElement('span');number.className='visual-number';number.textContent='CT—NEW';
-     const bottom=document.createElement('div');bottom.className='visual-bottom';const title=document.createElement('strong');title.textContent=file.name.replace(/\\.[^.]+$/,'').slice(0,50);const type=document.createElement('span');type.textContent=isVideo?'AI VIDEO':'IMAGE';bottom.append(title,type);visual.append(word,number);
-     const meta=document.createElement('div');meta.className='project-meta';const info=document.createElement('div');const h=document.createElement('h3');h.textContent=title.textContent;const p=document.createElement('p');p.textContent='分类：'+(filters.querySelector('[data-filter="'+categoryKey+'"]')?.textContent||'AI 影像')+' · 本机临时预览';info.append(h,p);meta.append(info);
-     const actions=document.createElement('div');actions.className='project-actions';
-     const rename=document.createElement('button');rename.type='button';rename.className='project-action';rename.textContent='✎ 重新命名';
-     const remove=document.createElement('button');remove.type='button';remove.className='project-action delete';remove.textContent='× 删除作品';
-     rename.addEventListener('click',e=>{e.stopPropagation();const next=prompt('请输入新的作品名称：',h.textContent);if(next&&next.trim()){h.textContent=next.trim().slice(0,80);title.textContent=h.textContent;project.setAttribute('aria-label','上传作品：'+h.textContent)}});
-     remove.addEventListener('click',e=>{e.stopPropagation();if(confirm('确定删除这个作品吗？')){URL.revokeObjectURL(url);project.remove()}});
-     actions.append(rename,remove);project.append(visual,meta,actions);document.getElementById('projectGrid').prepend(project);
-     if(activeFilter!=='all'&&activeFilter!==categoryKey)project.hidden=true;
-   });
-   picker.querySelector('#uploadNewCategory').value='';
-   applyFilter(activeFilter);
- });
- document.getElementById('workUpload').addEventListener('change',event=>{const files=[...event.target.files||[]];if(files.length)showPicker(files);event.target.value=''});
+    const files=pendingFiles.slice();
+    if(!files.length)return;
+    window.__portfolioFilesToUpload=files;
+    window.dispatchEvent(new CustomEvent('portfolio-cloud-upload-request',{detail:{files}}));
+    hidePicker();
+    picker.querySelector('#uploadNewCategory').value='';
+  });
+  document.getElementById('workUpload').addEventListener('change',event=>{const files=[...event.target.files||[]];if(files.length)showPicker(files);event.target.value=''});
  const dropOverlay=document.createElement('div');dropOverlay.className='drop-overlay';dropOverlay.innerHTML='<div class="drop-overlay-inner"><div class="drop-icon">↓</div><strong>松开鼠标，添加作品</strong><span>支持拖入多个视频和图片文件</span></div>';document.body.appendChild(dropOverlay);
  let dragDepth=0;
  document.addEventListener('dragenter',e=>{if(!e.dataTransfer||![...e.dataTransfer.types].includes('Files'))return;e.preventDefault();dragDepth++;dropOverlay.classList.add('visible');document.body.classList.add('is-dragging')});
@@ -832,6 +803,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
   }
 
   async function uploadQueuedFiles() {
+    if (Array.isArray(window.__portfolioFilesToUpload) && window.__portfolioFilesToUpload.length) queuedFiles = window.__portfolioFilesToUpload;
     if (!isAdmin()) { openAdmin(); say('请先登录已授权的管理员账号。',true); return; }
     if (!queuedFiles.length) { say('没有检测到待上传文件。',true); return; }
     if (busy) return;
@@ -913,7 +885,12 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     } finally { busy = false; confirmButton.disabled = false; }
   }
 
-  // Track files from both the file picker and drag-and-drop workflow.
+  // Send selected files through the authenticated cloud upload path only.
+  window.addEventListener('portfolio-cloud-upload-request', e => {
+    queuedFiles = Array.isArray(e.detail?.files) ? e.detail.files : [];
+    window.__portfolioFilesToUpload = queuedFiles;
+    uploadQueuedFiles();
+  });
   uploadInput.addEventListener('change', e => { queuedFiles = [...(e.target.files || [])]; }, true);
   document.addEventListener('drop', e => {
     if (e.dataTransfer?.files?.length) queuedFiles = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'));
