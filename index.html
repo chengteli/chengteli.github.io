@@ -815,7 +815,11 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
   }
   async function loadItems() {
     const {data,error} = await client.from('portfolio_items').select('*').order('created_at',{ascending:false});
-    if (error) { console.warn('Cloud portfolio load failed:', error.message); return; }
+    if (error) {
+      console.error('Cloud portfolio load failed:', error.message);
+      say('云端作品读取失败：' + error.message, true);
+      return false;
+    }
     grid.querySelectorAll('[data-cloud-id]').forEach(el => el.remove());
     cloudItems.clear();
     (data || []).forEach(item => {
@@ -824,6 +828,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
       grid.prepend(card);
     });
     document.querySelectorAll('.project').forEach(p => { if (p.dataset.category) p.hidden = false; });
+    return true;
   }
 
   async function uploadQueuedFiles() {
@@ -892,12 +897,14 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
         cloudItems.set(data.id,data);
         grid.prepend(createCard(data));
       }
-      say('上传完成，作品已保存到云端。');
+      const reloaded = await loadItems();
+      if (reloaded) say('上传完成，作品已保存到云端；已重新读取云端作品。');
       document.getElementById('uploadNewCategory').value='';
       document.getElementById('categoryPicker')?.classList.remove('open');
       const picker = document.querySelector('.category-picker');
       if (picker) picker.classList.remove('open');
       queuedFiles = [];
+      uploadInput.value = '';
     } catch (err) {
       console.error('Cloud portfolio upload failed:', err);
       const details = [err?.message, err?.statusCode ? '状态码：' + err.statusCode : '', err?.code ? '错误码：' + err.code : ''].filter(Boolean).join('；') || '未知错误。请检查 Storage 限制、网络和 RLS 策略。';
