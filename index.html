@@ -387,9 +387,9 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
  <form class="admin-card" id="adminForm">
   <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
 
-  <p id="adminLoginHint" style="color:#a6a397;font-size:13px;margin:8px 0 16px">请使用管理员账号和密码登录。</p>
-  <label for="adminEmail">管理员账号</label><input id="adminEmail" name="email" type="email" autocomplete="username" placeholder="管理员邮箱" required>
-  <label for="adminPassword">密码</label><input id="adminPassword" name="password" type="password" autocomplete="current-password" placeholder="管理员密码" required>
+  <p id="adminLoginHint" style="color:#a6a397;font-size:13px;margin:8px 0 16px">仅使用管理员账号和密码登录。</p>
+  <label for="adminEmail">账号</label><input id="adminEmail" name="email" type="email" autocomplete="username" placeholder="请输入管理员账号（邮箱）" required>
+  <label for="adminPassword">密码</label><input id="adminPassword" name="password" type="password" autocomplete="current-password" placeholder="请输入管理员密码" required>
   <div class="admin-actions"><button type="submit" id="adminSubmit">登录</button><button type="button" class="secondary" id="adminLogout" hidden>退出登录</button></div>
   <div class="admin-status" id="adminStatus" role="status"></div>
  </form>
