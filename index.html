@@ -887,11 +887,9 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
   document.addEventListener('drop', e => {
     if (e.dataTransfer?.files?.length) queuedFiles = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'));
   }, true);
-  // Capture before the original local-preview handler; prevent temporary-only uploads.
-  confirmButton.addEventListener('click', e => {
-    e.preventDefault(); e.stopImmediatePropagation(); uploadQueuedFiles();
-  }, true);
-
+  // Let the category picker's existing click handler copy pendingFiles into queuedFiles
+  // before starting the cloud upload. A capture-phase stopImmediatePropagation here
+  // prevents that handler from running and leaves queuedFiles empty.
   checkSession();
 })();
 </script>
