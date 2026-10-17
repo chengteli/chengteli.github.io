@@ -815,47 +815,66 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
       for (const file of queuedFiles) {
         if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) continue;
         const safeName = file.name.normalize('NFKC').replace(/[^a-zA-Z0-9._-]/g,'_').slice(-90) || 'media';
-        const path = currentUser.id + '/' + Date.now() + '-' + Math.random().toString(36).slice(2,8) + '-' + safeName;
-        // Use TUS resumable uploads for larger media; standard uploads are less reliable on unstable connections.
-        if (file.size > 6 * 1024 * 1024) {
-          if (!window.tus || !window.tus.Upload) throw new Error('大文件上传组件加载失败，请刷新页面后重试。');
-          const {data: sessionData, error: sessionError} = await client.auth.getSession();
-          if (sessionError) throw sessionError;
-          const accessToken = sessionData?.session?.access_token;
-          if (!accessToken) throw new Error('登录状态已失效，请重新登录管理员账号。');
-          const projectRef = 'rtsvmmxwlufrmwuwvtbp';
-          await new Promise((resolve, reject) => {
-            const upload = new window.tus.Upload(file, {
-              endpoint: 'https://' + projectRef + '.storage.supabase.co/storage/v1/upload/resumable',
-              retryDelays: [0, 3000, 5000, 10000, 20000],
-              headers: {
-                authorization: 'Bearer ' + accessToken,
-                apikey: SUPABASE_PUBLISHABLE_KEY,
-                'x-upsert': 'false'
-              },
-              uploadDataDuringCreation: true,
-              removeFingerprintOnSuccess: true,
-              chunkSize: 6 * 1024 * 1024,
-              metadata: {
-                bucketName: BUCKET,
-                objectName: path,
-                contentType: file.type || 'application/octet-stream',
-                cacheControl: '3600'
-              },
-              onError: reject,
-              onProgress: (bytesUploaded, bytesTotal) => {
-                const percent = Math.round(bytesUploaded / bytesTotal * 100);
-                say('正在上传 ' + file.name + '：' + percent + '%');
-              },
-              onSuccess: resolve
-            });
-            upload.start();
-          });
-        } else {
-          const {error:uploadError} = await client.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type || undefined});
-          if (uploadError) throw uploadError;
+        // Upload images and videos to the configured Qiniu Kodo bucket.
+        // Supabase Storage bucket portfolio-media is not configured in this project.
+        if (!window.qiniu || typeof window.qiniu.upload !== 'function') {
+          throw new Error('七牛云上传组件加载失败，请刷新页面后重试。');
         }
-        const url = mediaUrl(path);
+        const {data: sessionData, error: sessionError} = await client.auth.getSession();
+        if (sessionError) throw sessionError;
+        const accessToken = sessionData?.session?.access_token;
+        if (!accessToken) throw new Error('登录状态已失效，请重新登录管理员账号。');
+
+        say('正在为 ' + file.name + ' 申请七牛云上传凭证…');
+        const tokenResponse = await fetch(QINIU_TOKEN_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            fileName: file.name,
+            size: file.size,
+            contentType: file.type || 'application/octet-stream'
+          })
+        });
+        const tokenData = await tokenResponse.json().catch(() => ({}));
+        if (!tokenResponse.ok) {
+          throw new Error(tokenData.error || ('七牛云凭证接口返回 HTTP ' + tokenResponse.status));
+        }
+        if (!tokenData.token || !tokenData.key) {
+          throw new Error('七牛云凭证接口返回内容不完整。');
+        }
+
+        const domain = String(tokenData.domain || QINIU_DEFAULT_DOMAIN).replace(/\\/$/, '');
+        let uploadedUrl = '';
+        await new Promise((resolve, reject) => {
+          const observable = window.qiniu.upload(
+            file,
+            tokenData.key,
+            tokenData.token,
+            {fname: file.name, mimeType: [file.type || 'application/octet-stream']},
+            {
+              region: window.qiniu.region.z2,
+              useCdnDomain: false,
+              retryCount: 5,
+              concurrentRequestLimit: 3
+            }
+          );
+          observable.subscribe({
+            next(result) {
+              const percent = result && result.total ? Number(result.total.percent || 0) : 0;
+              say('正在上传 ' + file.name + ' 到七牛云：' + percent.toFixed(1) + '%');
+            },
+            error(error) { reject(error || new Error('七牛云上传失败。')); },
+            complete(result) {
+              const key = result && result.key ? result.key : tokenData.key;
+              uploadedUrl = domain + '/' + key;
+              resolve();
+            }
+          });
+        });
+        const url = uploadedUrl;
         const title = file.name.replace(/\.[^.]+$/,'').slice(0,80) || '未命名作品';
         const {data,error:insertError} = await client.from('portfolio_items').insert({
           title, category, description:'', media_url:url, media_type:file.type.startsWith('video/')?'video':'image'
