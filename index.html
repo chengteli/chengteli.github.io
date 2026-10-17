@@ -592,7 +592,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     qiniuUploadStatus.style.color = error ? '#ff8a70' : '';
   };
   const qiniuSetProgress = percent => { qiniuProgressBar.style.width = Math.max(0, Math.min(100, percent)) + '%'; };
-  qiniuUploadButton.addEventListener('click', async () => {
+  if (qiniuUploadButton) qiniuUploadButton.addEventListener('click', async () => {
     if (!isAdmin()) return say('请先登录管理员账号。', true);
     const file = qiniuFileInput.files && qiniuFileInput.files[0];
     const title = document.getElementById('qiniuVideoTitle').value.trim();
@@ -660,7 +660,8 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     }
   });
 
-  document.getElementById('externalVideoSave').addEventListener('click', async () => {
+  const externalVideoSaveButton = document.getElementById('externalVideoSave');
+  if (externalVideoSaveButton) externalVideoSaveButton.addEventListener('click', async () => {
     if (!isAdmin()) return say('请先登录管理员账号。', true);
     const title = document.getElementById('externalVideoTitle').value.trim();
     const url = document.getElementById('externalVideoUrl').value.trim();
