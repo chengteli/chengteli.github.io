@@ -881,8 +881,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
           title, category, description:'', media_url:url, media_type:file.type.startsWith('video/')?'video':'image'
         }).select().single();
         if (insertError) {
-          await client.storage.from(BUCKET).remove([path]);
-          throw insertError;
+          throw new Error('文件已上传到七牛云，但作品信息未能保存到数据库：' + insertError.message + '。文件地址：' + url);
         }
         cloudItems.set(data.id,data);
         grid.prepend(createCard(data));
