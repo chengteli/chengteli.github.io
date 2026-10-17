@@ -128,16 +128,15 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 .drop-overlay{position:fixed;inset:18px;z-index:1000;display:none;align-items:center;justify-content:center;border:3px dashed var(--acid);border-radius:18px;background:rgba(12,13,10,.9);backdrop-filter:blur(12px);pointer-events:none}.drop-overlay.visible{display:flex}.drop-overlay-inner{text-align:center;color:var(--ink);padding:30px}.drop-overlay-inner .drop-icon{font-size:56px;line-height:1.2;color:var(--acid)}.drop-overlay-inner strong{display:block;font-size:clamp(22px,4vw,40px);margin:14px 0 6px}.drop-overlay-inner span{color:var(--muted);font-size:13px}body.is-dragging{outline:3px solid var(--acid);outline-offset:-6px}.share-btn{border:1px solid var(--acid);background:var(--acid);color:#17180f;border-radius:999px;padding:10px 16px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}.share-btn:hover{filter:brightness(1.06)}.share-dialog{position:fixed;inset:0;z-index:2000;background:#080908d9;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(9px)}.share-dialog.open{display:flex}.share-card{width:min(470px,100%);background:#1c1c18;border:1px solid #45443a;padding:26px;box-shadow:0 24px 90px #0008}.share-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.share-card h3{margin:0;font-size:25px}.share-close{border:1px solid #45443a;border-radius:50%;width:36px;height:36px;background:transparent;color:var(--ink);cursor:pointer;font-size:20px}.share-card p{font-size:12px;color:var(--muted);line-height:1.8}.share-field-label{display:block;font-size:12px;margin:18px 0 7px;color:var(--ink)}.share-input-row{display:flex;gap:8px}.share-input-row input{flex:1;min-width:0;background:#11110f;color:var(--ink);border:1px solid #555448;border-radius:5px;padding:12px;font:inherit;font-size:12px}.share-copy{border:1px solid var(--acid);background:var(--acid);color:#17180f;border-radius:5px;padding:0 13px;font:inherit;font-size:12px;cursor:pointer}.share-note{border-top:1px solid #393830;margin-top:20px;padding-top:12px;font-size:11px;color:#aaa798;line-height:1.7}.topbar{gap:14px}.nav{align-items:center}@media(max-width:700px){.share-btn{padding:9px 12px}.topbar{flex-wrap:wrap}.share-dialog{padding:12px}.share-card{padding:20px}}.access-gate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:22px;background:#11110f}.access-gate[hidden]{display:none!important}.access-card{width:min(420px,100%);padding:32px;background:#1b1b17;border:1px solid #454439}.access-card h1{font-size:28px;margin:12px 0}.access-card p,.access-foot{color:var(--muted);font-size:13px}.access-card label{display:block;margin:16px 0 7px}.access-card input{width:100%;padding:13px;background:#10100e;color:var(--ink);border:1px solid #555448;border-radius:5px;font:inherit}.access-submit{width:100%;margin-top:13px;padding:13px;border:0;border-radius:999px;background:var(--acid);color:#17180f;font-weight:700;cursor:pointer}.access-error{min-height:22px;color:#ff8064;font-size:12px;margin-top:8px}.access-brand{color:var(--acid);font-size:11px;letter-spacing:.16em;font-weight:700}
 /* Admin edit panel must respect the hidden attribute even if theme styles set display. */
 #adminEditTools[hidden]{display:none!important}
-/* Keep administrator editing controls anchored at the top-right, matching the site's marked header area. */
+/* Admin editor is an in-flow panel opened from the header, never a floating overlay. */
 #adminEditTools:not([hidden]){
-  position:fixed!important;top:16px!important;right:20px!important;bottom:auto!important;left:auto!important;
-  z-index:2200!important;width:min(440px,calc(100vw - 32px))!important;max-width:min(440px,calc(100vw - 32px))!important;
-  max-height:calc(100vh - 32px)!important;overflow:auto!important;
-  background:rgba(28,28,24,.97)!important;border:1px solid #45443a!important;
-  box-shadow:0 8px 28px rgba(0,0,0,.38)!important;
+  position:relative!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
+  z-index:20!important;width:min(100% - 64px,1380px)!important;max-width:1380px!important;
+  max-height:none!important;overflow:visible!important;margin:12px auto 0!important;padding:16px!important;
+  background:rgba(28,28,24,.97)!important;border:1px solid #45443a!important;box-shadow:none!important;
   transform:none!important;will-change:auto!important;
 }
-#adminEditTools:not([hidden]){display:block!important}
+
 #adminEditTools button{font-size:13px;padding:10px 12px;border-radius:8px}
 #adminEditTools .admin-status{margin:6px 0;font-size:12px;line-height:1.5}
 /* Public visitors can view the portfolio; editing controls are admin-only. */
@@ -153,7 +152,7 @@ body:not(.is-admin) .project-media { user-select:none; -webkit-user-select:none;
 <body><div class="access-gate" id="accessGate" hidden><form class="access-card" id="accessForm"><div class="access-brand">CHENG TELI / PRIVATE VIEW</div><h1>输入访问密码</h1><p>请输入分享者提供的密码，查看个人作品集。</p><label for="accessPassword">访问密码</label><input id="accessPassword" type="password" placeholder="请输入密码" required><button class="access-submit" type="submit">进入作品集 ↗</button><div class="access-error" id="accessError"></div><div class="access-foot">如需密码，请向分享者索取。</div></form></div>
 <header class="shell topbar">
   <a class="brand" href="#top" aria-label="回到首页"><span class="brand-mark">程</span><span>CHENG TELI<small>VISUAL ARTIST / AI FILMMAKER</small></span></a>
-  <button class="share-btn" id="adminOpen" type="button">管理员登录</button><button class="share-btn" id="shareOpen" type="button">分享链接 ↗</button><nav class="nav" id="nav" aria-label="主导航"><a href="#work">精选作品</a><a href="#about">关于我</a><a href="#contact" class="contact-link">联系合作 ↗</a></nav>
+  <button class="share-btn" id="adminOpen" type="button">管理员登录</button><button class="share-btn" id="adminEditOpen" type="button" hidden>编辑页面</button><button class="share-btn" id="shareOpen" type="button">分享链接 ↗</button><nav class="nav" id="nav" aria-label="主导航"><a href="#work">精选作品</a><a href="#about">关于我</a><a href="#contact" class="contact-link">联系合作 ↗</a></nav>
   <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false">☰</button>
 </header>
 <div class="share-dialog" id="shareDialog" role="dialog" aria-modal="true" aria-labelledby="shareTitle"><div class="share-card"><div class="share-card-head"><h3 id="shareTitle">分享我的作品集</h3><button class="share-close" id="shareClose" type="button" aria-label="关闭">×</button></div><p>随时复制作品集链接和固定分享密码，发给需要查看作品的人。</p><label class="share-field-label" for="shareUrl">作品集链接</label><div class="share-input-row"><input id="shareUrl" readonly value="https://chengteli.github.io/"><button class="share-copy" id="copyShareUrl" type="button">复制链接</button></div><label class="share-field-label" for="sharePassword">分享密码</label><div class="share-input-row"><input id="sharePassword" type="text" value="123456" autocomplete="off"><button class="share-copy" id="copySharePassword" type="button">复制密码</button></div><div class="share-note">分享链接：https://chengteli.github.io/　分享密码：123456。注意：当前网站仍是公开网页，这个密码用于分享告知，并不会真正拦截未输入密码的访问者。</div></div></div>
@@ -451,7 +450,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     if (password) password.disabled = false;
     if (submit) submit.hidden = false;
     ['externalVideoPanel','qiniuVideoPanel','aboutEditPanel','contactEditPanel'].forEach(id => { const el=document.getElementById(id); if(el) el.hidden=!admin; });
-    const editTools=document.getElementById('adminEditTools'); if(editTools){ editTools.hidden=!admin; editTools.style.display=admin?'block':'none'; }
+    const editTools=document.getElementById('adminEditTools'); const editOpen=document.getElementById('adminEditOpen'); if(editOpen) editOpen.hidden=!admin; if(editTools){ const show=admin&&editTools.classList.contains('panel-open'); editTools.hidden=!show; editTools.style.display=show?'block':'none'; }
     document.querySelectorAll('.upload-work,#addCategoryBtn,.project-actions').forEach(el => { el.hidden = !admin; });
     if (isAdmin()) say('管理员已登录。');
   };
@@ -507,6 +506,16 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
   document.getElementById('contactEditSave').addEventListener('click',()=>{if(!isAdmin())return;try{localStorage.setItem(contactKey,JSON.stringify(contactCurrent()));contactEditable(false);contactStatus.textContent='已保存到当前浏览器；其他设备和访客不会同步。'}catch(e){contactStatus.textContent='保存失败，请检查浏览器存储权限。'}});
   document.getElementById('contactEditCancel').addEventListener('click',()=>{if(!isAdmin())return;try{restoreContact(JSON.parse(localStorage.getItem(contactKey)||'null'))}catch(e){restoreContact(contactDefault)}contactEditable(false)});
   const openAdmin = () => { dialog.classList.add('open'); if (!isAdmin()) document.getElementById('adminEmail').focus(); };
+  const editPanel = document.getElementById('adminEditTools');
+  const editPanelButton = document.getElementById('adminEditOpen');
+  editPanelButton.addEventListener('click', () => {
+    if (!isAdmin()) return;
+    const show = !editPanel.classList.contains('panel-open');
+    editPanel.classList.toggle('panel-open', show);
+    editPanel.hidden = !show;
+    editPanel.style.display = show ? 'block' : 'none';
+    editPanelButton.textContent = show ? '收起编辑' : '编辑页面';
+  });
   loginButton.addEventListener('click', openAdmin);
   document.getElementById('adminClose').addEventListener('click', () => dialog.classList.remove('open'));
   dialog.addEventListener('click', e => { if (e.target === dialog) dialog.classList.remove('open'); });
