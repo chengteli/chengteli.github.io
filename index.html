@@ -846,7 +846,8 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
           throw new Error('七牛云凭证接口返回内容不完整。');
         }
 
-        const domain = String(tokenData.domain || QINIU_DEFAULT_DOMAIN).replace(/\\/$/, '');
+        let domain = String(tokenData.domain || QINIU_DEFAULT_DOMAIN);
+        while (domain.endsWith('/')) domain = domain.slice(0, -1);
         let uploadedUrl = '';
         await new Promise((resolve, reject) => {
           const observable = window.qiniu.upload(
