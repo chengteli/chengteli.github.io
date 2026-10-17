@@ -350,6 +350,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qiniu-js@3/dist/qiniu.min.js"></script>
 <div id="adminDialog" role="dialog" aria-modal="true" aria-labelledby="adminDialogTitle">
  <form class="admin-card" id="adminForm">
   <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
@@ -361,6 +362,16 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
    <label for="externalVideoUrl">YouTube 视频链接</label><input id="externalVideoUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." >
    <label for="externalVideoCategory">作品分类</label><input id="externalVideoCategory" type="text" maxlength="24" value="AI 影像" placeholder="例如：AI 影像">
    <div class="admin-actions"><button type="button" id="externalVideoSave">添加视频到作品集</button></div>
+  </div>
+  <div id="qiniuVideoPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
+   <strong style="font-size:13px">七牛云大视频上传</strong>
+   <p style="margin:6px 0">支持分片上传与断点续传。上传完成后自动加入作品集；大文件上传时间取决于网络和七牛云配置。</p>
+   <label for="qiniuVideoTitle">作品名称</label><input id="qiniuVideoTitle" type="text" maxlength="80" placeholder="例如：国漫打斗长视频">
+   <label for="qiniuVideoCategory">作品分类</label><input id="qiniuVideoCategory" type="text" maxlength="24" value="AI 影像" placeholder="例如：AI 影像">
+   <label for="qiniuVideoFile">选择视频文件</label><input id="qiniuVideoFile" type="file" accept="video/*,.mp4,.mov,.m4v,.webm,.mkv,.avi">
+   <div style="height:8px;background:#333;border-radius:8px;overflow:hidden;margin:12px 0 6px"><div id="qiniuUploadBar" style="height:100%;width:0;background:#b8d8a7;transition:width .2s"></div></div>
+   <div id="qiniuUploadStatus" class="admin-status" role="status">等待选择视频。</div>
+   <div class="admin-actions"><button type="button" id="qiniuVideoUpload">上传到七牛云并添加作品</button></div>
   </div>
   <label for="adminEmail">管理员邮箱</label><input id="adminEmail" type="email" autocomplete="username" required placeholder="输入创建 Supabase 用户时使用的邮箱">
   <label for="adminPassword">密码</label><input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Supabase 账号密码">
@@ -408,6 +419,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     document.getElementById('adminPassword').disabled = isAdmin();
     document.getElementById('adminSubmit').hidden = isAdmin();
     document.getElementById('externalVideoPanel').hidden = !isAdmin();
+    document.getElementById('qiniuVideoPanel').hidden = !isAdmin();
     if (isAdmin()) say('管理员已登录，可以管理云端作品。');
   };
   const openAdmin = () => { dialog.classList.add('open'); if (!isAdmin()) document.getElementById('adminEmail').focus(); };
@@ -453,6 +465,88 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
   logoutButton.addEventListener('click', async () => {
     await client.auth.signOut(); currentUser = null; setAdminUi(); say('已退出登录。'); dialog.classList.remove('open'); await loadItems();
   });
+
+  // Qiniu Kodo large-video upload via authenticated Cloudflare Worker token endpoint.
+  const QINIU_TOKEN_ENDPOINT = 'https://morning-paper-de53.1529367086.workers.dev/upload-token';
+  const QINIU_DEFAULT_DOMAIN = 'https://tn1fk7ro8.hn-bkt.clouddn.com';
+  const qiniuPanel = document.getElementById('qiniuVideoPanel');
+  const qiniuUploadButton = document.getElementById('qiniuVideoUpload');
+  const qiniuFileInput = document.getElementById('qiniuVideoFile');
+  const qiniuProgressBar = document.getElementById('qiniuUploadBar');
+  const qiniuUploadStatus = document.getElementById('qiniuUploadStatus');
+  const qiniuSetStatus = (message, error=false) => {
+    qiniuUploadStatus.textContent = message;
+    qiniuUploadStatus.style.color = error ? '#ff8a70' : '';
+  };
+  const qiniuSetProgress = percent => { qiniuProgressBar.style.width = Math.max(0, Math.min(100, percent)) + '%'; };
+  qiniuUploadButton.addEventListener('click', async () => {
+    if (!isAdmin()) return say('请先登录管理员账号。', true);
+    const file = qiniuFileInput.files && qiniuFileInput.files[0];
+    const title = document.getElementById('qiniuVideoTitle').value.trim();
+    const category = document.getElementById('qiniuVideoCategory').value.trim() || 'AI 影像';
+    if (!title) return qiniuSetStatus('请填写作品名称。', true);
+    if (!file) return qiniuSetStatus('请先选择视频文件。', true);
+    if (!file.type.startsWith('video/')) return qiniuSetStatus('请选择浏览器识别为视频的文件。', true);
+    if (!window.qiniu || typeof window.qiniu.upload !== 'function') return qiniuSetStatus('七牛云上传组件加载失败，请刷新页面后重试。', true);
+    qiniuUploadButton.disabled = true; qiniuSetProgress(0);
+    let uploadedUrl = '';
+    try {
+      qiniuSetStatus('正在验证管理员身份…');
+      const { data: sessionData, error: sessionError } = await client.auth.getSession();
+      if (sessionError) throw sessionError;
+      const session = sessionData && sessionData.session;
+      if (!session || !session.access_token) throw new Error('登录已过期，请重新登录管理员账号。');
+      qiniuSetStatus('正在申请七牛云上传凭证…');
+      const tokenResponse = await fetch(QINIU_TOKEN_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + session.access_token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileName: file.name, size: file.size, contentType: file.type || 'video/mp4' })
+      });
+      const tokenData = await tokenResponse.json().catch(() => ({}));
+      if (!tokenResponse.ok) throw new Error(tokenData.error || ('上传凭证接口返回 HTTP ' + tokenResponse.status));
+      if (!tokenData.token || !tokenData.key) throw new Error('上传凭证接口返回内容不完整。');
+      const domain = String(tokenData.domain || QINIU_DEFAULT_DOMAIN).replace(/\/$/, '');
+      qiniuSetStatus('开始分片上传：0%');
+      await new Promise((resolve, reject) => {
+        const observable = window.qiniu.upload(
+          file, tokenData.key, tokenData.token,
+          { fname: file.name, mimeType: [file.type || 'video/mp4'] },
+          { region: window.qiniu.region.z2, useCdnDomain: false, retryCount: 5, concurrentRequestLimit: 3 }
+        );
+        observable.subscribe({
+          next(result) {
+            const percent = result && result.total ? Number(result.total.percent || 0) : 0;
+            qiniuSetProgress(percent);
+            qiniuSetStatus('正在上传视频：' + percent.toFixed(1) + '%');
+          },
+          error(error) { reject(error || new Error('七牛云上传失败。')); },
+          complete(result) {
+            const key = result && result.key ? result.key : tokenData.key;
+            uploadedUrl = domain + '/' + key;
+            resolve();
+          }
+        });
+      });
+      qiniuSetStatus('视频已上传，正在保存作品信息…');
+      const { error: insertError } = await client.from('portfolio_items').insert({
+        title: title.slice(0, 80), category: category.slice(0, 24), description: '',
+        media_url: uploadedUrl, media_type: 'video'
+      });
+      if (insertError) throw new Error('视频已传到七牛云，但保存作品信息失败：' + insertError.message + '。视频地址：' + uploadedUrl);
+      qiniuSetProgress(100);
+      qiniuSetStatus('上传成功，视频已添加到作品集。');
+      document.getElementById('qiniuVideoTitle').value = '';
+      qiniuFileInput.value = '';
+      await loadItems();
+    } catch (error) {
+      const message = error && error.message ? error.message : '未知错误';
+      qiniuSetStatus('上传失败：' + message, true);
+      console.error('Qiniu video upload failed:', error);
+    } finally {
+      qiniuUploadButton.disabled = false;
+    }
+  });
+
   document.getElementById('externalVideoSave').addEventListener('click', async () => {
     if (!isAdmin()) return say('请先登录管理员账号。', true);
     const title = document.getElementById('externalVideoTitle').value.trim();
