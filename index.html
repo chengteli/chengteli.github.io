@@ -54,7 +54,22 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 25px}
 .filter{border:1px solid #3b3a32;color:#bcb9ae;background:transparent;border-radius:99px;padding:10px 15px;font-size:11px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 .filter:hover,.filter.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.create-category{border-style:dashed;color:var(--acid)}.upload-work{cursor:pointer;background:var(--acid);color:#17180f;border-color:var(--acid);font-weight:700}.upload-note{font-size:11px;color:#8f8d82;margin:-12px 0 24px}.project-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.project-media video{width:100%;height:100%;object-fit:cover}.project.is-uploaded .project-visual:has(video){cursor:pointer}.video-play-overlay{position:absolute!important;z-index:20!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:84px!important;height:84px!important;min-width:84px!important;border-radius:50%!important;border:2px solid #fff!important;background:rgba(15,15,13,.82)!important;color:#fff!important;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 8px 35px #0008;transition:background .2s;opacity:1!important;visibility:visible!important;pointer-events:auto!important}.video-play-overlay:hover{transform:translate(-50%,-50%) scale(1.08)!important;background:#d7f36a!important;color:#17180f!important}.video-play-overlay svg{display:block!important;width:34px!important;height:34px!important;margin-left:5px;flex:none}.video-play-overlay[hidden]{display:none}.project.is-uploaded .video-play-overlay[hidden]{display:none!important}.project.is-uploaded .video-play-overlay{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important}.project.is-uploaded .project-visual:has(video) .visual-bottom{bottom:58px}.project.is-uploaded .project-visual:after{z-index:2}.project.is-uploaded .visual-bottom,.project.is-uploaded .visual-word,.project.is-uploaded .visual-number{z-index:3}.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
+.create-category{border-style:dashed;color:var(--acid)}.upload-work{cursor:pointer;background:var(--acid);color:#17180f;border-color:var(--acid);font-weight:700}.upload-note{font-size:11px;color:#8f8d82;margin:-12px 0 24px}.project-media{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;background:#10110f}
+.project.is-uploaded .project-visual{aspect-ratio:auto!important;min-height:0!important;height:auto!important;display:flex;align-items:center;justify-content:center;cursor:zoom-in}
+.project.is-uploaded .project-visual:before,.project.is-uploaded .project-visual:after{display:none!important}
+.project.is-uploaded .project-media{position:relative!important;inset:auto!important;display:block;width:100%;height:auto;max-height:75vh;object-fit:contain;background:#10110f}
+.project.is-uploaded .project-visual:has(video) .project-media{aspect-ratio:auto}
+.project.is-uploaded .project-visual .visual-word,.project.is-uploaded .project-visual .visual-number,.project.is-uploaded .project-visual .visual-bottom{display:none!important}
+.project.is-uploaded .project-visual:has(iframe.project-media){height:min(65vw,520px)!important;aspect-ratio:16/9!important}
+.project.is-uploaded .project-visual iframe.project-media{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
+.media-lightbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.94)}
+.media-lightbox.open{display:flex}
+.media-lightbox-content{position:relative;max-width:96vw;max-height:94vh;display:flex;align-items:center;justify-content:center}
+.media-lightbox img,.media-lightbox video,.media-lightbox iframe{display:block;max-width:96vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border:0;background:#080808}
+.media-lightbox iframe{width:min(90vw,1200px);height:min(80vh,675px)}
+.media-lightbox-close{position:fixed;top:18px;right:22px;width:44px;height:44px;border:1px solid #888;border-radius:50%;background:#222;color:white;font-size:28px;cursor:pointer;z-index:2}
+.media-lightbox-hint{position:fixed;bottom:12px;left:0;right:0;text-align:center;color:#aaa;font-size:12px;pointer-events:none}
+@media(max-width:620px){.project.is-uploaded .project-media{max-height:70vh}.media-lightbox{padding:8px}.media-lightbox img,.media-lightbox video{max-width:98vw;max-height:88vh}}.project-media video{width:100%;height:100%;object-fit:cover}.project.is-uploaded .project-visual:has(video){cursor:pointer}.video-play-overlay{position:absolute!important;z-index:20!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:84px!important;height:84px!important;min-width:84px!important;border-radius:50%!important;border:2px solid #fff!important;background:rgba(15,15,13,.82)!important;color:#fff!important;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 8px 35px #0008;transition:background .2s;opacity:1!important;visibility:visible!important;pointer-events:auto!important}.video-play-overlay:hover{transform:translate(-50%,-50%) scale(1.08)!important;background:#d7f36a!important;color:#17180f!important}.video-play-overlay svg{display:block!important;width:34px!important;height:34px!important;margin-left:5px;flex:none}.video-play-overlay[hidden]{display:none}.project.is-uploaded .video-play-overlay[hidden]{display:none!important}.project.is-uploaded .video-play-overlay{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important}.project.is-uploaded .project-visual:has(video) .visual-bottom{bottom:58px}.project.is-uploaded .project-visual:after{z-index:2}.project.is-uploaded .visual-bottom,.project.is-uploaded .visual-word,.project.is-uploaded .visual-number{z-index:3}.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
 .project{grid-column:span 4;min-width:0;cursor:pointer;animation:rise .65s both;animation-delay:var(--delay,0ms)}
 .project:nth-child(1),.project:nth-child(4){grid-column:span 7}
 .project:nth-child(2),.project:nth-child(5){grid-column:span 5}
@@ -225,6 +240,35 @@ body:not(.is-admin) .project-media { user-select:none; -webkit-user-select:none;
 </div>
 <script>
 (function(){const g=document.getElementById('accessGate'),f=document.getElementById('accessForm'),p=document.getElementById('accessPassword'),e=document.getElementById('accessError');f.addEventListener('submit',function(x){x.preventDefault();if(p.value==='123456'){g.hidden=true;}else{e.textContent='密码不正确，请重试。';p.value='';p.focus();}});})();
+(function(){
+  const box=document.createElement('div');
+  box.className='media-lightbox';
+  box.innerHTML='<button type="button" class="media-lightbox-close" aria-label="关闭大图">×</button><div class="media-lightbox-content"></div><div class="media-lightbox-hint">点击空白处或按 Esc 关闭</div>';
+  document.body.appendChild(box);
+  const content=box.querySelector('.media-lightbox-content');
+  function close(){box.classList.remove('open');content.replaceChildren();}
+  box.querySelector('.media-lightbox-close').addEventListener('click',close);
+  box.addEventListener('click',e=>{if(e.target===box)close()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  window.openPortfolioMedia=function(item){
+    if(!item||item.tagName==='IFRAME'){
+      if(item&&item.tagName==='IFRAME'){const f=document.createElement('iframe');f.src=item.src;f.allow=item.allow||'autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;content.appendChild(f);box.classList.add('open');}
+      return;
+    }
+    const clone=document.createElement(item.tagName==='VIDEO'?'video':'img');
+    clone.src=item.currentSrc||item.src;
+    if(item.tagName==='VIDEO'){clone.controls=true;clone.autoplay=true;clone.playsInline=true;}
+    else clone.alt=item.alt||'作品图片';
+    content.appendChild(clone);box.classList.add('open');
+  };
+  document.addEventListener('click',e=>{
+    const visual=e.target.closest('.project.is-uploaded .project-visual');
+    if(!visual||e.target.closest('button,video[controls]'))return;
+    const media=visual.querySelector('.project-media');
+    if(media&&media.tagName==='VIDEO'&&e.target.closest('.video-play-overlay'))return;
+    if(media)window.openPortfolioMedia(media);
+  });
+})();
 (function(){
   // Deterrence only: browsers cannot reliably prevent screenshots or all media downloads.
   document.addEventListener('contextmenu', e => { if (!document.body.classList.contains('is-admin')) e.preventDefault(); });
