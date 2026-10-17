@@ -31,7 +31,7 @@ function json(data, status = 200, origin = "") {
 function b64url(bytes) {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replace(/\\+/g, "-").replace(/\\//g, "_").replace(/=+$/g, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 function b64text(text) {
   return b64url(new TextEncoder().encode(text));
@@ -46,14 +46,14 @@ async function hmac(secret, message, algorithm = "SHA-256") {
   return new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(message)));
 }
 function safeName(value) {
-  return String(value || "media").normalize("NFKC").replace(/[^\\p{L}\\p{N}._-]+/gu, "-").replace(/^[-.]+|[-.]+$/g, "").slice(0, 100) || "media";
+  return String(value || "media").normalize("NFKC").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^[-.]+|[-.]+$/g, "").slice(0, 100) || "media";
 }
 async function issueSession(env) {
   const payload = b64text(JSON.stringify({exp: Math.floor(Date.now()/1000) + SESSION_TTL, scope:"admin"}));
   return payload + "." + b64url(await hmac(env.ADMIN_SESSION_SECRET, payload));
 }
 async function isAdmin(request, env) {
-  const match = (request.headers.get("Authorization") || "").match(/^Bearer\\s+([^.]+\\.[^.]+)$/i);
+  const match = (request.headers.get("Authorization") || "").match(/^Bearer\s+([^.]+\.[^.]+)$/i);
   if (!match || !env.ADMIN_SESSION_SECRET) return false;
   const [payload, signature] = match[1].split(".");
   const expected = b64url(await hmac(env.ADMIN_SESSION_SECRET, payload));
@@ -72,10 +72,10 @@ async function qiniuToken(env, key, size, contentType, insertOnly = 1) {
   const policy = {scope: env.QINIU_BUCKET + ":" + key, deadline, insertOnly, fsizeLimit:size, mimeLimit:contentType};
   const encoded = b64text(JSON.stringify(policy));
   const token = env.QINIU_ACCESS_KEY + ":" + b64url(await hmac(env.QINIU_SECRET_KEY, encoded, "SHA-1")) + ":" + encoded;
-  return {token,key,bucket:env.QINIU_BUCKET,domain:env.QINIU_DOMAIN.replace(/\\/$/,""),expiresAt:deadline};
+  return {token,key,bucket:env.QINIU_BUCKET,domain:env.QINIU_DOMAIN.replace(/\/$/,""),expiresAt:deadline};
 }
 async function getPublicData(env) {
-  const response = await fetch(env.QINIU_DOMAIN.replace(/\\/$/,"") + "/" + DATA_KEY + "?v=" + Date.now(), {cf:{cacheTtl:0}});
+  const response = await fetch(env.QINIU_DOMAIN.replace(/\/$/,"") + "/" + DATA_KEY + "?v=" + Date.now(), {cf:{cacheTtl:0}});
   if (response.status === 404) return {items:[],about:null};
   if (!response.ok) throw new Error("Could not read site data from Qiniu");
   return await response.json();
