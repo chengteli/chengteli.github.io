@@ -363,6 +363,12 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
    <div class="admin-actions"><button type="button" id="aboutEditToggle">开启页面编辑</button><button type="button" class="secondary" id="aboutEditSave">保存文字</button><button type="button" class="secondary" id="aboutEditCancel">取消编辑</button></div>
    <div class="admin-status" id="aboutEditStatus" role="status">编辑内容仅保存在当前浏览器。</div>
   </div>
+  <div id="contactEditPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
+   <strong style="font-size:13px">编辑「联系合作」文字</strong>
+   <p style="margin:6px 0">开启后可直接点击页面下方联系区域的标题、介绍、按钮文字和邮箱提示进行修改。</p>
+   <div class="admin-actions"><button type="button" id="contactEditToggle">开启联系区编辑</button><button type="button" class="secondary" id="contactEditSave">保存联系区文字</button><button type="button" class="secondary" id="contactEditCancel">取消编辑</button></div>
+   <div class="admin-status" id="contactEditStatus" role="status">当前保存方式为本地浏览器。</div>
+  </div>
   <div id="externalVideoPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
    <strong style="font-size:13px">添加外部视频（不占 Supabase 空间）</strong>
    <p style="margin:6px 0">先把大视频上传到 YouTube，建议设为“不公开列出”，再粘贴视频链接。</p>
@@ -429,6 +435,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     document.getElementById('externalVideoPanel').hidden = !isAdmin();
     document.getElementById('qiniuVideoPanel').hidden = !isAdmin();
     document.getElementById('aboutEditPanel').hidden = !isAdmin();
+    document.getElementById('contactEditPanel').hidden = !isAdmin();
     if (isAdmin()) say('管理员已登录，可以管理云端作品。');
   };
   const aboutSection = document.getElementById('about');
@@ -462,6 +469,26 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     try { restoreAbout(JSON.parse(localStorage.getItem(aboutKey)||'null')); } catch(e) {restoreAbout(aboutDefault)}
     aboutEditable(false);
   });
+  const contactSection = document.getElementById('contact');
+  const contactTitle = contactSection.querySelector('h2');
+  const contactParagraph = contactSection.querySelector('.contact-right p');
+  const contactButtonText = document.getElementById('emailLink').childNodes[0];
+  const contactEmailLink = document.getElementById('emailLink');
+  const contactHint = contactSection.querySelector('.contact-right > span');
+  const contactStatus = document.getElementById('contactEditStatus');
+  const contactKey = 'chengteli-contact-copy-v1';
+  const contactDefault = {title:contactTitle.innerHTML, paragraph:contactParagraph.innerHTML, button:contactButtonText.textContent, href:contactEmailLink.getAttribute('href'), hint:contactHint.textContent};
+  const contactCurrent = () => ({title:contactTitle.innerHTML,paragraph:contactParagraph.innerHTML,button:contactButtonText.textContent,href:contactEmailLink.getAttribute('href'),hint:contactHint.textContent});
+  const restoreContact = data => { if(!data)return; contactTitle.innerHTML=data.title ?? contactDefault.title; contactParagraph.innerHTML=data.paragraph ?? contactDefault.paragraph; contactButtonText.textContent=data.button ?? contactDefault.button; contactEmailLink.setAttribute('href',data.href ?? contactDefault.href); contactHint.textContent=data.hint ?? contactDefault.hint; };
+  try { restoreContact(JSON.parse(localStorage.getItem(contactKey)||'null')); } catch(e) {}
+  const contactEditable = value => {
+    [contactTitle,contactParagraph,contactButtonText.parentElement,contactHint].forEach(el=>{el.contentEditable=value?'true':'false';el.classList.toggle('about-editable',value)});
+    contactStatus.textContent=value?'直接点击下方联系区域的文字进行修改，邮箱地址可在按钮链接属性中由管理员另行调整。':'编辑已关闭。';
+    document.getElementById('contactEditToggle').textContent=value?'正在编辑联系区':'开启联系区编辑';
+  };
+  document.getElementById('contactEditToggle').addEventListener('click',()=>{if(isAdmin())contactEditable(true)});
+  document.getElementById('contactEditSave').addEventListener('click',()=>{if(!isAdmin())return;try{localStorage.setItem(contactKey,JSON.stringify(contactCurrent()));contactEditable(false);contactStatus.textContent='已保存到当前浏览器；其他设备和访客不会同步。'}catch(e){contactStatus.textContent='保存失败，请检查浏览器存储权限。'}});
+  document.getElementById('contactEditCancel').addEventListener('click',()=>{if(!isAdmin())return;try{restoreContact(JSON.parse(localStorage.getItem(contactKey)||'null'))}catch(e){restoreContact(contactDefault)}contactEditable(false)});
   const openAdmin = () => { dialog.classList.add('open'); if (!isAdmin()) document.getElementById('adminEmail').focus(); };
   loginButton.addEventListener('click', openAdmin);
   document.getElementById('adminClose').addEventListener('click', () => dialog.classList.remove('open'));
