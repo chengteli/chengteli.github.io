@@ -53,19 +53,42 @@ async function issueSession(env) {
   return payload + "." + b64url(await hmac(env.ADMIN_SESSION_SECRET, payload));
 }
 async function isAdmin(request, env) {
-  const match = (request.headers.get("Authorization") || "").match(/^Bearer\s+([^.]+\.[^.]+)$/i);
-  if (!match || !env.ADMIN_SESSION_SECRET) return false;
-  const [payload, signature] = match[1].split(".");
-  const expected = b64url(await hmac(env.ADMIN_SESSION_SECRET, payload));
-  if (signature.length !== expected.length) return false;
-  const a = new TextEncoder().encode(signature), b = new TextEncoder().encode(expected);
-  if (!crypto.subtle.timingSafeEqual) {
-    let diff = 0; for (let i=0;i<a.length;i++) diff |= a[i]^b[i]; if (diff) return false;
-  } else if (!crypto.subtle.timingSafeEqual(a,b)) return false;
+  const match = (request.headers.get("Authorization") || "").match(/^Bearer\s+(.+)$/i);
+  if (!match) return false;
+  const token = match[1].trim();
+
+  // Accept short-lived Worker sessions for the standalone /admin-login flow.
+  const sessionMatch = token.match(/^([^.]+)\.([^.]+)$/);
+  if (sessionMatch && env.ADMIN_SESSION_SECRET) {
+    const [, payload, signature] = sessionMatch;
+    const expected = b64url(await hmac(env.ADMIN_SESSION_SECRET, payload));
+    const a = new TextEncoder().encode(signature), b = new TextEncoder().encode(expected);
+    let diff = a.length ^ b.length;
+    for (let i = 0; i < Math.max(a.length, b.length); i++) diff |= (a[i] || 0) ^ (b[i] || 0);
+    if (diff === 0) {
+      try {
+        const data = JSON.parse(new TextDecoder().decode(fromB64url(payload)));
+        if (data.scope === "admin" && data.exp > Math.floor(Date.now()/1000)) return true;
+      } catch { /* Continue with Supabase token validation. */ }
+    }
+  }
+
+  // The current portfolio frontend authenticates admins with Supabase Auth.
+  // Ask Supabase to validate its bearer token, then require the configured admin UID.
+  if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY || !env.ADMIN_UID) return false;
   try {
-    const data = JSON.parse(new TextDecoder().decode(fromB64url(payload)));
-    return data.scope === "admin" && data.exp > Math.floor(Date.now()/1000);
-  } catch { return false; }
+    const response = await fetch(env.SUPABASE_URL.replace(/\/$/, "") + "/auth/v1/user", {
+      headers: {
+        apikey: env.SUPABASE_PUBLISHABLE_KEY,
+        Authorization: "Bearer " + token
+      }
+    });
+    if (!response.ok) return false;
+    const user = await response.json();
+    return user && user.id === env.ADMIN_UID;
+  } catch {
+    return false;
+  }
 }
 async function qiniuToken(env, key, size, contentType, insertOnly = 1) {
   const deadline = Math.floor(Date.now()/1000) + 3600;
