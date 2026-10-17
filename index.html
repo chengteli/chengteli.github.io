@@ -54,7 +54,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--acid);outline-offse
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 25px}
 .filter{border:1px solid #3b3a32;color:#bcb9ae;background:transparent;border-radius:99px;padding:10px 15px;font-size:11px;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
 .filter:hover,.filter.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.create-category{border-style:dashed;color:var(--acid)}.upload-work{cursor:pointer;background:var(--acid);color:#17180f;border-color:var(--acid);font-weight:700}.upload-note{font-size:11px;color:#8f8d82;margin:-12px 0 24px}.project-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.project-media video{width:100%;height:100%;object-fit:cover}.project.is-uploaded .project-visual:has(video){cursor:pointer}.video-play-overlay{position:absolute!important;z-index:20!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:84px!important;height:84px!important;min-width:84px!important;border-radius:50%!important;border:2px solid #fff!important;background:rgba(15,15,13,.82)!important;color:#fff!important;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 8px 35px #0008;transition:background .2s;opacity:1!important;visibility:visible!important;pointer-events:auto!important}.video-play-overlay:hover{transform:translate(-50%,-50%) scale(1.08)!important;background:#d7f36a!important;color:#17180f!important}.video-play-overlay svg{display:block!important;width:34px!important;height:34px!important;margin-left:5px;flex:none}.video-play-overlay[hidden]{display:none}.project.is-uploaded .project-visual:has(video) .visual-bottom{bottom:58px}.project.is-uploaded .project-visual:after{z-index:2}.project.is-uploaded .visual-bottom,.project.is-uploaded .visual-word,.project.is-uploaded .visual-number{z-index:3}.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
+.create-category{border-style:dashed;color:var(--acid)}.upload-work{cursor:pointer;background:var(--acid);color:#17180f;border-color:var(--acid);font-weight:700}.upload-note{font-size:11px;color:#8f8d82;margin:-12px 0 24px}.project-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.project-media video{width:100%;height:100%;object-fit:cover}.project.is-uploaded .project-visual:has(video){cursor:pointer}.video-play-overlay{position:absolute!important;z-index:20!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:84px!important;height:84px!important;min-width:84px!important;border-radius:50%!important;border:2px solid #fff!important;background:rgba(15,15,13,.82)!important;color:#fff!important;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 8px 35px #0008;transition:background .2s;opacity:1!important;visibility:visible!important;pointer-events:auto!important}.video-play-overlay:hover{transform:translate(-50%,-50%) scale(1.08)!important;background:#d7f36a!important;color:#17180f!important}.video-play-overlay svg{display:block!important;width:34px!important;height:34px!important;margin-left:5px;flex:none}.video-play-overlay[hidden]{display:none}.project.is-uploaded .video-play-overlay[hidden]{display:none!important}.project.is-uploaded .video-play-overlay{left:50%!important;top:50%!important;right:auto!important;bottom:auto!important}.project.is-uploaded .project-visual:has(video) .visual-bottom{bottom:58px}.project.is-uploaded .project-visual:after{z-index:2}.project.is-uploaded .visual-bottom,.project.is-uploaded .visual-word,.project.is-uploaded .visual-number{z-index:3}.project-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:19px}
 .project{grid-column:span 4;min-width:0;cursor:pointer;animation:rise .65s both;animation-delay:var(--delay,0ms)}
 .project:nth-child(1),.project:nth-child(4){grid-column:span 7}
 .project:nth-child(2),.project:nth-child(5){grid-column:span 5}
@@ -698,6 +698,21 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     const title = document.createElement('strong'); title.textContent = item.title || '未命名作品';
     const type = document.createElement('span'); type.textContent = isVideo ? 'AI VIDEO' : 'IMAGE';
     bottom.append(title,type); visual.append(media,word,number,bottom);
+    if (isVideo && !youtubeId) {
+      const playOverlay = document.createElement('button');
+      playOverlay.type = 'button'; playOverlay.className = 'video-play-overlay';
+      playOverlay.setAttribute('aria-label','播放视频');
+      playOverlay.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg>';
+      playOverlay.addEventListener('click', e => {
+        e.preventDefault(); e.stopPropagation();
+        if (media.paused) media.play().catch(() => { playOverlay.hidden = false; });
+        else media.pause();
+      });
+      media.addEventListener('play', () => { playOverlay.hidden = true; });
+      media.addEventListener('pause', () => { playOverlay.hidden = false; });
+      media.addEventListener('ended', () => { playOverlay.hidden = false; });
+      visual.appendChild(playOverlay);
+    }
     const meta = document.createElement('div'); meta.className = 'project-meta';
     const info = document.createElement('div'); const h = document.createElement('h3'); h.textContent = item.title || '未命名作品';
     const p = document.createElement('p'); p.textContent = '分类：' + (item.category || '未分类') + ' · 云端作品';
