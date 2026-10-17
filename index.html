@@ -352,11 +352,14 @@ body:not(.is-admin) .project-media { user-select:none; -webkit-user-select:none;
 <style>
 #adminOpen{background:transparent;color:var(--acid);border-color:#6b7547}
 #adminDialog{position:fixed;inset:0;z-index:2100;display:none;align-items:center;justify-content:center;padding:18px;background:#080908e8;backdrop-filter:blur(9px)}
-#adminDialog.open{display:flex}
-.admin-card{width:min(380px,100%);max-height:calc(100vh - 32px);overflow-y:auto;background:#1c1c18;border:1px solid #45443a;padding:20px}
-.admin-card h3{margin:0;font-size:22px}.admin-card p{color:var(--muted);font-size:12px;line-height:1.6;margin:8px 0}
-.admin-card label{display:block;font-size:12px;margin:10px 0 5px}
-.admin-card input{width:100%;background:#11110f;color:var(--ink);border:1px solid #555448;border-radius:5px;padding:10px;font:inherit}
+#adminDialog.open{display:flex;pointer-events:auto}
+#adminDialog{isolation:isolate}
+#adminDialog .admin-card{position:relative;z-index:1;pointer-events:auto;user-select:auto;-webkit-user-select:auto;touch-action:auto;width:min(380px,100%);max-height:calc(100vh - 32px);overflow-y:auto;background:#1c1c18;border:1px solid #45443a;padding:20px}
+#adminDialog .admin-card h3{margin:0;font-size:22px}#adminDialog .admin-card p{color:var(--muted);font-size:12px;line-height:1.6;margin:8px 0}
+#adminDialog .admin-card label{display:block;font-size:12px;margin:10px 0 5px;pointer-events:auto}
+#adminDialog .admin-card input{display:block;position:relative;z-index:2;pointer-events:auto;user-select:text;-webkit-user-select:text;touch-action:manipulation;width:100%;min-height:42px;background:#11110f;color:var(--ink);border:1px solid #777665;border-radius:5px;padding:10px;font:inherit;opacity:1;visibility:visible}
+#adminDialog .admin-card input:focus{outline:2px solid var(--acid);outline-offset:1px;border-color:var(--acid)}
+#adminDialog .admin-card input:disabled{opacity:.65;cursor:not-allowed}
 .admin-actions{display:flex;gap:8px;margin-top:16px}.admin-actions button{border:1px solid var(--acid);background:var(--acid);color:#17180f;border-radius:999px;padding:10px 15px;cursor:pointer;font-weight:700}.admin-actions button.secondary{background:transparent;color:var(--ink);border-color:#555448}
 .admin-status{font-size:12px;min-height:20px;margin-top:10px;color:var(--acid)}
 .cloud-badge{font-size:10px;color:var(--acid);letter-spacing:.08em}
