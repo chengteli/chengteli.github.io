@@ -348,6 +348,7 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
 .project-visual iframe.project-media{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 #externalVideoPanel[hidden]{display:none!important}
 #qiniuVideoPanel[hidden]{display:none!important}
+.about-editable[contenteditable='true']{outline:1px dashed var(--acid);outline-offset:4px;cursor:text;border-radius:2px}.about-editable[contenteditable='true']:focus{outline:2px solid var(--acid)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
@@ -356,6 +357,12 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
  <form class="admin-card" id="adminForm">
   <div class="share-card-head"><h3 id="adminDialogTitle">管理员登录</h3><button class="share-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
 
+  <div id="aboutEditPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
+   <strong style="font-size:13px">编辑「关于创作者」文字</strong>
+   <p style="margin:6px 0">登录管理员后可直接编辑页面中的标题、介绍和标签。</p>
+   <div class="admin-actions"><button type="button" id="aboutEditToggle">开启页面编辑</button><button type="button" class="secondary" id="aboutEditSave">保存文字</button><button type="button" class="secondary" id="aboutEditCancel">取消编辑</button></div>
+   <div class="admin-status" id="aboutEditStatus" role="status">编辑内容仅保存在当前浏览器。</div>
+  </div>
   <div id="externalVideoPanel" hidden style="border:1px solid #45443a;padding:12px;margin:14px 0">
    <strong style="font-size:13px">添加外部视频（不占 Supabase 空间）</strong>
    <p style="margin:6px 0">先把大视频上传到 YouTube，建议设为“不公开列出”，再粘贴视频链接。</p>
@@ -421,8 +428,40 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     document.getElementById('adminSubmit').hidden = isAdmin();
     document.getElementById('externalVideoPanel').hidden = !isAdmin();
     document.getElementById('qiniuVideoPanel').hidden = !isAdmin();
+    document.getElementById('aboutEditPanel').hidden = !isAdmin();
     if (isAdmin()) say('管理员已登录，可以管理云端作品。');
   };
+  const aboutSection = document.getElementById('about');
+  const aboutTitle = aboutSection.querySelector('h2');
+  const aboutParagraphs = [...aboutSection.querySelectorAll('.about-copy p')];
+  const aboutTags = [...aboutSection.querySelectorAll('.capabilities span')];
+  const aboutStatus = document.getElementById('aboutEditStatus');
+  const aboutOriginal = () => ({title:aboutTitle.innerHTML, paragraphs:aboutParagraphs.map(p=>p.innerHTML), tags:aboutTags.map(t=>t.textContent)});
+  const aboutDefault = aboutOriginal();
+  const aboutKey = 'chengteli-about-copy-v1';
+  const restoreAbout = data => {
+    if (!data) return;
+    aboutTitle.innerHTML = data.title || aboutDefault.title;
+    (data.paragraphs || aboutDefault.paragraphs).forEach((v,i)=>{if(aboutParagraphs[i]) aboutParagraphs[i].innerHTML=v});
+    (data.tags || aboutDefault.tags).forEach((v,i)=>{if(aboutTags[i]) aboutTags[i].textContent=v});
+  };
+  try { restoreAbout(JSON.parse(localStorage.getItem(aboutKey) || 'null')); } catch(e) {}
+  const aboutEditable = value => {
+    [aboutTitle,...aboutParagraphs,...aboutTags].forEach(el=>{el.contentEditable=value?'true':'false';el.classList.toggle('about-editable',value)});
+    document.getElementById('aboutEditToggle').textContent=value?'正在编辑页面文字':'开启页面编辑';
+    aboutStatus.textContent=value?'直接点击页面上的文字进行修改，完成后点「保存文字」。':'编辑已关闭。';
+  };
+  document.getElementById('aboutEditToggle').addEventListener('click',()=>{if(isAdmin()) aboutEditable(true)});
+  document.getElementById('aboutEditSave').addEventListener('click',()=>{
+    if(!isAdmin()) return;
+    try { localStorage.setItem(aboutKey,JSON.stringify(aboutOriginal())); aboutEditable(false); aboutStatus.textContent='已保存到当前浏览器；其他设备和访客不会同步。'; }
+    catch(e){aboutStatus.textContent='保存失败，请检查浏览器存储权限。';}
+  });
+  document.getElementById('aboutEditCancel').addEventListener('click',()=>{
+    if(!isAdmin()) return;
+    try { restoreAbout(JSON.parse(localStorage.getItem(aboutKey)||'null')); } catch(e) {restoreAbout(aboutDefault)}
+    aboutEditable(false);
+  });
   const openAdmin = () => { dialog.classList.add('open'); if (!isAdmin()) document.getElementById('adminEmail').focus(); };
   loginButton.addEventListener('click', openAdmin);
   document.getElementById('adminClose').addEventListener('click', () => dialog.classList.remove('open'));
