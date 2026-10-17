@@ -445,9 +445,10 @@ body:not(.is-admin) .upload-work,body:not(.is-admin) #addCategoryBtn,body:not(.i
     const email = document.getElementById('adminEmail');
     const password = document.getElementById('adminPassword');
     const submit = document.getElementById('adminSubmit');
-    if (email) email.disabled = admin;
-    if (password) password.disabled = admin;
-    if (submit) submit.hidden = admin;
+    // Keep credentials editable even when a prior admin session exists; users may re-enter credentials.
+    if (email) email.disabled = false;
+    if (password) password.disabled = false;
+    if (submit) submit.hidden = false;
     ['externalVideoPanel','qiniuVideoPanel','aboutEditPanel','contactEditPanel'].forEach(id => { const el=document.getElementById(id); if(el) el.hidden=!admin; });
     const editTools=document.getElementById('adminEditTools'); if(editTools){ editTools.hidden=!admin; editTools.style.display=admin?'block':'none'; }
     document.querySelectorAll('.upload-work,#addCategoryBtn,.project-actions').forEach(el => { el.hidden = !admin; });
