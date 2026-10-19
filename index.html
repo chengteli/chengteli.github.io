@@ -38,8 +38,6 @@
     .portrait-tag{position:absolute;z-index:2;left:-8px;bottom:12%;background:var(--red);color:white;padding:11px 16px;font:italic 13px var(--serif);transform:rotate(-5deg)}
     .round-note{position:absolute;right:0;top:6%;width:94px;height:94px;border:1px solid #84887c;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:9px;line-height:1.5;letter-spacing:.13em;color:var(--green);transform:rotate(11deg)}
     .hero-index{position:absolute;right:5%;bottom:1%;font-size:9px;letter-spacing:.18em;color:#777a71}
-    .ticker{border-block:1px solid var(--line);padding:15px 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#777a71}
-    .ticker b{color:var(--red);font-weight:400}
     section.work{padding:100px 0 112px}
     .section-top{display:flex;justify-content:space-between;align-items:end;gap:28px;margin-bottom:34px}
     h2{font-size:clamp(40px,6vw,72px);line-height:1;letter-spacing:-.07em;margin:13px 0 0}
@@ -52,7 +50,7 @@
     .project[hidden]{display:none}
     .project{min-width:0;animation:appear .45s both}
     .project:nth-child(2){margin-top:74px}
-    .project-visual{position:relative;overflow:hidden;background:#dad5c8;aspect-ratio:1.3;cursor:zoom-in}
+    .project-visual{position:relative;overflow:hidden;background:#dad5c8;aspect-ratio:1.3;cursor:zoom-in;isolation:isolate}
     .project:nth-child(2) .project-visual{aspect-ratio:.88}
     .project-visual img,.project-visual video{display:block;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
     .project:hover .project-visual img,.project:hover .project-visual video{transform:scale(1.025)}
@@ -60,7 +58,7 @@
     .project-index{position:absolute;top:16px;left:17px;z-index:1;padding:6px 9px;background:#f1eee5e8;color:var(--ink);font-size:9px;letter-spacing:.12em}
     .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62px;height:62px;border:1px solid #ffffffc7;border-radius:50%;display:grid;place-items:center;background:#161c187a;color:white;backdrop-filter:blur(5px);font-size:20px;padding-left:4px;transition:background .2s}
     .project:hover .play{background:var(--red)}
-    .project-caption{display:flex;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
+    .project-caption{display:flex;justify-content:space-between;gap:14px;padding:15px 0;border-bottom:1px solid var(--line);align-items:flex-start}
     .project-caption h3{margin:0;font-size:15px;font-weight:700}
     .project-caption p{margin:5px 0 0;font-size:11px;color:var(--muted)}
     .project-type{color:var(--green);font-size:9px;letter-spacing:.12em;white-space:nowrap;padding-top:3px}
@@ -81,7 +79,8 @@
     .lightbox img,.lightbox video{display:block;max-width:min(92vw,1200px);max-height:88vh;object-fit:contain}
     .lightbox-close{position:fixed;right:20px;top:18px;border:1px solid #b6b8af;border-radius:50%;width:42px;height:42px;color:white;background:#242a25;font-size:24px;cursor:pointer}
     @keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-    @media(max-width:760px){.wrap{width:min(100% - 38px,620px)}.topbar{height:72px}nav{gap:17px}nav a:not(.nav-contact){display:none}.hero{min-height:auto;grid-template-columns:1fr;padding:65px 0 48px;gap:12px}.hero h1{font-size:clamp(68px,17vw,112px)}.hero-portrait{min-height:410px}.portrait-frame{height:375px;width:min(340px,78%)}.round-note{right:5%;top:5%}.hero-index{right:7%;bottom:0}.ticker{justify-content:center;gap:10px 16px}.ticker span:nth-of-type(n+4),.ticker b:nth-of-type(n+3){display:none}section.work{padding:72px 0 82px}.section-top{align-items:start;flex-direction:column;gap:14px}.section-intro{max-width:440px}.project-grid{grid-template-columns:1fr;gap:32px}.project:nth-child(2){margin-top:0}.project-visual,.project:nth-child(2) .project-visual{aspect-ratio:1.1}.project:nth-child(2) .project-visual img{object-position:50% 33%}.about{grid-template-columns:1fr;gap:30px;padding:55px 0}.contact{padding:70px 0;align-items:start;flex-direction:column}.contact-side{max-width:380px}footer{font-size:8px}}
+    @media(max-width:760px){.wrap{width:min(100% - 38px,620px)}.topbar{height:72px}nav{gap:10px}nav a:not(.nav-contact){display:none}nav a[href="#work"]{display:inline-flex;font-size:11px}.nav-contact{padding:8px 11px;font-size:11px}.wordmark{font-size:10px}.wordmark small{font-size:8px}.hero{min-height:auto;grid-template-columns:1fr;padding:65px 0 48px;gap:12px}.hero h1{font-size:clamp(68px,17vw,112px)}.hero-portrait{min-height:410px}.portrait-frame{height:375px;width:min(340px,78%)}.round-note{right:5%;top:5%}.hero-index{right:7%;bottom:0}section.work{padding:72px 0 82px}.section-top{align-items:start;flex-direction:column;gap:14px}.section-intro{max-width:440px}.project-grid{grid-template-columns:1fr;gap:32px}.project:nth-child(2){margin-top:0}.project-visual,.project:nth-child(2) .project-visual{aspect-ratio:1.1}.project:nth-child(2) .project-visual img{object-position:50% 33%}.about{grid-template-columns:1fr;gap:30px;padding:55px 0}.contact{padding:70px 0;align-items:start;flex-direction:column}.contact-side{max-width:380px}footer{font-size:8px}}
+    @media(max-width:400px){nav{gap:8px}.nav-contact{display:none}.hero-links{flex-wrap:wrap}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
 </head>
@@ -103,7 +102,6 @@
         <div class="round-note">IMAGINE<br>· MAKE ·<br>REPEAT</div><span class="hero-index">VISUAL DIARY — 01</span>
       </div>
     </section>
-    <div class="wrap ticker" aria-hidden="true"><span>Character & image</span><b>✳</b><span>Visual storytelling</span><b>✳</b><span>Motion experiments</span><b>✳</b><span>Made with curiosity</span></div>
     <section class="wrap work" id="work">
       <div class="section-top"><div><div class="section-label">01 / SELECTED WORK</div><h2>一些创作，<em>一些念头。</em></h2></div><p class="section-intro">从角色肖像到动态影像，记录正在发生的视觉练习。点击作品可以放大查看。</p></div>
       <div class="filters" role="group" aria-label="筛选作品"><button class="filter active" data-filter="all" aria-pressed="true">全部</button><button class="filter" data-filter="image" aria-pressed="false">角色视觉</button><button class="filter" data-filter="film" aria-pressed="false">影像练习</button></div>
@@ -131,25 +129,46 @@
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="作品预览"><button class="lightbox-close" type="button" aria-label="关闭预览">×</button><div id="lightboxContent"></div></div>
   <script>
     const filters=[...document.querySelectorAll('.filter')];
-    const projects=[...document.querySelectorAll('.project')];
     filters.forEach(button=>button.addEventListener('click',()=>{
       filters.forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-pressed',String(active))});
-      projects.forEach(project=>project.hidden=button.dataset.filter!=='all'&&project.dataset.category!==button.dataset.filter);
+      document.querySelectorAll('.project').forEach(project=>project.hidden=button.dataset.filter!=='all'&&project.dataset.category!==button.dataset.filter);
     }));
     const lightbox=document.getElementById('lightbox');
     const content=document.getElementById('lightboxContent');
     function closePreview(){lightbox.classList.remove('open');content.replaceChildren()}
-    document.querySelectorAll('.project-visual').forEach(visual=>visual.addEventListener('click',()=>{
+    document.addEventListener('click',event=>{
+      const visual=event.target.closest('.project-visual');
+      if(!visual)return;
       const source=visual.querySelector('img,video');
+      if(!source)return;
       const preview=document.createElement(source.tagName.toLowerCase());
       preview.src=source.currentSrc||source.src;
       if(source.tagName==='VIDEO'){preview.controls=true;preview.autoplay=true;preview.playsInline=true}
       else preview.alt=source.alt;
       content.replaceChildren(preview);lightbox.classList.add('open');
-    }));
+    });
     document.querySelector('.lightbox-close').addEventListener('click',closePreview);
     lightbox.addEventListener('click',event=>{if(event.target===lightbox)closePreview()});
     document.addEventListener('keydown',event=>{if(event.key==='Escape')closePreview()});
+    function safeText(element,text){element.textContent=String(text||'')}
+    function renderCloudItems(items){
+      const cloudItems=Array.isArray(items)?items:[];
+      const grid=document.querySelector('.project-grid');grid.replaceChildren();
+      if(!cloudItems.length){const empty=document.createElement('p');empty.className='section-intro';empty.textContent='作品正在整理中，欢迎稍后再来看看。';grid.appendChild(empty);return}
+      cloudItems.forEach((item,index)=>{
+        const type=String(item.media_type||'image').toLowerCase()==='video'?'video':'image';
+        const article=document.createElement('article');article.className='project';article.dataset.category=type==='video'?'film':'image';
+        const visual=document.createElement('div');visual.className='project-visual';
+        const badge=document.createElement('span');badge.className='project-index';safeText(badge,(type==='video'?'MOTION':'IMAGE')+' / '+String(index+1).padStart(2,'0'));visual.appendChild(badge);
+        const media=document.createElement(type);media.src=item.media_url||'';media.loading='lazy';media.alt=type==='image'?String(item.title||'作品图片'):'';if(type==='video'){media.controls=false;media.muted=true;media.playsInline=true;media.preload='metadata'}visual.appendChild(media);
+        if(type==='video'){const play=document.createElement('span');play.className='play';play.setAttribute('aria-hidden','true');play.textContent='▶';visual.appendChild(play)}
+        const caption=document.createElement('div');caption.className='project-caption';const details=document.createElement('div');const title=document.createElement('h3');safeText(title,item.title||'未命名作品');const desc=document.createElement('p');safeText(desc,item.description||'');details.append(title,desc);const label=document.createElement('span');label.className='project-type';safeText(label,type==='video'?'VIDEO':'IMAGE');caption.append(details,label);article.append(visual,caption);grid.appendChild(article);
+      });
+    }
+    async function loadCloudItems(){
+      try{const response=await fetch('./portfolio-data/site-data.json',{cache:'no-cache'});if(!response.ok)throw new Error('作品清单暂时不可用');const data=await response.json();if(Array.isArray(data.items)&&data.items.length)renderCloudItems(data.items)}catch(error){console.info('Portfolio manifest is unavailable; showing the bundled examples.',error)}
+    }
+    loadCloudItems();
   </script>
 </body>
 </html>
