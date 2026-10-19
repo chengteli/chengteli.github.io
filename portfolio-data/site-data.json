@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "title": "影像练习 01",
+      "description": "一段关于节奏、氛围与画面运动的视觉实验。",
+      "media_type": "video",
+      "media_url": "assets/visual-study.mp4"
+    },
+    {
+      "title": "红刃 · 角色视觉",
+      "description": "写实角色渲染练习，聚焦目光、材质与镜头距离。",
+      "media_type": "image",
+      "media_url": "assets/red-blade.webp"
+    }
+  ]
+}
