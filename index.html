@@ -79,6 +79,28 @@
     .lightbox img,.lightbox video{display:block;max-width:min(92vw,1200px);max-height:88vh;object-fit:contain}
     .lightbox-close{position:fixed;right:20px;top:18px;border:1px solid #b6b8af;border-radius:50%;width:42px;height:42px;color:white;background:#242a25;font-size:24px;cursor:pointer}
     @keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+    .admin-open{border:1px solid #92948a;border-radius:99px;padding:9px 13px;font-size:11px;background:transparent;cursor:pointer;color:var(--ink)}
+    .admin-layer{position:fixed;inset:0;z-index:20;background:#101311b8;display:none;align-items:center;justify-content:center;padding:18px}
+    .admin-layer.open{display:flex}
+    .admin-card{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--paper);padding:25px;border:1px solid var(--line);box-shadow:0 20px 70px #0005}
+    .admin-head{display:flex;justify-content:space-between;gap:16px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:18px}
+    .admin-head h3{margin:0;font:700 24px var(--serif)}
+    .admin-close{border:1px solid var(--line);background:transparent;border-radius:50%;width:36px;height:36px;font-size:22px;cursor:pointer}
+    .admin-form{display:grid;gap:12px}
+    .admin-form label{font-size:11px;color:var(--muted);display:grid;gap:5px}
+    .admin-form input,.admin-form textarea,.admin-form select{font:inherit;font-size:13px;padding:11px 12px;border:1px solid var(--line);background:#fffdf7;color:var(--ink);width:100%;border-radius:2px}
+    .admin-form textarea{min-height:70px;resize:vertical}
+    .drop-zone{border:1px dashed #899083;padding:24px 16px;text-align:center;background:#e8e5da;color:#4f594f;font-size:12px;cursor:pointer}
+    .drop-zone.dragging{border-color:var(--red);background:#f5e5df}
+    .admin-status{font-size:12px;line-height:1.7;color:var(--green);min-height:20px;overflow-wrap:anywhere}
+    .admin-status.error{color:var(--red)}
+    .admin-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+    .admin-secondary{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:11px 15px;cursor:pointer;font-size:12px}
+    .project-admin-actions{display:flex;gap:8px;margin-top:10px}
+    .project-admin-actions button{border:1px solid var(--line);background:transparent;padding:5px 9px;font-size:10px;cursor:pointer;color:var(--muted)}
+    .project-admin-actions button:hover{border-color:var(--red);color:var(--red)}
+
     @media(max-width:760px){.wrap{width:min(100% - 38px,620px)}.topbar{height:72px}nav{gap:10px}nav a:not(.nav-contact){display:none}nav a[href="#work"]{display:inline-flex;font-size:11px}.nav-contact{padding:8px 11px;font-size:11px}.wordmark{font-size:10px}.wordmark small{font-size:8px}.hero{min-height:auto;grid-template-columns:1fr;padding:65px 0 48px;gap:12px}.hero h1{font-size:clamp(68px,17vw,112px)}.hero-portrait{min-height:410px}.portrait-frame{height:375px;width:min(340px,78%)}.round-note{right:5%;top:5%}.hero-index{right:7%;bottom:0}section.work{padding:72px 0 82px}.section-top{align-items:start;flex-direction:column;gap:14px}.section-intro{max-width:440px}.project-grid{grid-template-columns:1fr;gap:32px}.project:nth-child(2){margin-top:0}.project-visual,.project:nth-child(2) .project-visual{aspect-ratio:1.1}.project:nth-child(2) .project-visual img{object-position:50% 33%}.about{grid-template-columns:1fr;gap:30px;padding:55px 0}.contact{padding:70px 0;align-items:start;flex-direction:column}.contact-side{max-width:380px}footer{font-size:8px}}
     @media(max-width:400px){nav{gap:8px}.nav-contact{display:none}.hero-links{flex-wrap:wrap}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
@@ -87,7 +109,7 @@
 <body>
   <header class="wrap topbar">
     <a class="wordmark" href="#top">CHENG TELI<small>VISUAL CREATOR / 2026</small></a>
-    <nav aria-label="主导航"><a href="#work">作品</a><a href="#about">关于</a><a class="nav-contact" href="#contact">联系 ↗</a></nav>
+    <nav aria-label="主导航"><a href="#work">作品</a><a href="#about">关于</a><a class="nav-contact" href="#contact">联系 ↗</a><button class="admin-open" id="adminOpen" type="button">管理入口</button></nav>
   </header>
   <main id="top">
     <section class="wrap hero">
@@ -126,6 +148,29 @@
     </section>
   </main>
   <footer class="wrap"><span>© 2026 CHENG TELI / PERSONAL PORTFOLIO</span><span>Built with curiosity, in Foshan.</span></footer>
+  <div class="admin-layer" id="adminLayer" role="dialog" aria-modal="true" aria-label="作品管理">
+    <section class="admin-card">
+      <div class="admin-head"><h3>作品管理</h3><button class="admin-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
+      <form class="admin-form" id="adminLoginForm">
+        <label>管理员密码<input id="adminPassword" type="password" autocomplete="current-password" placeholder="输入管理密码" required></label>
+        <div class="admin-actions"><button class="button" type="submit">登录管理端 ↗</button></div>
+      </form>
+      <div id="adminWorkspace" hidden>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 15px">已登录。作品将上传到七牛云，作品清单也保存到七牛云；刷新后仍然保留。</p>
+        <form class="admin-form" id="uploadForm">
+          <label>作品名称<input id="workTitle" maxlength="120" placeholder="例如：角色视觉练习" required></label>
+          <label>作品说明<textarea id="workDescription" maxlength="500" placeholder="简单介绍这件作品"></textarea></label>
+          <label>作品类型<select id="workType"><option value="image">图片</option><option value="video">视频</option></select></label>
+          <div class="drop-zone" id="dropZone" tabindex="0">将图片或视频拖到这里，或点击选择文件<br><small>支持常见图片与视频格式；大文件采用分片上传</small><input id="workFile" type="file" accept="image/*,video/*" hidden></div>
+          <div class="admin-status" id="uploadStatus" aria-live="polite"></div>
+          <div class="admin-actions"><button class="button" type="submit">上传并保存作品 ↗</button><button class="admin-secondary" id="adminLogout" type="button">退出登录</button></div>
+        </form>
+        <div style="border-top:1px solid var(--line);margin-top:20px;padding-top:15px"><strong style="font-size:12px">已保存的云端作品</strong><div id="adminSavedList" style="font-size:12px;color:var(--muted);margin-top:8px"></div></div>
+      </div>
+      <p class="admin-status" id="loginStatus" aria-live="polite"></p>
+    </section>
+  </div>
+  <script src="https://unpkg.com/qiniu-js@3.4.1/dist/qiniu.min.js"></script>
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="作品预览"><button class="lightbox-close" type="button" aria-label="关闭预览">×</button><div id="lightboxContent"></div></div>
   <script>
     const filters=[...document.querySelectorAll('.filter')];
@@ -150,9 +195,9 @@
     document.querySelector('.lightbox-close').addEventListener('click',closePreview);
     lightbox.addEventListener('click',event=>{if(event.target===lightbox)closePreview()});
     document.addEventListener('keydown',event=>{if(event.key==='Escape')closePreview()});
-    function safeText(element,text){element.textContent=String(text||'')}
+    let adminToken=sessionStorage.getItem('portfolio_admin_token')||'';\n    let cloudItems=[];\n    const WORKER_API='https://morning-paper-de53.1529367086.workers.dev';\n    function safeText(element,text){element.textContent=String(text||'')}
     function renderCloudItems(items){
-      const cloudItems=Array.isArray(items)?items:[];
+      cloudItems=Array.isArray(items)?items:[];
       const grid=document.querySelector('.project-grid');grid.replaceChildren();
       if(!cloudItems.length){const empty=document.createElement('p');empty.className='section-intro';empty.textContent='作品正在整理中，欢迎稍后再来看看。';grid.appendChild(empty);return}
       cloudItems.forEach((item,index)=>{
@@ -166,9 +211,103 @@
       });
     }
     async function loadCloudItems(){
-      try{const response=await fetch('./portfolio-data/site-data.json',{cache:'no-cache'});if(!response.ok)throw new Error('作品清单暂时不可用');const data=await response.json();if(Array.isArray(data.items)&&data.items.length)renderCloudItems(data.items)}catch(error){console.info('Portfolio manifest is unavailable; showing the bundled examples.',error)}
+      try{
+        const response=await fetch(WORKER_API+'/items',{cache:'no-store'});
+        if(!response.ok)throw new Error('七牛云作品清单读取失败 ('+response.status+')');
+        const data=await response.json();
+        if(Array.isArray(data.items)&&data.items.length){renderCloudItems(data.items);return}
+      }catch(error){console.warn('Qiniu list unavailable; trying the bundled manifest.',error)}
+      try{const response=await fetch('./portfolio-data/site-data.json',{cache:'no-cache'});if(!response.ok)throw new Error('作品清单暂时不可用');const data=await response.json();if(Array.isArray(data.items)&&data.items.length)renderCloudItems(data.items)}catch(error){console.info('Portfolio manifest is unavailable; showing bundled examples.',error)}
     }
-    loadCloudItems();
+    const adminLayer=document.getElementById('adminLayer');
+    const loginForm=document.getElementById('adminLoginForm');
+    const workspace=document.getElementById('adminWorkspace');
+    const loginStatus=document.getElementById('loginStatus');
+    const uploadStatus=document.getElementById('uploadStatus');
+    const fileInput=document.getElementById('workFile');
+    const dropZone=document.getElementById('dropZone');
+    function status(el,message,error=false){el.textContent=message;el.classList.toggle('error',error)}
+    function openAdmin(){adminLayer.classList.add('open');loginStatus.textContent='';syncAdminState()}
+    function syncAdminState(){loginForm.hidden=!!adminToken;workspace.hidden=!adminToken;if(adminToken)refreshSavedList()}
+    document.getElementById('adminOpen').addEventListener('click',openAdmin);
+    document.getElementById('adminClose').addEventListener('click',()=>adminLayer.classList.remove('open'));
+    adminLayer.addEventListener('click',e=>{if(e.target===adminLayer)adminLayer.classList.remove('open')});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')adminLayer.classList.remove('open')});
+    loginForm.addEventListener('submit',async e=>{
+      e.preventDefault();status(loginStatus,'正在验证管理员密码…');
+      try{const r=await fetch(WORKER_API+'/admin-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('adminPassword').value})});const d=await r.json();if(!r.ok||!d.token)throw new Error(d.error||'登录失败');adminToken=d.token;sessionStorage.setItem('portfolio_admin_token',adminToken);document.getElementById('adminPassword').value='';status(loginStatus,'登录成功');syncAdminState();renderCloudItems(cloudItems)}
+      catch(err){status(loginStatus,err.message||'登录失败，请检查 Worker 配置',true)}
+    });
+    document.getElementById('adminLogout').addEventListener('click',()=>{adminToken='';sessionStorage.removeItem('portfolio_admin_token');status(uploadStatus,'已退出登录');syncAdminState();renderCloudItems(cloudItems)});
+    dropZone.addEventListener('click',()=>fileInput.click());
+    dropZone.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click()}});
+    fileInput.addEventListener('change',()=>{const f=fileInput.files[0];if(f){document.getElementById('workType').value=f.type.startsWith('video/')?'video':'image';status(uploadStatus,'已选择：'+f.name+'（'+formatBytes(f.size)+'）')}});
+    ['dragenter','dragover'].forEach(type=>dropZone.addEventListener(type,e=>{e.preventDefault();dropZone.classList.add('dragging')}));
+    ['dragleave','drop'].forEach(type=>dropZone.addEventListener(type,e=>{e.preventDefault();dropZone.classList.remove('dragging')}));
+    dropZone.addEventListener('drop',e=>{const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(f){fileInput.files=e.dataTransfer.files;document.getElementById('workType').value=f.type.startsWith('video/')?'video':'image';status(uploadStatus,'已选择：'+f.name+'（'+formatBytes(f.size)+'）')}});
+    function formatBytes(n){if(n<1024)return n+' B';const u=['KB','MB','GB','TB'];let i=-1;do{n/=1024;i++}while(n>=1024&&i<u.length-1);return n.toFixed(1)+' '+u[i]}
+    async function requestToken(path,body){const r=await fetch(WORKER_API+path,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+adminToken},body:JSON.stringify(body||{})});const d=await r.json();if(!r.ok)throw new Error(d.error||'云端授权失败');return d}
+    function qiniuUpload(file,key,token,mimeType,onProgress){
+      return new Promise((resolve,reject)=>{
+        if(!window.qiniu||typeof window.qiniu.upload!=='function'){reject(new Error('七牛上传组件加载失败，请刷新页面重试'));return}
+        const observable=window.qiniu.upload(file,key,token,{fname:file.name,mimeType:mimeType||file.type}, {useCdnDomain:true,region:window.qiniu.region&&window.qiniu.region.z2,chunkSize:4});
+        observable.subscribe({next:res=>{if(res.total)onProgress(Math.round(res.total.percent||0))},error:err=>reject(new Error(err&&err.message||'七牛云上传失败')),complete:resolve});
+      });
+    }
+    async function saveCloudMetadata(){
+      const data={items:cloudItems};
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      const t=await requestToken('/data-token',{});
+      await qiniuUpload(blob,t.key,t.token,'application/json',p=>status(uploadStatus,'正在保存作品清单… '+p+'%'));
+    }
+    async function refreshSavedList(){
+      const list=document.getElementById('adminSavedList');list.replaceChildren();
+      if(!cloudItems.length){list.textContent='还没有加载到作品；成功上传后会显示在这里。';return}
+      cloudItems.forEach((item,i)=>{const row=document.createElement('div');row.style.cssText='display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line)';
+        const title=document.createElement('span');title.textContent=(i+1)+'. '+(item.title||'未命名作品');
+        const type=document.createElement('span');type.textContent=item.media_type==='video'?'视频':'图片';row.append(title,type);list.appendChild(row)})
+    }
+    async function editCloudItem(index){
+      const item=cloudItems[index];if(!item)return;
+      const title=prompt('作品名称',item.title||'');if(title===null)return;
+      const description=prompt('作品说明',item.description||'');if(description===null)return;
+      item.title=title.trim()||'未命名作品';item.description=description.trim();
+      try{status(uploadStatus,'正在保存修改…');await saveCloudMetadata();renderCloudItems(cloudItems);refreshSavedList();status(uploadStatus,'作品信息已保存到七牛云。')}
+      catch(err){status(uploadStatus,err.message||'保存失败',true)}
+    }
+    async function deleteCloudItem(index){
+      const item=cloudItems[index];if(!item||!confirm('从作品清单中移除“'+(item.title||'未命名作品')+'”？\n这不会自动删除七牛云中的原始文件。'))return;
+      cloudItems.splice(index,1);
+      try{status(uploadStatus,'正在保存作品清单…');await saveCloudMetadata();renderCloudItems(cloudItems);refreshSavedList();status(uploadStatus,'已从展示清单移除。原始文件仍保留在七牛云。')}
+      catch(err){status(uploadStatus,err.message||'保存失败',true)}
+    }
+    document.getElementById('uploadForm').addEventListener('submit',async e=>{
+      e.preventDefault();
+      if(!adminToken){status(uploadStatus,'请先登录管理员端',true);return}
+      const file=fileInput.files[0];if(!file){status(uploadStatus,'请先选择或拖入图片/视频文件',true);return}
+      if(!file.type.startsWith('image/')&&!file.type.startsWith('video/')){status(uploadStatus,'只支持图片和视频文件',true);return}
+      const title=document.getElementById('workTitle').value.trim();if(!title){status(uploadStatus,'请填写作品名称',true);return}
+      const submit=e.submitter; if(submit)submit.disabled=true;
+      try{
+        status(uploadStatus,'正在向服务端申请七牛云上传授权…');
+        const tokenData=await requestToken('/upload-token',{fileName:file.name,size:file.size,contentType:file.type});
+        status(uploadStatus,'正在上传 '+formatBytes(file.size)+'…');
+        await qiniuUpload(file,tokenData.key,tokenData.token,file.type,p=>status(uploadStatus,'正在上传… '+p+'%'));
+        const item={title,description:document.getElementById('workDescription').value.trim(),media_type:file.type.startsWith('video/')?'video':'image',media_url:tokenData.domain+'/'+tokenData.key};
+        cloudItems.unshift(item);
+        status(uploadStatus,'文件上传成功，正在保存作品清单…');
+        await saveCloudMetadata();
+        renderCloudItems(cloudItems);refreshSavedList();
+        document.getElementById('workTitle').value='';document.getElementById('workDescription').value='';fileInput.value='';
+        status(uploadStatus,'上传成功！已保存到七牛云，刷新页面后仍会显示。');
+      }catch(err){status(uploadStatus,err.message||'上传失败，请检查 Worker 与七牛云配置',true)}
+      finally{if(submit)submit.disabled=false}
+    });
+    async function bootPortfolio(){
+      await loadCloudItems();
+      if(adminToken){syncAdminState()}
+    }
+    bootPortfolio();
   </script>
 </body>
 </html>
