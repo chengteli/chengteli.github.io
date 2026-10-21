@@ -8,6 +8,8 @@
 
 网页和作品媒体都从 GitHub Pages 仓库读取，不需要购买域名，也不依赖七牛的 CDN 测试域名。当前公开站点已有 `assets/` 图片和视频；`portfolio-data/site-data.json` 是作品清单。
 
+管理员登录后可使用顶部“访客分享”入口，生成随机只读链接、设置访客密码或停用链接。该功能需要为 Cloudflare Worker 绑定名为 `GUEST_ACCESS` 的 KV namespace，并部署 `qiniu-worker/index.js` 中的访客路由。访客不能通过网页编辑或保存作品清单；公开 GitHub Pages 媒体文件仍可被直接访问或另存。
+
 ## 添加或删除作品
 
 1. 把图片或视频放进 `assets/` 目录，并使用英文或数字文件名。
