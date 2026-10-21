@@ -34,6 +34,8 @@ Worker 变量（非敏感）还需要配置：
 - `GITEE_CLIENT_ID` = Gitee OAuth 应用的 Client ID
 - `GITEE_ADMIN_LOGIN` = 允许管理作品的唯一 Gitee 登录名（login/用户名），不是昵称或邮箱
 
+另外创建 Cloudflare KV namespace，并将 Worker binding 命名为 `GUEST_ACCESS`。访客链接设置会保存到这个 KV namespace；访客密码仅以加盐 PBKDF2 校验值保存。
+
 不要把七牛云密钥或管理员密码写进 GitHub Pages 的 HTML、JSON 或公开仓库。
 
 ## 网页使用方式
@@ -45,7 +47,7 @@ Worker 变量（非敏感）还需要配置：
 5. 点击“上传并保存作品”。网页会向 Worker 申请限时凭证，将文件上传到七牛云，再把作品清单保存为 `portfolio-data/site-data.json`。
 6. 刷新网页，作品应仍然显示。管理端可以修改作品名称/说明，或从展示清单移除作品。
 
-管理登录会话仅保存在当前浏览器标签页的 sessionStorage，退出登录或关闭标签页后需要重新登录。访客不显示管理操作。
+管理登录会话仅保存在当前浏览器标签页的 sessionStorage，退出登录或关闭标签页后需要重新登录。访客不显示管理操作。 管理员登录后的管理窗口新增“访客只读分享”：设置至少 8 位密码，生成随机链接，可复制分享或停用链接。重新生成会使旧链接失效。访客只读浏览；上传、修改、删除接口仍要求管理员会话。
 
 ## API 路由
 
@@ -55,6 +57,9 @@ Worker 变量（非敏感）还需要配置：
 - `POST /admin-login`：备用密码登录（若配置了管理员密码），返回 12 小时有效的签名会话。
 - `POST /upload-token`：校验管理员会话，签发限定对象名、文件大小和 MIME 类型的上传凭证。
 - `POST /data-token`：校验管理员会话，签发作品清单 JSON 的上传凭证。
+- `GET /guest-config` / `POST /guest-config`：管理员读取、创建、更新或停用随机访客链接与密码。
+- `POST /guest-login`：校验访客链接编号和密码，返回短期只读访客令牌。
+- `GET /guest-status`：报告访客分享是否启用。
 
 网页只使用 Worker 返回的临时上传凭证，不接触七牛云 SecretKey。Worker 仅允许来源 `https://chengteli.github.io`。
 
