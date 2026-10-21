@@ -260,8 +260,9 @@
     async function saveCloudMetadata(){
       const data={items:cloudItems};
       const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      const metadataFile=new File([blob],'site-data.json',{type:'application/json'});
       const t=await requestToken('/data-token',{});
-      await qiniuUpload(blob,t.key,t.token,'application/json',p=>status(uploadStatus,'正在保存作品清单… '+p+'%'));
+      await qiniuUpload(metadataFile,t.key,t.token,'application/json',p=>status(uploadStatus,'正在保存作品清单… '+p+'%'));
     }
     async function refreshSavedList(){
       const list=document.getElementById('adminSavedList');list.replaceChildren();
