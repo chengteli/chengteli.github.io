@@ -106,6 +106,62 @@ async function getPublicData(env) {
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
+    const url = new URL(request.url);
+
+    // Gitee OAuth navigation endpoints: no CORS Origin is expected on top-level redirects.
+    if (url.pathname === "/gitee-login" && request.method === "GET") {
+      if (!env.GITEE_CLIENT_ID || !env.GITEE_CLIENT_SECRET || !env.ADMIN_SESSION_SECRET) {
+        return new Response("Gitee login is not configured. Add GITEE_CLIENT_ID, GITEE_CLIENT_SECRET and ADMIN_SESSION_SECRET in Worker settings.", {status:503, headers:{"Content-Type":"text/plain; charset=utf-8","Cache-Control":"no-store"}});
+      }
+      const state = b64url(crypto.getRandomValues(new Uint8Array(32)));
+      const authorize = new URL("https://gitee.com/oauth/authorize");
+      authorize.searchParams.set("client_id", env.GITEE_CLIENT_ID);
+      authorize.searchParams.set("redirect_uri", "https://morning-paper-de53.1529367086.workers.dev/gitee-callback");
+      authorize.searchParams.set("response_type", "code");
+      authorize.searchParams.set("scope", "user_info");
+      authorize.searchParams.set("state", state);
+      return new Response(null, {status:302, headers:{
+        "Location":authorize.toString(),
+        "Set-Cookie":"gitee_oauth_state="+state+"; Max-Age=300; Path=/; Secure; HttpOnly; SameSite=Lax",
+        "Cache-Control":"no-store"
+      }});
+    }
+    if (url.pathname === "/gitee-callback" && request.method === "GET") {
+      const clearCookie = "gitee_oauth_state=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=Lax";
+      const fail = (message, status=400) => new Response(message, {status, headers:{"Content-Type":"text/plain; charset=utf-8","Cache-Control":"no-store","Set-Cookie":clearCookie}});
+      if (url.searchParams.get("error")) return fail("Gitee 授权未完成，请返回作品集重试。");
+      const code = url.searchParams.get("code") || "";
+      const state = url.searchParams.get("state") || "";
+      const cookieState = (request.headers.get("Cookie") || "").split(";").map(v=>v.trim()).find(v=>v.startsWith("gitee_oauth_state="))?.slice("gitee_oauth_state=".length) || "";
+      if (!code || !state || !cookieState || state !== cookieState) return fail("Gitee 登录状态校验失败，请重新点击登录。");
+      if (!env.GITEE_CLIENT_ID || !env.GITEE_CLIENT_SECRET || !env.ADMIN_SESSION_SECRET || !env.GITEE_ADMIN_LOGIN) return fail("Worker 缺少 Gitee 登录配置，请检查加密变量和管理员用户名。",503);
+      try {
+        const tokenResponse = await fetch("https://gitee.com/oauth/token", {
+          method:"POST",
+          headers:{"Content-Type":"application/x-www-form-urlencoded","Accept":"application/json"},
+          body:new URLSearchParams({grant_type:"authorization_code",code,client_id:env.GITEE_CLIENT_ID,client_secret:env.GITEE_CLIENT_SECRET,redirect_uri:"https://morning-paper-de53.1529367086.workers.dev/gitee-callback"})
+        });
+        const tokenData = await tokenResponse.json();
+        if (!tokenResponse.ok || !tokenData.access_token) return fail("无法从 Gitee 获取授权令牌，请检查应用回调地址和密钥。",502);
+        const userResponse = await fetch("https://gitee.com/api/v5/user?access_token="+encodeURIComponent(tokenData.access_token), {headers:{"Accept":"application/json"}});
+        const user = await userResponse.json();
+        if (!userResponse.ok || !user || !user.login) return fail("无法读取 Gitee 用户信息。",502);
+        if (String(user.login).toLowerCase() !== String(env.GITEE_ADMIN_LOGIN).trim().toLowerCase()) {
+          return new Response("此 Gitee 账号没有作品集管理员权限。", {status:403,headers:{"Content-Type":"text/plain; charset=utf-8","Cache-Control":"no-store","Set-Cookie":clearCookie}});
+        }
+        const payload = b64text(JSON.stringify({exp:Math.floor(Date.now()/1000)+SESSION_TTL,scope:"admin",login:user.login}));
+        const session = payload+"."+b64url(await hmac(env.ADMIN_SESSION_SECRET,payload));
+        return new Response(null,{status:302,headers:{
+          "Location":"https://chengteli.github.io/#gitee_token="+encodeURIComponent(session),
+          "Cache-Control":"no-store",
+          "Referrer-Policy":"no-referrer",
+          "Set-Cookie":clearCookie
+        }});
+      } catch {
+        return fail("Gitee 登录暂时失败，请稍后重试。",502);
+      }
+    }
+
     if (request.method === "OPTIONS") {
       if (!ALLOWED_ORIGINS.has(origin)) return new Response(null,{status:403});
       return new Response(null,{status:204,headers:{
@@ -117,7 +173,6 @@ export default {
     if (!env.QINIU_ACCESS_KEY || !env.QINIU_SECRET_KEY || !env.QINIU_BUCKET || !env.QINIU_DOMAIN) {
       return json({error:"Qiniu service is not configured"},503,origin);
     }
-    const url = new URL(request.url);
     if (url.pathname === "/items" && request.method === "GET") {
       try { return json(await getPublicData(env),200,origin); }
       catch(e) { return json({error:e.message || "Unable to load data"},502,origin); }
