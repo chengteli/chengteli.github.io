@@ -195,7 +195,10 @@
     document.querySelector('.lightbox-close').addEventListener('click',closePreview);
     lightbox.addEventListener('click',event=>{if(event.target===lightbox)closePreview()});
     document.addEventListener('keydown',event=>{if(event.key==='Escape')closePreview()});
-    let adminToken=sessionStorage.getItem('portfolio_admin_token')||'';\n    let cloudItems=[];\n    const WORKER_API='https://morning-paper-de53.1529367086.workers.dev';\n    function safeText(element,text){element.textContent=String(text||'')}
+    let adminToken=sessionStorage.getItem('portfolio_admin_token')||'';
+    let cloudItems=[];
+    const WORKER_API='https://morning-paper-de53.1529367086.workers.dev';
+    function safeText(element,text){element.textContent=String(text||'')}
     function renderCloudItems(items){
       cloudItems=Array.isArray(items)?items:[];
       const grid=document.querySelector('.project-grid');grid.replaceChildren();
