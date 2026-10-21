@@ -80,6 +80,17 @@
     .lightbox-close{position:fixed;right:20px;top:18px;border:1px solid #b6b8af;border-radius:50%;width:42px;height:42px;color:white;background:#242a25;font-size:24px;cursor:pointer}
     @keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
+    .visitor-open{border:0;border-bottom:1px solid #92948a;padding:8px 2px;font-size:11px;background:transparent;cursor:pointer;color:var(--ink)}
+    .visitor-open:hover{color:var(--red)}
+    .guest-share-tools{border-top:1px solid var(--line);margin-top:20px;padding-top:15px}
+    .guest-share-tools p{font-size:11px;color:var(--muted);line-height:1.7}
+    .guest-share-output{font-size:12px;overflow-wrap:anywhere;color:var(--green)}
+    .guest-gate{position:fixed;inset:0;z-index:30;background:#101311ed;display:none;place-items:center;padding:20px;color:var(--ink)}
+    .guest-gate.open{display:grid}
+    .guest-card{width:min(420px,100%);padding:30px;background:var(--paper)}
+    .guest-card h2{margin:12px 0;font:700 30px var(--serif)}
+    .guest-card p{font-size:12px;color:var(--muted)}
+    .guest-card input{font:inherit;font-size:14px;padding:11px 12px;border:1px solid var(--line);background:#fffdf7;width:100%}
     .admin-open{border:1px solid #92948a;border-radius:99px;padding:9px 13px;font-size:11px;background:transparent;cursor:pointer;color:var(--ink)}
     .admin-layer{position:fixed;inset:0;z-index:20;background:#101311b8;display:none;align-items:center;justify-content:center;padding:18px}
     .admin-layer.open{display:flex}
@@ -109,7 +120,7 @@
 <body>
   <header class="wrap topbar">
     <a class="wordmark" href="#top">CHENG TELI<small>VISUAL CREATOR / 2026</small></a>
-    <nav aria-label="主导航"><a href="#work">作品</a><a href="#about">关于</a><a class="nav-contact" href="#contact">联系 ↗</a><button class="admin-open" id="adminOpen" type="button">管理入口</button></nav>
+    <nav aria-label="主导航"><a href="#work">作品</a><a href="#about">关于</a><a class="nav-contact" href="#contact">联系 ↗</a><button class="visitor-open" id="visitorOpen" type="button">访客分享 ↗</button><button class="admin-open" id="adminOpen" type="button">管理入口</button></nav>
   </header>
   <main id="top">
     <section class="wrap hero">
@@ -170,11 +181,13 @@
           <div class="admin-status" id="uploadStatus" aria-live="polite"></div>
           <div class="admin-actions"><button class="button" type="submit">上传并保存作品 ↗</button><button class="admin-secondary" id="adminLogout" type="button">退出登录</button></div>
         </form>
+        <div class="guest-share-tools"><strong style="font-size:12px">访客只读分享</strong><p>设置至少 8 位密码并生成随机链接。访客只能浏览，不会获得编辑、上传或删除权限；再次生成会让旧链接失效。</p><form class="admin-form" id="guestShareForm"><label>访客密码<input id="guestPassword" type="password" minlength="8" autocomplete="new-password" required></label><div class="admin-actions"><button class="admin-secondary" type="submit">生成或更新访客链接</button><button class="admin-secondary" id="guestCopy" type="button" hidden>复制链接</button><button class="admin-secondary" id="guestDisable" type="button" hidden>停用链接</button></div><div class="admin-status" id="guestStatus" aria-live="polite"></div><div class="guest-share-output" id="guestShareOutput" hidden></div></form></div>
         <div style="border-top:1px solid var(--line);margin-top:20px;padding-top:15px"><strong style="font-size:12px">已保存的云端作品</strong><div id="adminSavedList" style="font-size:12px;color:var(--muted);margin-top:8px"></div></div>
       </div>
       <p class="admin-status" id="loginStatus" aria-live="polite"></p>
     </section>
   </div>
+  <div class="guest-gate" id="guestGate" role="dialog" aria-modal="true" aria-labelledby="guestGateTitle"><div class="guest-card"><div class="section-label">VIEW ONLY</div><h2 id="guestGateTitle">访客浏览</h2><p>输入分享密码即可只读查看作品集。</p><form class="admin-form" id="guestLoginForm"><label>访客密码<input name="password" type="password" autocomplete="current-password" required></label><div class="admin-status" id="guestLoginStatus" aria-live="polite"></div><button class="button" type="submit">进入作品集</button></form><button class="admin-secondary" id="guestAdminLogin" type="button" style="margin-top:14px">管理员登录</button></div></div>
   <script src="https://unpkg.com/qiniu-js@3.4.1/dist/qiniu.min.js"></script>
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="作品预览"><button class="lightbox-close" type="button" aria-label="关闭预览">×</button><div id="lightboxContent"></div></div>
   <script>
@@ -211,6 +224,8 @@
     let adminToken=sessionStorage.getItem('portfolio_admin_token')||'';
     let cloudItems=[];
     const WORKER_API='https://morning-paper-de53.1529367086.workers.dev';
+    const visitorId=new URLSearchParams(location.search).get('visitor');
+    if(visitorId){document.body.classList.add('visitor-pending');document.getElementById('guestGate').classList.add('open')}
     function safeText(element,text){element.textContent=String(text||'')}
     function renderCloudItems(items){
       cloudItems=Array.isArray(items)?items:[];
@@ -244,8 +259,10 @@
     const dropZone=document.getElementById('dropZone');
     function status(el,message,error=false){el.textContent=message;el.classList.toggle('error',error)}
     function openAdmin(){adminLayer.classList.add('open');loginStatus.textContent='';syncAdminState()}
-    function syncAdminState(){loginForm.hidden=!!adminToken;workspace.hidden=!adminToken;if(adminToken)refreshSavedList()}
+    function syncAdminState(){loginForm.hidden=!!adminToken;workspace.hidden=!adminToken;if(adminToken){refreshSavedList();refreshGuestShare()}}
     document.getElementById('adminOpen').addEventListener('click',openAdmin);
+    document.getElementById('visitorOpen').addEventListener('click',openAdmin);
+    document.getElementById('guestAdminLogin').addEventListener('click',()=>{document.getElementById('guestGate').classList.remove('open');document.body.classList.remove('visitor-pending');openAdmin()});
     document.getElementById('adminClose').addEventListener('click',()=>adminLayer.classList.remove('open'));
     adminLayer.addEventListener('click',e=>{if(e.target===adminLayer)adminLayer.classList.remove('open')});
     document.addEventListener('keydown',e=>{if(e.key==='Escape')adminLayer.classList.remove('open')});
@@ -263,6 +280,12 @@
     dropZone.addEventListener('drop',e=>{const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(f){fileInput.files=e.dataTransfer.files;document.getElementById('workType').value=f.type.startsWith('video/')?'video':'image';status(uploadStatus,'已选择：'+f.name+'（'+formatBytes(f.size)+'）')}});
     function formatBytes(n){if(n<1024)return n+' B';const u=['KB','MB','GB','TB'];let i=-1;do{n/=1024;i++}while(n>=1024&&i<u.length-1);return n.toFixed(1)+' '+u[i]}
     async function requestToken(path,body){const r=await fetch(WORKER_API+path,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+adminToken},body:JSON.stringify(body||{})});const d=await r.json();if(!r.ok)throw new Error(d.error||'云端授权失败');return d}
+    function buildGuestLink(id){const u=new URL(location.pathname,location.origin);u.searchParams.set('visitor',id);return u.href}
+    async function refreshGuestShare(){try{const r=await fetch(WORKER_API+'/guest-config',{headers:{'Authorization':'Bearer '+adminToken},cache:'no-store'});const d=await r.json();if(!r.ok)throw new Error(d.error||'读取分享设置失败');if(d.enabled){const out=document.getElementById('guestShareOutput');out.textContent=buildGuestLink(d.shareId);out.hidden=false;document.getElementById('guestCopy').hidden=false;document.getElementById('guestDisable').hidden=false}}catch(e){status(document.getElementById('guestStatus'),e.message||'访客分享服务尚未部署',true)}}
+    document.getElementById('guestShareForm').addEventListener('submit',async e=>{e.preventDefault();const state=document.getElementById('guestStatus');status(state,'正在生成访客链接…');try{const shareId=crypto.randomUUID().replaceAll('-','');const d=await requestToken('/guest-config',{shareId,password:document.getElementById('guestPassword').value});document.getElementById('guestPassword').value='';const out=document.getElementById('guestShareOutput');out.textContent=buildGuestLink(d.shareId);out.hidden=false;document.getElementById('guestCopy').hidden=false;document.getElementById('guestDisable').hidden=false;status(state,'链接已更新，旧链接已失效。')}catch(err){status(state,err.message||'生成失败',true)}});
+    document.getElementById('guestCopy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(document.getElementById('guestShareOutput').textContent);status(document.getElementById('guestStatus'),'已复制分享链接。')}catch{status(document.getElementById('guestStatus'),'复制失败，请手动复制下方链接。',true)}});
+    document.getElementById('guestDisable').addEventListener('click',async()=>{if(!confirm('停用当前访客链接？'))return;try{await requestToken('/guest-config',{disabled:true});document.getElementById('guestShareOutput').hidden=true;document.getElementById('guestCopy').hidden=true;document.getElementById('guestDisable').hidden=true;status(document.getElementById('guestStatus'),'访客链接已停用。')}catch(err){status(document.getElementById('guestStatus'),err.message,true)}});
+    document.getElementById('guestLoginForm').addEventListener('submit',async e=>{e.preventDefault();const state=document.getElementById('guestLoginStatus');status(state,'正在验证密码…');try{const response=await fetch(WORKER_API+'/guest-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({shareId:visitorId,password:e.currentTarget.elements.password.value})});const d=await response.json();if(!response.ok)throw new Error(d.error||'访客密码不正确');sessionStorage.setItem('portfolio_guest_token',d.token);document.getElementById('guestGate').classList.remove('open');document.body.classList.remove('visitor-pending');status(state,'验证成功。')}catch(err){status(state,err.message||'密码验证失败',true)}});
     function qiniuUpload(file,key,token,mimeType,onProgress){
       return new Promise((resolve,reject)=>{
         if(!window.qiniu||typeof window.qiniu.upload!=='function'){reject(new Error('七牛上传组件加载失败，请刷新页面重试'));return}
