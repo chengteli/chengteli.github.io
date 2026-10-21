@@ -12,6 +12,8 @@
 const ALLOWED_ORIGINS = new Set(["https://chengteli.github.io"]);
 const MAX_FILE_SIZE = 50 * 1024 * 1024 * 1024;
 const SESSION_TTL = 12 * 60 * 60;
+const GUEST_SESSION_TTL = 24 * 60 * 60;
+const GUEST_CONFIG_KEY = "active-visitor-link";
 const DATA_KEY = "portfolio-data/site-data.json";
 
 function json(data, status = 200, origin = "") {
@@ -51,6 +53,11 @@ function safeName(value) {
 async function issueSession(env) {
   const payload = b64text(JSON.stringify({exp: Math.floor(Date.now()/1000) + SESSION_TTL, scope:"admin"}));
   return payload + "." + b64url(await hmac(env.ADMIN_SESSION_SECRET, payload));
+}
+async function guestPasswordHash(password, salt) {
+  const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveBits"]);
+  const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt,iterations:150000,hash:"SHA-256"},key,256);
+  return b64url(new Uint8Array(bits));
 }
 async function isAdmin(request, env) {
   const match = (request.headers.get("Authorization") || "").match(/^Bearer\s+(.+)$/i);
@@ -170,6 +177,42 @@ export default {
       }});
     }
     if (!ALLOWED_ORIGINS.has(origin)) return json({error:"Origin not allowed"},403,origin);
+    if (url.pathname === "/guest-status" && request.method === "GET") {
+      if (!env.GUEST_ACCESS) return json({error:"Visitor sharing is not configured"},503,origin);
+      const config=await env.GUEST_ACCESS.get(GUEST_CONFIG_KEY,"json");
+      return json({enabled:Boolean(config?.shareId)},200,origin);
+    }
+    if (url.pathname === "/guest-login" && request.method === "POST") {
+      if (!env.GUEST_ACCESS || !env.ADMIN_SESSION_SECRET) return json({error:"Visitor sharing is not configured"},503,origin);
+      let body;try{body=await request.json()}catch{return json({error:"Invalid JSON"},400,origin)}
+      const config=await env.GUEST_ACCESS.get(GUEST_CONFIG_KEY,"json");
+      const shareId=String(body.shareId||"");
+      if(!config||shareId!==config.shareId)return json({error:"分享链接无效或已停用"},404,origin);
+      const actual=await guestPasswordHash(String(body.password||""),fromB64url(config.salt));
+      const a=new TextEncoder().encode(actual),b=new TextEncoder().encode(config.passwordHash);let diff=a.length^b.length;
+      for(let i=0;i<Math.max(a.length,b.length);i++)diff|=(a[i]||0)^(b[i]||0);
+      if(diff!==0)return json({error:"访客密码不正确"},401,origin);
+      const payload=b64text(JSON.stringify({exp:Math.floor(Date.now()/1000)+GUEST_SESSION_TTL,scope:"guest",shareId}));
+      return json({token:payload+"."+b64url(await hmac(env.ADMIN_SESSION_SECRET,payload)),expiresIn:GUEST_SESSION_TTL},200,origin);
+    }
+    if (url.pathname === "/guest-config" && request.method === "GET") {
+      if(!await isAdmin(request,env))return json({error:"请先登录管理员账号"},401,origin);
+      if(!env.GUEST_ACCESS)return json({error:"请先绑定 GUEST_ACCESS KV"},503,origin);
+      const config=await env.GUEST_ACCESS.get(GUEST_CONFIG_KEY,"json");
+      return json({enabled:Boolean(config?.shareId),shareId:config?.shareId||""},200,origin);
+    }
+    if (url.pathname === "/guest-config" && request.method === "POST") {
+      if(!await isAdmin(request,env))return json({error:"请先登录管理员账号"},401,origin);
+      if(!env.GUEST_ACCESS)return json({error:"请先绑定 GUEST_ACCESS KV"},503,origin);
+      let body;try{body=await request.json()}catch{return json({error:"Invalid JSON"},400,origin)}
+      if(body.disabled===true){await env.GUEST_ACCESS.delete(GUEST_CONFIG_KEY);return json({enabled:false},200,origin)}
+      const shareId=String(body.shareId||""),password=String(body.password||"");
+      if(!/^[A-Za-z0-9_-]{20,100}$/.test(shareId))return json({error:"分享链接编号无效"},400,origin);
+      if(password.length<8||password.length>256)return json({error:"访客密码至少需要 8 个字符"},400,origin);
+      const salt=crypto.getRandomValues(new Uint8Array(16));
+      await env.GUEST_ACCESS.put(GUEST_CONFIG_KEY,JSON.stringify({shareId,salt:b64url(salt),passwordHash:await guestPasswordHash(password,salt)}));
+      return json({enabled:true,shareId},200,origin);
+    }
     if (!env.QINIU_ACCESS_KEY || !env.QINIU_SECRET_KEY || !env.QINIU_BUCKET || !env.QINIU_DOMAIN) {
       return json({error:"Qiniu service is not configured"},503,origin);
     }
