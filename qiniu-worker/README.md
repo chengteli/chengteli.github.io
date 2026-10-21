@@ -25,25 +25,34 @@ Worker 变量（非敏感）：
 
 - `QINIU_ACCESS_KEY` = 七牛云 AccessKey
 - `QINIU_SECRET_KEY` = 七牛云 SecretKey
-- `ADMIN_PASSWORD` = 你自己设置的管理员登录密码
+- `ADMIN_PASSWORD` = 备用管理员密码（如果继续保留密码登录）
 - `ADMIN_SESSION_SECRET` = 独立生成的长随机字符串，不能与管理员密码相同
+- `GITEE_CLIENT_SECRET` = Gitee OAuth 应用的 Client Secret（加密密钥）
+
+Worker 变量（非敏感）还需要配置：
+
+- `GITEE_CLIENT_ID` = Gitee OAuth 应用的 Client ID
+- `GITEE_ADMIN_LOGIN` = 允许管理作品的唯一 Gitee 登录名（login/用户名），不是昵称或邮箱
 
 不要把七牛云密钥或管理员密码写进 GitHub Pages 的 HTML、JSON 或公开仓库。
 
 ## 网页使用方式
 
 1. 打开 https://chengteli.github.io/。
-2. 点击右上角“管理入口”，输入 Worker 中配置的管理员密码。
-3. 填写作品名称和说明，选择图片或视频；可以点击上传区域选文件，也可以把文件直接拖进去。
-4. 点击“上传并保存作品”。网页会向 Worker 申请限时凭证，将文件上传到七牛云，再把作品清单保存为 `portfolio-data/site-data.json`。
-5. 刷新网页，作品应仍然显示。管理端可以修改作品名称/说明，或从展示清单移除作品。
+2. 点击右上角“管理入口”，优先点击“使用 Gitee 账号登录”。
+3. 只有 `GITEE_ADMIN_LOGIN` 配置的 Gitee 用户名能获得管理权限；其他 Gitee 账号会被拒绝。
+4. 填写作品名称和说明，选择图片或视频；可以点击上传区域选文件，也可以把文件直接拖进去。
+5. 点击“上传并保存作品”。网页会向 Worker 申请限时凭证，将文件上传到七牛云，再把作品清单保存为 `portfolio-data/site-data.json`。
+6. 刷新网页，作品应仍然显示。管理端可以修改作品名称/说明，或从展示清单移除作品。
 
 管理登录会话仅保存在当前浏览器标签页的 sessionStorage，退出登录或关闭标签页后需要重新登录。访客不显示管理操作。
 
 ## API 路由
 
 - `GET /items`：从七牛云读取作品清单。
-- `POST /admin-login`：使用管理员密码登录，返回 12 小时有效的签名会话。
+- `GET /gitee-login`：启动 Gitee OAuth 登录。
+- `GET /gitee-callback`：校验 OAuth state、交换令牌、核对管理员用户名并返回签名会话。
+- `POST /admin-login`：备用密码登录（若配置了管理员密码），返回 12 小时有效的签名会话。
 - `POST /upload-token`：校验管理员会话，签发限定对象名、文件大小和 MIME 类型的上传凭证。
 - `POST /data-token`：校验管理员会话，签发作品清单 JSON 的上传凭证。
 
