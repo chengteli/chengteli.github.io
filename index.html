@@ -152,8 +152,13 @@
     <section class="admin-card">
       <div class="admin-head"><h3>作品管理</h3><button class="admin-close" id="adminClose" type="button" aria-label="关闭">×</button></div>
       <form class="admin-form" id="adminLoginForm">
-        <label>管理员密码<input id="adminPassword" type="password" autocomplete="current-password" placeholder="输入管理密码" required></label>
-        <div class="admin-actions"><button class="button" type="submit">登录管理端 ↗</button></div>
+        <div class="admin-actions"><a class="button" href="https://morning-paper-de53.1529367086.workers.dev/gitee-login">使用 Gitee 账号登录 ↗</a></div>
+        <p style="font-size:11px;color:var(--muted);margin:0">只有配置的管理员 Gitee 账号可以编辑和上传作品。</p>
+        <details>
+          <summary style="font-size:11px;color:var(--muted);cursor:pointer">备用：管理员密码登录</summary>
+          <label>管理员密码<input id="adminPassword" type="password" autocomplete="current-password" placeholder="输入管理密码"></label>
+          <div class="admin-actions"><button class="button" type="submit">密码登录管理端 ↗</button></div>
+        </details>
       </form>
       <div id="adminWorkspace" hidden>
         <p style="font-size:12px;color:var(--muted);margin:0 0 15px">已登录。作品将上传到七牛云，作品清单也保存到七牛云；刷新后仍然保留。</p>
@@ -195,6 +200,14 @@
     document.querySelector('.lightbox-close').addEventListener('click',closePreview);
     lightbox.addEventListener('click',event=>{if(event.target===lightbox)closePreview()});
     document.addEventListener('keydown',event=>{if(event.key==='Escape')closePreview()});
+    // OAuth returns a short-lived signed admin session in the URL fragment.
+    // Store it only in sessionStorage, then immediately remove it from the address bar.
+    const oauthParams=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):'');
+    const giteeSession=oauthParams.get('gitee_token');
+    if(giteeSession){
+      sessionStorage.setItem('portfolio_admin_token',giteeSession);
+      history.replaceState(null,'',location.pathname+location.search+'#top');
+    }
     let adminToken=sessionStorage.getItem('portfolio_admin_token')||'';
     let cloudItems=[];
     const WORKER_API='https://morning-paper-de53.1529367086.workers.dev';
