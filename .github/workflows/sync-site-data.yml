@@ -30,8 +30,11 @@ jobs:
           WORKER = "https://morning-paper-de53.1529367086.workers.dev"
           MAX_MEDIA = 25 * 1024 * 1024  # 超过 25MB 的媒体不进仓库（GitHub 文件上限限制）
 
+          HDR = {"Origin": "https://chengteli.github.io"}
           try:
-              with urllib.request.urlopen(WORKER + "/items", timeout=40) as r:
+              with urllib.request.urlopen(
+                  urllib.request.Request(WORKER + "/items", headers=HDR), timeout=40
+              ) as r:
                   data = json.load(r)
           except Exception as e:
               print("FETCH_FAIL", e)
@@ -54,7 +57,9 @@ jobs:
               if not os.path.exists(local) or os.path.getsize(local) == 0:
                   try:
                       with urllib.request.urlopen(
-                          WORKER + "/media/" + urllib.parse.quote(key), timeout=180
+                          urllib.request.Request(
+                              WORKER + "/media/" + urllib.parse.quote(key), headers=HDR
+                          ), timeout=180
                       ) as r:
                           blob = r.read()
                   except Exception as e:
