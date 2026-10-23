@@ -33,6 +33,7 @@ a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}b
 <div id="dropHint">松开即上传到作品库<small>JPG / PNG / WEBP / GIF / MP4 / MOV / WEBM</small></div>
 <script>
 const API='https://morning-paper-de53.1529367086.workers.dev';
+const PUBLIC_DATA='https://chengteli.github.io/portfolio-data/site-data.json';
 const DEFAULT_DATA={"items":[{"id":"d1","title":"影像练习 01","description":"一段关于节奏、氛围与画面运动的视觉实验。","category":"视觉设计","media_type":"video","media_url":"https://chengteli.github.io/assets/visual-study.mp4","created_at":1792737272396},{"id":"d2","title":"红刃 · 角色视觉","description":"写实角色渲染练习，聚焦目光、材质与镜头距离。","category":"角色设计与展示","media_type":"image","media_url":"https://chengteli.github.io/assets/red-blade.webp","created_at":1792737272395}],"categories":["原画","场景","3D角色","ai漫剧","ai短片","角色设计与展示","UI","视觉设计"],"about":{"heroIntro":"你好，我是程特立。一名持续探索影像、视觉叙事与数字创作的创作者。这里收录了我的精选项目、视觉实验与创作过程。","aboutText":"我相信好的视觉作品不仅是画面的呈现，更是对世界的一次重新观察。这里是我的视觉实验与创作记录，欢迎一起交流。"}};
 let items=[],categories=['全部','视觉设计','AI 图片','AI 短剧','影像创作'],activeCategory='全部',adminToken=sessionStorage.getItem('portfolio_admin_token')||'',draftFiles=[],about=null,deletedKeys=[];
 const $=id=>document.getElementById(id);
@@ -44,7 +45,25 @@ document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)hide(m.id)}));
 function status(id,msg,error=false){$(id).textContent=msg;$(id).classList.toggle('error',error);}
 async function api(path,opts={}){const headers={'Content-Type':'application/json',...(opts.headers||{})};if(adminToken)headers.Authorization='Bearer '+adminToken;const r=await fetch(API+path,{...opts,headers});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||'请求失败（'+r.status+'）');return d;}
-async function loadItems(){let fromDefault=false;try{const d=await api('/items');items=Array.isArray(d.items)?d.items.map(it=>({...it,media_url:String(it.media_url||'')})):[];about=d.about||null;if(Array.isArray(d.hidden))deletedKeys=Array.from(d.hidden);if(Array.isArray(d.categories)&&d.categories.length)categories=['全部',...d.categories.filter(x=>x!=='全部').map(x=>x==='AI 视频'?'AI 短剧':x)];else categories=deriveCategories();}catch(e){fromDefault=true;items=Array.isArray(DEFAULT_DATA.items)?DEFAULT_DATA.items.map(it=>({...it,media_url:String(it.media_url||'')})):[];about=DEFAULT_DATA.about||null;categories=['全部',...(DEFAULT_DATA.categories||[]).filter(x=>x!=='全部')];console.warn('Worker 不可达，使用国内可加载的默认数据。',e);}renderFilters();renderGrid();renderAbout();if(adminToken)renderAdmin();}
+function setItems(d){
+  items=Array.isArray(d.items)?d.items.map(it=>({...it,media_url:String(it.media_url||'')})):[];
+  about=d.about||null;
+  if(Array.isArray(d.hidden))deletedKeys=Array.from(d.hidden);
+  if(Array.isArray(d.categories)&&d.categories.length)categories=['全部',...d.categories.filter(x=>x!=='全部').map(x=>x==='AI 视频'?'AI 短剧':x)];else categories=deriveCategories();
+}
+async function loadItems(){
+  if(adminToken){
+    try{setItems(await api('/items'));}
+    catch(e){console.warn('Worker 不可达，管理员暂无法加载云端数据。',e);}
+  }else{
+    try{
+      const r=await fetch(PUBLIC_DATA+'?v='+Date.now());
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      setItems(await r.json());
+    }catch(e){console.warn('公共数据源不可达，使用内置默认数据。',e);setItems(DEFAULT_DATA);}
+  }
+  renderFilters();renderGrid();renderAbout();if(adminToken)renderAdmin();
+}
 function deriveCategories(){const a=[...new Set(items.map(i=>i.category).filter(Boolean))];return ['全部',...a,'视觉设计','AI 图片','AI 短剧','影像创作'].filter((v,i,x)=>x.indexOf(v)===i);}
 function renderAbout(){if(!about)return;if(about.heroIntro!=null&&String(about.heroIntro).trim()!=='')$('heroIntro').textContent=about.heroIntro;if(about.aboutText!=null&&String(about.aboutText).trim()!=='')$('aboutText').textContent=about.aboutText;}
 function renderFilters(){const f=$('filters');f.innerHTML='';const cats=['全部',...new Set([...categories.filter(x=>x!=='全部'),...items.map(i=>i.category||'视觉设计')])];cats.forEach(c=>{const b=document.createElement('button');b.className='filter'+(activeCategory===c?' active':'');b.textContent=c;b.onclick=()=>{activeCategory=c;renderFilters();renderGrid()};f.appendChild(b)});if(adminToken){const add=document.createElement('button');add.className='filter add';add.textContent='＋ 添加类型';add.onclick=async()=>{const n=prompt('输入新类型名称（例如：AI 短剧、角色设计）：');if(!n||!n.trim())return;const v=n.trim();if(!categories.includes(v))categories.push(v);try{await persist();activeCategory=v;renderFilters();renderGrid();}catch(e){alert('保存失败：'+e.message);}};f.appendChild(add);}}
