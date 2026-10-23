@@ -22,23 +22,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Sync public data from Worker and mirror media into repo
+      - name: Sync public data and media from Qiniu into repo
         shell: python
         run: |
           import json, os, hashlib, urllib.parse, urllib.request
 
-          WORKER = "https://morning-paper-de53.1529367086.workers.dev"
-          MAX_MEDIA = 25 * 1024 * 1024  # 超过 25MB 的媒体不进仓库（GitHub 文件上限限制）
+          # 数据源为七牛国内 CDN（测试域名），绕过被 Cloudflare 拦截的 Worker：
+          # Worker 每次保存都会写 portfolio-data/current.json，媒体在 portfolio-images|videos/
+          QINIU = "http://tn1tamwgn.hn-bkt.clouddn.com"
+          MAX_MEDIA = 25 * 1024 * 1024  # 超过 25MB 的媒体不进仓库
 
-          HDR = {"Origin": "https://chengteli.github.io"}
           try:
-              with urllib.request.urlopen(
-                  urllib.request.Request(WORKER + "/items", headers=HDR), timeout=40
-              ) as r:
+              with urllib.request.urlopen(QINIU + "/portfolio-data/current.json", timeout=40) as r:
                   data = json.load(r)
           except Exception as e:
               print("FETCH_FAIL", e)
-              raise SystemExit(0)  # Worker 暂不可达，本次跳过，不产生空数据覆盖
+              raise SystemExit(0)  # 数据源暂不可达，本次跳过，不覆盖已有公共数据
 
           media_dir = "assets/portfolio"
           os.makedirs(media_dir, exist_ok=True)
@@ -47,9 +46,15 @@ jobs:
 
           for it in items:
               u = str(it.get("media_url") or "")
-              if "/media/" not in u:
+              key = ""
+              if "/media/" in u:
+                  key = u.split("/media/", 1)[1]
+              elif "clouddn.com/" in u:
+                  key = u.split("clouddn.com/", 1)[1]
+              elif "://" in u:
+                  key = u.split("://", 1)[1].split("/", 1)[-1]
+              if not key:
                   continue
-              key = u.split("/media/", 1)[1]
               h = hashlib.sha1(key.encode("utf-8")).hexdigest()[:12]
               orig = os.path.basename(key)
               fname = h + "-" + orig
@@ -57,9 +62,7 @@ jobs:
               if not os.path.exists(local) or os.path.getsize(local) == 0:
                   try:
                       with urllib.request.urlopen(
-                          urllib.request.Request(
-                              WORKER + "/media/" + urllib.parse.quote(key), headers=HDR
-                          ), timeout=180
+                          QINIU + "/" + urllib.parse.quote(key), timeout=180
                       ) as r:
                           blob = r.read()
                   except Exception as e:
