@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f4f2ec"><title>程特立 — 个人作品集</title>
+<meta name="theme-color" content="#f4f2ec"><title>程特立 — 个人作品集</title><link rel="icon" href="data:,">
 <style>
 :root{--paper:#f4f2ec;--ink:#20221f;--muted:#77786f;--line:#d9d8ce;--green:#3d5b48;--red:#b9573d;--card:#fbfaf6}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Microsoft YaHei",system-ui,sans-serif}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(30deg,transparent 48%,#c6c6ba 49%,transparent 50%),linear-gradient(150deg,transparent 48%,#c6c6ba 49%,transparent 50%);background-size:72px 72px;mask-image:linear-gradient(to bottom,black,transparent 85%);z-index:-1}
@@ -35,8 +35,6 @@ a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}b
 <div id="dropHint">松开即上传到作品库<small>JPG / PNG / WEBP / GIF / MP4 / MOV / WEBM</small></div>
 <script>
 const API='https://morning-paper-de53.1529367086.workers.dev';
-const DOMAIN='https://tn1fk7ro8.hn-bkt.clouddn.com';
-const DATA_KEY='portfolio-data/site-data.json';
 let items=[],categories=['全部','视觉设计','AI 图片','AI 短剧','影像创作'],activeCategory='全部',adminToken=sessionStorage.getItem('portfolio_admin_token')||'',draftFiles=[],about=null,deletedKeys=[];
 const $=id=>document.getElementById(id);
 function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
