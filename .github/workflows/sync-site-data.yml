@@ -30,7 +30,7 @@ jobs:
           # 数据源为七牛国内 CDN（测试域名），绕过被 Cloudflare 拦截的 Worker：
           # Worker 每次保存都会写 portfolio-data/current.json，媒体在 portfolio-images|videos/
           QINIU = "http://tn1tamwgn.hn-bkt.clouddn.com"
-          MAX_MEDIA = 25 * 1024 * 1024  # 超过 25MB 的媒体不进仓库
+          MAX_MEDIA = 50 * 1024 * 1024  # 超过 50MB 的媒体不进仓库（GitHub 单文件上限内）
 
           try:
               with urllib.request.urlopen(QINIU + "/portfolio-data/current.json", timeout=40) as r:
