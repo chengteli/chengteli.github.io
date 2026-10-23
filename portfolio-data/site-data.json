@@ -1,16 +1,36 @@
 {
   "items": [
     {
-      "title": "影像练习 01",
-      "description": "一段关于节奏、氛围与画面运动的视觉实验。",
-      "media_type": "video",
-      "media_url": "assets/visual-study.mp4"
+      "id": "auto-57ae2921-87aa-4884-b97c-61da8385963b-addcecc5-ba53-4159-8c2c-c4feacbe6a43-2048x.jpg",
+      "title": "57ae2921-87aa-4884-b97c-61da8385963b-addcecc5-ba53-4159-8c2c-c4feacbe6a43-2048x.jpg",
+      "description": "",
+      "category": "视觉设计",
+      "media_type": "image",
+      "media_url": "https://chengteli.github.io/assets/portfolio/3c4baa2ce0fc-57ae2921-87aa-4884-b97c-61da8385963b-addcecc5-ba53-4159-8c2c-c4feacbe6a43-2048x.jpg",
+      "created_at": 1792689517116
     },
     {
-      "title": "红刃 · 角色视觉",
-      "description": "写实角色渲染练习，聚焦目光、材质与镜头距离。",
+      "id": "auto-f7daccb2-414f-44ba-ad53-8fe244e909b3-1-.png",
+      "title": "f7daccb2-414f-44ba-ad53-8fe244e909b3-1-.png",
+      "description": "",
+      "category": "视觉设计",
       "media_type": "image",
-      "media_url": "assets/red-blade.webp"
+      "media_url": "https://morning-paper-de53.1529367086.workers.dev/media/portfolio-images/f7daccb2-414f-44ba-ad53-8fe244e909b3-1-.png",
+      "created_at": 1792657116683
     }
-  ]
+  ],
+  "categories": [
+    "原画",
+    "场景",
+    "3D角色",
+    "ai漫剧",
+    "ai短片",
+    "角色设计与展示",
+    "UI",
+    "视觉设计"
+  ],
+  "about": {
+    "heroIntro": "你好，我是程特立。一名持续探索影像、视觉叙事与数字创作的创作者。这里收录了我的精选项目、视觉实验与创作过程。",
+    "aboutText": "我相信好的视觉作品不仅是画面的呈现，更是对世界的一次重新观察。这里是我的视觉实验与创作记录，欢迎一起交流。"
+  }
 }
