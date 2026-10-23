@@ -1,0 +1,99 @@
+name: sync-public-data
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - '.github/workflows/sync-site-data.yml'
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-public-data
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync public data from Worker and mirror media into repo
+        shell: python
+        run: |
+          import json, os, hashlib, urllib.parse, urllib.request
+
+          WORKER = "https://morning-paper-de53.1529367086.workers.dev"
+          MAX_MEDIA = 25 * 1024 * 1024  # 超过 25MB 的媒体不进仓库（GitHub 文件上限限制）
+
+          try:
+              with urllib.request.urlopen(WORKER + "/items", timeout=40) as r:
+                  data = json.load(r)
+          except Exception as e:
+              print("FETCH_FAIL", e)
+              raise SystemExit(0)  # Worker 暂不可达，本次跳过，不产生空数据覆盖
+
+          media_dir = "assets/portfolio"
+          os.makedirs(media_dir, exist_ok=True)
+          items = data.get("items") or []
+          refs = set()
+
+          for it in items:
+              u = str(it.get("media_url") or "")
+              if "/media/" not in u:
+                  continue
+              key = u.split("/media/", 1)[1]
+              h = hashlib.sha1(key.encode("utf-8")).hexdigest()[:12]
+              orig = os.path.basename(key)
+              fname = h + "-" + orig
+              local = os.path.join(media_dir, fname)
+              if not os.path.exists(local) or os.path.getsize(local) == 0:
+                  try:
+                      with urllib.request.urlopen(
+                          WORKER + "/media/" + urllib.parse.quote(key), timeout=180
+                      ) as r:
+                          blob = r.read()
+                  except Exception as e:
+                      print("MEDIA_FAIL", key, e)
+                      continue
+                  if len(blob) > MAX_MEDIA:
+                      print("MEDIA_TOO_BIG", key, len(blob))
+                      continue
+                  with open(local, "wb") as f:
+                      f.write(blob)
+              size = os.path.getsize(local)
+              if size > 0 and size <= MAX_MEDIA:
+                  it["media_url"] = "https://chengteli.github.io/" + media_dir + "/" + fname
+                  refs.add(local)
+
+          out = {
+              "items": items,
+              "categories": data.get("categories") or [],
+              "about": data.get("about"),
+          }
+          os.makedirs("portfolio-data", exist_ok=True)
+          with open("portfolio-data/site-data.json", "w", encoding="utf-8") as f:
+              json.dump(out, f, ensure_ascii=False, indent=2)
+
+          # 清理已不再被引用的镜像媒体，保持仓库精简
+          for fn in os.listdir(media_dir):
+              p = os.path.join(media_dir, fn)
+              if os.path.isfile(p) and p not in refs:
+                  os.remove(p)
+                  print("PRUNE", p)
+
+      - name: Commit and push
+        run: |
+          git config user.name "chengteli"
+          git config user.email "chengteli@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "chore: sync public portfolio data [skip ci]"
+            git push
+          fi
