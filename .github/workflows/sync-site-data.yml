@@ -41,10 +41,10 @@ jobs:
 
           media_dir = "assets/portfolio"
           os.makedirs(media_dir, exist_ok=True)
-          items = data.get("items") or []
           refs = set()
+          valid = []
 
-          for it in items:
+          for it in (data.get("items") or []):
               u = str(it.get("media_url") or "")
               key = ""
               if "/media/" in u:
@@ -67,19 +67,21 @@ jobs:
                           blob = r.read()
                   except Exception as e:
                       print("MEDIA_FAIL", key, e)
-                      continue
+                      continue  # 媒体取不到 = 失效条目，剔除，避免访客看到破图
                   if len(blob) > MAX_MEDIA:
                       print("MEDIA_TOO_BIG", key, len(blob))
                       continue
                   with open(local, "wb") as f:
                       f.write(blob)
               size = os.path.getsize(local)
-              if size > 0 and size <= MAX_MEDIA:
-                  it["media_url"] = "https://chengteli.github.io/" + media_dir + "/" + fname
-                  refs.add(local)
+              if size <= 0 or size > MAX_MEDIA:
+                  continue
+              it["media_url"] = "https://chengteli.github.io/" + media_dir + "/" + fname
+              refs.add(local)
+              valid.append(it)
 
           out = {
-              "items": items,
+              "items": valid,
               "categories": data.get("categories") or [],
               "about": data.get("about"),
           }
