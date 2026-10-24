@@ -174,7 +174,7 @@ async function uploadFiles(files,fromHome){
       const name=(file.name||'').replace(/\.[^.]+$/,'')||'未命名作品';
       items.unshift({id:crypto.randomUUID(),title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:path,created_at:Date.now()});
       activeCategory=category;
-      renderFilters();renderGrid();
+      renderFilters();renderGrid();renderAdmin();
       await persist();
       status('uploadStatus','上传成功并已发布：'+name);
     }catch(error){failed.push(file.name+': '+error.message);}
