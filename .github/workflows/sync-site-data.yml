@@ -18,18 +18,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Sync public data and media from Qiniu into repo
+      - name: Sync public data and media from Worker into repo
         shell: python
         run: |
-          import json, os, hashlib, time, urllib.parse, urllib.request
-          # 数据源为七牛国内 CDN（测试域名），绕过被 Cloudflare 拦截的 Worker：
-          # 管理端每次保存都会把最新数据直传 site-data-v2.json（固定 key，供访客同步）；
-          # 媒体在 portfolio-images|videos/。带随机 cb 参数绕过 CDN 缓存，确保读到最新。
+          import json, os, hashlib, urllib.parse, urllib.request
+          # 数据源为 Cloudflare Worker 的 /items（返回最新版本化数据，实时、无 CDN 缓存）：
+          # 管理端每次保存都会写版本化 key，/items 合并媒体列举返回最新；
+          # 只需伪造 Origin 头通过校验，无需 token。媒体在七牛 portfolio-images|videos/。
+          WORKER = "https://morning-paper-de53.1529367086.workers.dev"
           QINIU = "http://tn1tamwgn.hn-bkt.clouddn.com"
           MAX_MEDIA = 100 * 1024 * 1024  # 超过 100MB 的媒体不进仓库（GitHub 单文件硬上限）
-          src = QINIU + "/portfolio-data/site-data-v2.json?cb=" + str(int(time.time() * 1000))
           try:
-              with urllib.request.urlopen(src, timeout=40) as r:
+              req = urllib.request.Request(
+                  WORKER + "/items",
+                  headers={
+                      "Origin": "https://chengteli.github.io",
+                      "Accept": "application/json",
+                      "User-Agent": "sync-public-data",
+                  },
+              )
+              with urllib.request.urlopen(req, timeout=40) as r:
                   data = json.load(r)
           except Exception as e:
               print("FETCH_FAIL", e)
