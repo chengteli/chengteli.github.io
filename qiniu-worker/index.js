@@ -99,7 +99,11 @@ async function isAdmin(request, env) {
 }
 async function qiniuToken(env, key, size, contentType, insertOnly = 1) {
   const deadline = Math.floor(Date.now()/1000) + 3600;
-  const policy = {scope: env.QINIU_BUCKET + ":" + key, deadline, insertOnly, fsizeLimit:size, mimeLimit:contentType};
+  // Qiniu checks the file contents for mimeLimit, so a QuickTime container named .mp4
+  // is detected as video/quicktime. Allow video MIME types for video uploads while
+  // keeping image uploads restricted to their declared image MIME type.
+  const mimeLimit = contentType.startsWith("video/") ? "video/*" : contentType;
+  const policy = {scope: env.QINIU_BUCKET + ":" + key, deadline, insertOnly, fsizeLimit:size, mimeLimit};
   const encoded = b64text(JSON.stringify(policy));
   const token = env.QINIU_ACCESS_KEY + ":" + b64url(await hmac(env.QINIU_SECRET_KEY, encoded, "SHA-1")) + ":" + encoded;
   return {token,key,bucket:env.QINIU_BUCKET,domain:env.QINIU_DOMAIN.replace(/\/$/,""),expiresAt:deadline};
