@@ -143,7 +143,7 @@ async function uploadFiles(files,fromHome=false){
   const failed=[];
   for(const file of valid){
     const extension=(file.name.match(/\.([^.]+)$/)||[])[1]||'';
-    const inferredType=file.type||( /^(mp4|mov|webm|m4v)$/i.test(extension)?'video/'+(extension.toLowerCase()==='mov'?'quicktime':extension.toLowerCase()):'image/'+(extension.toLowerCase()==='jpg'?'jpeg':extension.toLowerCase()));
+    const inferredType=file.type.startsWith('image/')||file.type.startsWith('video/')?file.type:(/^(mp4|mov|webm|m4v)$/i.test(extension)?'video/'+(extension.toLowerCase()==='mov'?'quicktime':extension.toLowerCase()):'image/'+(extension.toLowerCase()==='jpg'?'jpeg':extension.toLowerCase()));
     const isVideo=inferredType.startsWith('video/');
     if(!isVideo&&!inferredType.startsWith('image/')){failed.push(file.name+': 不支持的文件类型');continue;}
     try{
