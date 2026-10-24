@@ -15,6 +15,10 @@ a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}b
 #vFull{right:196px}#vZoomIn{right:148px}#vZoomOut{right:100px}#vZoomReset{right:48px;font-size:12px}
 .card-tools button[data-up],.card-tools button[data-down]{color:#d7ecd9;border-color:#7ba887}
 .card-tools button[data-up]:hover,.card-tools button[data-down]:hover{background:var(--green)}
+#toast{position:fixed;top:84px;left:50%;transform:translateX(-50%);z-index:60;padding:11px 20px;border-radius:999px;font-size:13px;color:#fff;background:#2c332d;box-shadow:0 8px 30px #0004;opacity:0;pointer-events:none;transition:opacity .25s;max-width:90vw;text-align:center}
+#toast.show{opacity:1}
+#toast.ok{background:var(--green)}
+#toast.err{background:var(--red)}
 .works-drag{outline:2px dashed var(--green);outline-offset:6px;border-radius:6px;background:rgba(61,91,72,.05)}
 .home-drop{margin:0 0 24px;padding:26px 18px;border:1.5px dashed var(--green);border-radius:6px;background:#eef0e6;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;color:var(--green);transition:border-color .2s,background .2s;text-align:center}
 .home-drop span{font-size:15px;font-weight:650;letter-spacing:.02em}
@@ -47,6 +51,7 @@ a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}b
 <div class="modal" id="aboutModal"><div class="panel"><div class="panel-head"><h2>编辑个人简介</h2><button class="x" data-close="aboutModal">×</button></div><div class="field"><label>首屏介绍（主页顶部那段话）</label><textarea id="aboutHero"></textarea></div><div class="field"><label>关于我（「关于我」区整段文字）</label><textarea id="aboutTextArea"></textarea></div><div class="status" id="aboutStatus"></div><button class="btn" id="aboutSave">保存简介</button></div></div>
 <div class="modal" id="viewerModal"><div class="viewer"><button class="vtool" id="vFull" title="视频全屏">⛶</button><button class="vtool" id="vZoomIn" title="放大">＋</button><button class="vtool" id="vZoomOut" title="缩小">－</button><button class="vtool" id="vZoomReset" title="复位">复位</button><button class="x" id="vClose" style="color:white;float:right">×</button><button class="vnav" id="vPrev" title="上一个">‹</button><button class="vnav" id="vNext" title="下一个">›</button><div id="viewerStage"><div id="viewerContent"></div></div><h3 id="viewerTitle"></h3><p id="viewerDescription"></p></div></div>
 <div id="dropHint">松开即上传到作品库<small>JPG / PNG / WEBP / GIF / MP4 / MOV / WEBM</small></div>
+<div id="toast"></div>
 <input id="homeFileInput" type="file" accept="image/*,video/*" multiple style="display:none">
 <script>
 const GH_OWNER='chengteli',GH_REPO='chengteli.github.io';
@@ -62,6 +67,8 @@ function show(id){$(id).classList.add('show');}function hide(id){$(id).classList
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>hide(b.dataset.close)));
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m){if(m.id==='viewerModal')closeViewer();else hide(m.id)}}));
 function status(id,msg,error=false){const target=$(id);if(target){target.textContent=msg;target.classList.toggle('error',error);}if(id==='uploadStatus'){const home=$('homeUploadStatus');if(home){home.textContent=msg;home.classList.toggle('error',error);home.classList.toggle('hidden',!msg);}}}
+let toastTimer=null;
+function toast(msg,ok=true){const t=$('toast');if(!t)return;t.textContent=msg;t.className='show '+(ok?'ok':'err');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.className='';},2600);}
 async function gh(method,path,body){const headers={'Authorization':'Bearer '+adminToken,'Accept':'application/vnd.github+json'};const opt={method,headers};if(body!==undefined){headers['Content-Type']='application/json';opt.body=JSON.stringify(body);}const r=await fetch(GH_API+path,opt);let d=null;try{d=await r.json()}catch(_){}if(!r.ok)throw new Error((d&&d.message)||('GitHub 请求失败 ('+r.status+')'));return d;}
 function b64Text(obj){return btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));}
 async function fileToB64(file){const buf=await file.arrayBuffer();const bytes=new Uint8Array(buf);let bin='',chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));}return btoa(bin);}
@@ -122,11 +129,14 @@ async function persist(){
   status('uploadStatus','正在保存到 GitHub…');
   const payload={items,categories:categories.filter(c=>c!=='全部'),about,hidden:deletedKeys};
   const content=b64Text(payload);
-  const cur=await gh('GET','/contents/portfolio-data/site-data.json');
-  await gh('PUT','/contents/portfolio-data/site-data.json',{message:'update portfolio data',content,sha:cur.sha});
-  try{localStorage.setItem('portfolio_cache',JSON.stringify(payload));}catch(_){}
-  renderFilters();renderGrid();renderAbout();refreshHomeDrop();if(adminToken)renderAdmin();
-  status('uploadStatus','已保存到 GitHub。');
+  try{
+    const cur=await gh('GET','/contents/portfolio-data/site-data.json');
+    await gh('PUT','/contents/portfolio-data/site-data.json',{message:'update portfolio data',content,sha:cur.sha});
+    try{localStorage.setItem('portfolio_cache',JSON.stringify(payload));}catch(_){}
+    renderFilters();renderGrid();renderAbout();refreshHomeDrop();if(adminToken)renderAdmin();
+    status('uploadStatus','已保存到 GitHub。');
+    toast('已保存到 GitHub',true);
+  }catch(err){status('uploadStatus','保存失败：'+err.message,true);toast('保存失败：'+err.message,false);throw err;}
 }
 function uploadMime(file){const ext=String(file.name||'').toLowerCase().match(/\.([^.]+)$/)?.[1];const byExtension=({mp4:'video/mp4',m4v:'video/mp4',mov:'video/quicktime',webm:'video/webm',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',avif:'image/avif',bmp:'image/bmp'})[ext]||'';if(ext==='mp4'||ext==='m4v')return byExtension;const type=String(file.type||'').toLowerCase();if(type.startsWith('image/')||type.startsWith('video/'))return type;return byExtension;}
 function setUploadProgress(percent){
