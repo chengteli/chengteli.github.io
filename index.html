@@ -71,7 +71,7 @@ document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if
 function status(id,msg,error=false){const target=$(id);if(target){target.textContent=msg;target.classList.toggle('error',error);}if(id==='uploadStatus'){const home=$('homeUploadStatus');if(home){home.textContent=msg;home.classList.toggle('error',error);home.classList.toggle('hidden',!msg);}}}
 let toastTimer=null;
 function toast(msg,ok=true){const t=$('toast');if(!t)return;t.textContent=msg;t.className='show '+(ok?'ok':'err');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.className='';},2600);}
-async function gh(method,path,body){const headers={'Authorization':'Bearer '+adminToken,'Accept':'application/vnd.github+json'};const opt={method,headers};if(body!==undefined){headers['Content-Type']='application/json';opt.body=JSON.stringify(body);}const r=await fetch(GH_API+path,opt);let d=null;try{d=await r.json()}catch(_){}if(!r.ok)throw new Error((d&&d.message)||('GitHub 请求失败 ('+r.status+')'));return d;}
+async function gh(method,path,body){const headers={'Authorization':'Bearer '+adminToken,'Accept':'application/vnd.github+json'};const opt={method,headers};if(body!==undefined){headers['Content-Type']='application/json';opt.body=JSON.stringify(body);}const r=await fetch(GH_API+path,opt);let d=null;try{d=await r.json()}catch(_){}if(!r.ok){if(r.status===401)throw new Error('授权码已失效或无效，请重新登录粘贴新的 GitHub 授权码');throw new Error((d&&d.message)||('GitHub 请求失败 ('+r.status+')'));}return d;}
 function b64Text(obj){return btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));}
 async function fileToB64(file){const buf=await file.arrayBuffer();const bytes=new Uint8Array(buf);let bin='',chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));}return btoa(bin);}
 function setItems(d){
@@ -163,6 +163,7 @@ async function uploadFiles(files,fromHome){
   }
   const failed=[];
   for(const {file,mime} of valid){
+    let inserted=null;
     try{
       status('uploadStatus','正在上传：'+file.name+'（'+(file.size/1024/1024).toFixed(1)+' MB）');
       const safe=String(file.name||'media').replace(/[^\w.\-]+/g,'_');
@@ -172,12 +173,17 @@ async function uploadFiles(files,fromHome){
       const isVideo=mime.startsWith('video/');
       const category=(fromHome&&activeCategory&&activeCategory!=='全部')?activeCategory:($('itemCategory').value||(isVideo?'AI 短剧':'视觉设计'));
       const name=(file.name||'').replace(/\.[^.]+$/,'')||'未命名作品';
-      items.unshift({id:crypto.randomUUID(),title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:path,created_at:Date.now()});
+      inserted={id:crypto.randomUUID(),title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:path,created_at:Date.now()};
+      items.unshift(inserted);
       activeCategory=category;
       renderFilters();renderGrid();renderAdmin();
       await persist();
       status('uploadStatus','上传成功并已发布：'+name);
-    }catch(error){failed.push(file.name+': '+error.message);}
+    }catch(error){
+      if(inserted){const k=items.indexOf(inserted);if(k>-1)items.splice(k,1);renderFilters();renderGrid();renderAdmin();}
+      const msg=String(error.message||error);
+      failed.push(file.name+': '+(/(401|Bad credentials)/.test(msg)?'授权码已失效，请重新登录粘贴新的 GitHub 授权码':msg));
+    }
   }
   $('itemTitle').value='';$('itemDescription').value='';
   setUploadProgress(null);
