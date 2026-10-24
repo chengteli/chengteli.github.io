@@ -23,47 +23,29 @@ a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}b
 @media(max-width:520px){.wrap{width:calc(100% - 28px)}.topbar{height:66px}.brand{font-size:17px}.hero h1{font-size:54px}.intro{font-size:14px}.grid{grid-template-columns:1fr;gap:12px}.section-head h2{font-size:26px}.about{padding:30px 0 55px}.footer{gap:12px;flex-wrap:wrap}.panel{padding:18px}.admin-item{grid-template-columns:48px 1fr}.admin-item img,.admin-item video{width:48px;height:40px}.admin-item .row{grid-column:1/-1}.vnav{width:44px;height:64px;font-size:38px}}
 .work.admin .editable{cursor:text;border-bottom:1px dashed transparent;transition:border-color .15s}.work.admin .editable:hover{border-bottom-color:var(--green)}.inline-edit{font:inherit;font-size:17px;font-weight:600;letter-spacing:-.03em;width:100%;padding:4px 6px;border:1px solid var(--green);border-radius:4px;background:#fff;outline:none;color:var(--ink)}.inline-edit.tag-edit{font-size:11px;text-transform:uppercase;letter-spacing:.13em;width:auto;min-width:80px;font-weight:400}.inline-edit:focus{border-color:var(--green);box-shadow:0 0 0 2px #3d5b481f}
 </style>
-<script>
-const qiniuReady=new Promise((resolve,reject)=>{
-  const urls=[
-    'https://cdnjs.cloudflare.com/ajax/libs/qiniu-js/3.4.1/qiniu.min.js',
-    'https://cdn.jsdelivr.net/npm/qiniu-js@3.4.1/dist/qiniu.min.js',
-    'https://unpkg.com/qiniu-js@3.4.1/dist/qiniu.min.js'
-  ];
-  let index=0;
-  const loadNext=()=>{
-    if(window.qiniu&&window.qiniu.upload){resolve(window.qiniu);return;}
-    if(index>=urls.length){reject(new Error('七牛上传组件加载失败：当前网络无法连接可用 CDN，请切换网络后重试。'));return;}
-    const script=document.createElement('script');
-    script.src=urls[index++];
-    script.onload=()=>window.qiniu&&window.qiniu.upload?resolve(window.qiniu):loadNext();
-    script.onerror=loadNext;
-    document.head.appendChild(script);
-  };
-  loadNext();
-});
-</script>
+
 </head>
 <body>
-<header class="wrap topbar"><a class="brand" href="#top">程特立<small>VISUAL PORTFOLIO · 2026</small></a><nav class="nav"><a href="#works">作品</a><a href="#about">关于</a><a href="#contact">联系</a><button class="btn light hidden" id="adminOpen">管理入口</button></nav></header>
+<header class="wrap topbar"><a class="brand" href="#top">程特立<small>VISUAL PORTFOLIO · 2026</small></a><nav class="nav"><a href="#works">作品</a><a href="#about">关于</a><a href="#contact">联系</a><button class="btn light" id="adminOpen">管理入口</button></nav></header>
 <main id="top" class="wrap">
 <section class="hero"><div><div class="eyebrow">Independent Visual Creator</div><h1>让想法<br><span>成为作品。</span></h1><p class="intro" id="heroIntro">你好，我是程特立。一名持续探索影像、视觉叙事与数字创作的创作者。这里收录了我的精选项目、视觉实验与创作过程。</p></aside><aside class="hero-side"><div class="num">10<span style="font-size:26px">+</span></div><p>年创作与项目经验<br>视觉设计 · 影像创作 · AI 视觉实验</p></aside></section>
-<section id="works"><div class="section-head"><div><h2>精选作品</h2><p>SELECTED WORKS / 持续更新</p></div><div class="hint" id="countLabel">正在加载作品…</div></div><div class="filters" id="filters"></div><div id="homeDrop" class="home-drop hidden"><span>＋ 上传作品</span><small id="homeDropHint">将图片或视频拖到此处，或点击选择文件</small></div><div class="upload-progress hidden" id="homeUploadProgress" role="progressbar" aria-label="首页上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="upload-progress-track"><span class="upload-progress-bar" id="homeUploadProgressBar"></span></div><span class="upload-progress-text" id="homeUploadProgressText">0%</span></div><div class="status hidden" id="homeUploadStatus" role="status" aria-live="polite"></div><div class="grid" id="grid"><div class="empty">正在连接作品库…</div></div></section>
+<section id="works"><div class="section-head"><div><h2>精选作品</h2><p>SELECTED WORKS / 持续更新</p></div><div class="hint" id="countLabel">正在加载作品…</div></div><div class="filters" id="filters"></div><div id="homeDrop" class="home-drop"><span>＋ 上传作品</span><small id="homeDropHint">将图片或视频拖到此处，或点击选择文件</small></div><div class="upload-progress hidden" id="homeUploadProgress" role="progressbar" aria-label="首页上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="upload-progress-track"><span class="upload-progress-bar" id="homeUploadProgressBar"></span></div><span class="upload-progress-text" id="homeUploadProgressText">0%</span></div><div class="status hidden" id="homeUploadStatus" role="status" aria-live="polite"></div><div class="grid" id="grid"><div class="empty">正在连接作品库…</div></div></section>
 <section id="about" class="about"><h2>关于我<span style="color:var(--red)">.</span></h2><p id="aboutText">我相信好的视觉作品不仅是画面的呈现，更是想法、情绪与细节的共同表达。这个作品集会持续更新个人项目、影像实验与 AI 创作内容。欢迎浏览，也欢迎交流合作。</p></section>
 <section id="contact" class="section-head"><div><h2>保持联系</h2><p>CONTACT / LET'S CREATE SOMETHING</p></div><a class="btn" href="mailto:hello@chengteli.com">联系我 ↗</a></section>
-</main><footer class="wrap footer"><span>© 2026 程特立 · Personal Portfolio</span><span>Made with intention.</span><button class="admin-link hidden" id="adminOpen2">管理</button></footer>
-<div class="modal" id="loginModal"><div class="panel"><div class="panel-head"><h2>管理员登录</h2><button class="x" data-close="loginModal">×</button></div><p class="hint">仅管理员可编辑作品与上传文件。</p><div class="field"><label>管理员密码</label><input id="adminPassword" type="password" autocomplete="current-password" placeholder="输入管理员密码"></div><div class="status" id="loginStatus"></div><button class="btn" id="loginBtn">登录管理后台</button></div></div>
-<div class="modal" id="adminModal"><div class="panel wide"><div class="panel-head"><div><h2>作品管理</h2><p class="hint">文件上传到七牛云，作品信息持久保存。</p></div><button class="x" data-close="adminModal">×</button></div><div class="admin-tools"><button class="btn" id="openCatBtn">分类管理</button><button class="btn light" id="shareBtn">访客分享链接</button><button class="btn light" id="editAboutBtn">✎ 编辑简介</button><button class="btn light" id="logoutBtn">退出登录</button><button class="btn light" id="reloadBtn">重新加载</button></div><div class="drop" id="dropZone">将图片或视频拖到这里，松开后自动上传<br><small>支持 JPG / PNG / WEBP / GIF / MP4 / MOV / WEBM；大文件上传取决于七牛云空间配置</small><input id="fileInput" type="file" accept="image/*,video/*" multiple style="display:block;margin:12px auto 0;max-width:100%"></div><div class="status" id="uploadStatus" role="status" aria-live="polite"></div><div class="upload-progress hidden" id="uploadProgress" role="progressbar" aria-label="上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="upload-progress-track"><span class="upload-progress-bar" id="uploadProgressBar"></span></div><span class="upload-progress-text" id="uploadProgressText">0%</span></div><div class="field"><label>作品标题</label><input id="itemTitle" placeholder="给新上传的作品命名（可留空）"></div><div class="field"><label>作品描述</label><textarea id="itemDescription" placeholder="简短介绍（可留空）"></textarea></div><div class="field"><label>分类</label><select id="itemCategory"></select></div><div class="hint" style="margin:12px 0">已上传作品（可重命名、修改分类或删除）：</div><div class="admin-list" id="adminList"></div></div></div>
+</main><footer class="wrap footer"><span>© 2026 程特立 · Personal Portfolio</span><span>Made with intention.</span><button class="admin-link" id="adminOpen2">管理</button></footer>
+<div class="modal" id="loginModal"><div class="panel"><div class="panel-head"><h2>管理员登录</h2><button class="x" data-close="loginModal">×</button></div><p class="hint">粘贴你的 GitHub 授权码（PAT）即可登录，改动直接保存到本仓库，授权码只存在你本机浏览器。</p><div class="field"><label>GitHub 授权码 (PAT)</label><input id="adminPassword" type="password" autocomplete="off" placeholder="粘贴 GitHub 授权码，例如 ghp_xxxxxxxx"></div><div class="status" id="loginStatus"></div><button class="btn" id="loginBtn">登录管理后台</button></div></div>
+<div class="modal" id="adminModal"><div class="panel wide"><div class="panel-head"><div><h2>作品管理</h2><p class="hint">文件上传到 GitHub 仓库，作品信息自动保存。</p></div><button class="x" data-close="adminModal">×</button></div><div class="admin-tools"><button class="btn" id="openCatBtn">分类管理</button><button class="btn light" id="shareBtn">访客分享链接</button><button class="btn light" id="editAboutBtn">✎ 编辑简介</button><button class="btn light" id="logoutBtn">退出登录</button><button class="btn light" id="reloadBtn">重新加载</button></div><div class="drop" id="dropZone">将图片或视频拖到这里，松开后自动上传<br><small>支持 JPG / PNG / WEBP / GIF / MP4 / MOV / WEBM；单文件建议小于 48MB，过大请先压缩</small><input id="fileInput" type="file" accept="image/*,video/*" multiple style="display:block;margin:12px auto 0;max-width:100%"></div><div class="status" id="uploadStatus" role="status" aria-live="polite"></div><div class="upload-progress hidden" id="uploadProgress" role="progressbar" aria-label="上传进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="upload-progress-track"><span class="upload-progress-bar" id="uploadProgressBar"></span></div><span class="upload-progress-text" id="uploadProgressText">0%</span></div><div class="field"><label>作品标题</label><input id="itemTitle" placeholder="给新上传的作品命名（可留空）"></div><div class="field"><label>作品描述</label><textarea id="itemDescription" placeholder="简短介绍（可留空）"></textarea></div><div class="field"><label>分类</label><select id="itemCategory"></select></div><div class="hint" style="margin:12px 0">已上传作品（可重命名、修改分类或删除）：</div><div class="admin-list" id="adminList"></div></div></div>
 <div class="modal" id="catModal"><div class="panel"><div class="panel-head"><h2>分类管理</h2><button class="x" data-close="catModal">×</button></div><div class="row" style="margin-bottom:16px"><input id="catNewName" placeholder="新分类名称，例如：AI 短剧" style="flex:1"><button class="btn" id="catAdd">＋ 添加</button></div><p class="hint" style="margin-bottom:12px">可添加任意自定义分类；重命名会同步更新该分类下所有作品；删除后该分类的作品归入「视觉设计」。</p><div class="status" id="catStatus"></div><div class="admin-list" id="catList"></div></div></div>
 <div class="modal" id="aboutModal"><div class="panel"><div class="panel-head"><h2>编辑个人简介</h2><button class="x" data-close="aboutModal">×</button></div><div class="field"><label>首屏介绍（主页顶部那段话）</label><textarea id="aboutHero"></textarea></div><div class="field"><label>关于我（「关于我」区整段文字）</label><textarea id="aboutTextArea"></textarea></div><div class="status" id="aboutStatus"></div><button class="btn" id="aboutSave">保存简介</button></div></div>
 <div class="modal" id="viewerModal"><div class="viewer"><button class="x" data-close="viewerModal" style="color:white;float:right">×</button><button class="vnav" id="vPrev" title="上一个">‹</button><button class="vnav" id="vNext" title="下一个">›</button><div id="viewerContent"></div><h3 id="viewerTitle"></h3><p id="viewerDescription"></p></div></div>
 <div id="dropHint">松开即上传到作品库<small>JPG / PNG / WEBP / GIF / MP4 / MOV / WEBM</small></div>
 <input id="homeFileInput" type="file" accept="image/*,video/*" multiple style="display:none">
 <script>
-const API='https://morning-paper-de53.1529367086.workers.dev';
+const GH_OWNER='chengteli',GH_REPO='chengteli.github.io';
+const GH_API='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO;
 const PUBLIC_DATA='portfolio-data/site-data.json';
 const DEFAULT_DATA={"items":[],"categories":["视觉设计","AI 图片","AI 短剧","影像创作"],"about":null};
-let items=[],categories=['全部','视觉设计','AI 图片','AI 短剧','影像创作'],activeCategory='全部',adminToken='',draftFiles=[],about=null,deletedKeys=[],localPreviews={},dragFrom=null;try{sessionStorage.removeItem('portfolio_admin_token')}catch(_){}
+let items=[],categories=['全部','视觉设计','AI 图片','AI 短剧','影像创作'],activeCategory='全部',adminToken=sessionStorage.getItem('gh_token')||'',draftFiles=[],about=null,deletedKeys=[],localPreviews={},dragFrom=null;
 const $=id=>document.getElementById(id);
 function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function kind(it){return it.media_type==='video'||['.mp4','.mov','.webm','.m4v'].some(e=>String(it.media_url||'').toLowerCase().includes(e))?'video':'image';}
@@ -72,7 +54,9 @@ function show(id){$(id).classList.add('show');}function hide(id){$(id).classList
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>hide(b.dataset.close)));
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)hide(m.id)}));
 function status(id,msg,error=false){const target=$(id);if(target){target.textContent=msg;target.classList.toggle('error',error);}if(id==='uploadStatus'){const home=$('homeUploadStatus');if(home){home.textContent=msg;home.classList.toggle('error',error);home.classList.toggle('hidden',!msg);}}}
-async function api(path,opts={}){const headers={'Content-Type':'application/json',...(opts.headers||{})};if(adminToken)headers.Authorization='Bearer '+adminToken;const r=await fetch(API+path,{...opts,headers});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||'请求失败（'+r.status+'）');return d;}
+async function gh(method,path,body){const headers={'Authorization':'Bearer '+adminToken,'Accept':'application/vnd.github+json'};const opt={method,headers};if(body!==undefined){headers['Content-Type']='application/json';opt.body=JSON.stringify(body);}const r=await fetch(GH_API+path,opt);let d=null;try{d=await r.json()}catch(_){}if(!r.ok)throw new Error((d&&d.message)||('GitHub 请求失败 ('+r.status+')'));return d;}
+function b64Text(obj){return btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));}
+async function fileToB64(file){const buf=await file.arrayBuffer();const bytes=new Uint8Array(buf);let bin='',chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));}return btoa(bin);}
 function setItems(d){
   items=Array.isArray(d.items)?d.items.map(it=>({...it,media_url:String(it.media_url||'')})):[];
   about=d.about||null;
@@ -90,10 +74,10 @@ async function loadItems(forceFromServer){
     }
     if(forceFromServer){
       try{
-        const d=await api('/items');
+        const r=await fetch(PUBLIC_DATA+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();
         setItems(d);
         try{localStorage.setItem(cacheKey,JSON.stringify({items:items,categories:categories.filter(x=>x!=='全部'),about:about||null,hidden:deletedKeys}));}catch(_){}
-      }catch(e){console.warn('Worker 不可达，管理员暂无法加载云端数据。',e);}
+      }catch(e){console.warn('静态清单加载失败。',e);}
     }
   }else{
     try{
@@ -124,45 +108,17 @@ function makeInlineEdit(i,el,getVal,setVal,cls){const it=items[i];if(!it)return;
 function startInlineTitle(i,el){makeInlineEdit(i,el,it=>title(it),(it,v)=>{it.title=v;},'');}
 function startInlineCat(i,el){makeInlineEdit(i,el,it=>it.category||'视觉设计',(it,v)=>{it.category=v;if(!categories.includes(v))categories.push(v);},' tag-edit');}
 function renderAdmin(){const sel=$('itemCategory');const old=sel.value;const cats=categories.filter(x=>x!=='全部');sel.innerHTML=[...new Set([...cats,...items.map(i=>i.category).filter(Boolean),'视觉设计'])].map(c=>'<option>'+esc(c)+'</option>').join('');if(old)sel.value=old;const list=$('adminList');if(!items.length){list.innerHTML='<div class="hint">暂时没有作品。</div>';return;}list.innerHTML=items.map((it,i)=>'<div class="admin-item"><'+(kind(it)==='video'?'video muted':'img')+' src="'+esc((it._pkey&&localPreviews[it._pkey])||it.media_url)+'" '+(kind(it)==='video'?'preload="metadata"':'')+'></'+(kind(it)==='video'?'video':'img')+'><div><strong>'+esc(title(it))+'</strong><small>'+esc(it.category||'视觉设计')+' · '+(kind(it)==='video'?'视频':'图片')+'</small></div><div class="row"><button data-edit="'+i+'">编辑</button><button data-delete="'+i+'">删除</button></div></div>').join('');list.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editItem(Number(b.dataset.edit)));list.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteItem(Number(b.dataset.delete)));}
-async function persist(onProgress){
-  status('uploadStatus','正在保存作品信息…');
+async function persist(){
+  status('uploadStatus','正在保存到 GitHub…');
   const payload={items,categories:categories.filter(c=>c!=='全部'),about,hidden:deletedKeys};
-  const dataFile=new File([JSON.stringify(payload)],'site-data.json',{type:'application/json'});
-  const ticket=await api('/data-token',{method:'POST',body:JSON.stringify({size:dataFile.size})});
-  await qiniuUpload(dataFile,ticket.token,ticket.key,'application/json',onProgress);
+  const content=b64Text(payload);
+  const cur=await gh('GET','/contents/portfolio-data/site-data.json');
+  await gh('PUT','/contents/portfolio-data/site-data.json',{message:'update portfolio data',content,sha:cur.sha});
   try{localStorage.setItem('portfolio_cache',JSON.stringify(payload));}catch(_){}
   renderFilters();renderGrid();renderAbout();refreshHomeDrop();if(adminToken)renderAdmin();
-  status('uploadStatus','作品信息已保存。');
+  status('uploadStatus','已保存到 GitHub。');
 }
 function uploadMime(file){const ext=String(file.name||'').toLowerCase().match(/\.([^.]+)$/)?.[1];const byExtension=({mp4:'video/mp4',m4v:'video/mp4',mov:'video/quicktime',webm:'video/webm',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',avif:'image/avif',bmp:'image/bmp'})[ext]||'';if(ext==='mp4'||ext==='m4v')return byExtension;const type=String(file.type||'').toLowerCase();if(type.startsWith('image/')||type.startsWith('video/'))return type;return byExtension;}
-async function qiniuUpload(file,token,key,mime,onProgress){
-  const sdk=await qiniuReady;
-  const uploadFile=mime&&file.type!==mime?new File([file],file.name||'upload.bin',{type:mime,lastModified:file.lastModified||Date.now()}):file;
-  return new Promise((resolve,reject)=>{
-    const observable=sdk.upload(uploadFile,key,token,{fname:file.name||'site-data.json',mimeType:mime||file.type||'application/octet-stream'},{useCdnDomain:true,chunkSize:4,retryCount:3});
-    let settled=false,subscription=null;
-    const finish=(fn,value)=>{if(settled)return;settled=true;clearTimeout(timeout);fn(value);};
-    const timeout=setTimeout(()=>{
-      if(subscription&&typeof subscription.unsubscribe==='function')subscription.unsubscribe();
-      finish(reject,new Error('七牛已接收全部数据，但 3 分钟内没有返回完成确认。请检查网络和存储空间状态；若作品未出现，请刷新后再试。'));
-    },180000);
-    subscription=observable.subscribe({
-      next:info=>{
-        const percent=Number(info&&info.total&&info.total.percent);
-        if(Number.isFinite(percent)&&typeof onProgress==='function'){
-          onProgress(percent);
-          if(Math.round(percent)>=100)status('uploadStatus','进度已到 100%，正在等待七牛确认完成…');
-        }
-      },
-      error:e=>{
-        const detail=e&&(e.message||e.error||e.response&&e.responseText);
-        const code=e&&(e.code||e.status);
-        finish(reject,new Error((detail||'七牛云上传失败，请检查网络、空间区域和上传配置')+(code?'（错误码 '+code+'）':'')));
-      },
-      complete:result=>finish(resolve,result)
-    });
-  });
-}
 function setUploadProgress(percent){
   const widgets=[['uploadProgress','uploadProgressBar','uploadProgressText'],['homeUploadProgress','homeUploadProgressBar','homeUploadProgressText']];
   widgets.forEach(([boxId,barId,textId])=>{
@@ -177,49 +133,42 @@ function setUploadProgress(percent){
 }
 async function uploadFiles(files,fromHome){
   if(!adminToken){show('loginModal');return;}
-  const selected=[...files],recognized=selected.map(file=>({file,mime:uploadMime(file)})),maxSize=100*1024*1024,valid=recognized.filter(x=>x.mime&&x.file.size<=maxSize),skipped=selected.length-valid.length;
+  const selected=[...files],recognized=selected.map(file=>({file,mime:uploadMime(file)})),maxSize=48*1024*1024,valid=recognized.filter(x=>x.mime&&x.file.size<=maxSize),skipped=selected.length-valid.length;
   if(!valid.length){
     const tooLarge=recognized.some(x=>x.mime&&x.file.size>maxSize);
-    status('uploadStatus',tooLarge?'文件超过 100 MB。当前网站发布流程无法同步超过 100 MB 的媒体，请压缩后再上传。':selected.length?'无法识别文件格式。请使用 JPG、PNG、WEBP、GIF、MP4、MOV 或 WEBM。':'请选择图片或视频文件。',true);
+    status('uploadStatus',tooLarge?'文件超过 48MB，请压缩后再上传。':selected.length?'无法识别格式，请使用 JPG/PNG/WEBP/GIF/MP4/MOV/WEBM。':'请选择图片或视频文件。',true);
     return;
   }
   const failed=[];
   for(const {file,mime} of valid){
     try{
       status('uploadStatus','正在上传：'+file.name+'（'+(file.size/1024/1024).toFixed(1)+' MB）');
-      setUploadProgress(0);
-      const t=await api('/upload-token',{method:'POST',body:JSON.stringify({fileName:file.name,size:file.size,contentType:mime})});
-      await qiniuUpload(file,t.token,t.key,mime,percent=>setUploadProgress(percent));
-      status('uploadStatus','视频或图片文件已上传，正在保存作品信息…');
-      const key=t.key,isVideo=mime.startsWith('video/');
-      const domain=String(t.domain||'').replace(/\/$/,'');
-      if(!key||!domain)throw new Error('上传令牌没有返回文件 key 或七牛访问域名；文件可能尚未上传，请检查上传服务返回值。');
+      const safe=String(file.name||'media').replace(/[^\w.\-]+/g,'_');
+      const path='assets/portfolio/'+crypto.randomUUID()+'-'+safe;
+      const content=await fileToB64(file);
+      await gh('PUT','/contents/'+path,{message:'add '+file.name,content});
+      const isVideo=mime.startsWith('video/');
       const category=(fromHome&&activeCategory&&activeCategory!=='全部')?activeCategory:($('itemCategory').value||(isVideo?'AI 短剧':'视觉设计'));
       const name=(file.name||'').replace(/\.[^.]+$/,'')||'未命名作品';
-      items.unshift({id:crypto.randomUUID(),_pkey:key,title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:domain+'/'+key,created_at:Date.now()});
+      items.unshift({id:crypto.randomUUID(),title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:path,created_at:Date.now()});
       activeCategory=category;
-      localPreviews[key]=URL.createObjectURL(file);
       renderFilters();renderGrid();
-      try{
-        status('uploadStatus','文件已上传，正在发布作品信息…');
-        setUploadProgress(0);
-        await persist(percent=>setUploadProgress(percent));
-        status('uploadStatus','上传成功并已发布：'+name);
-      }catch(error){failed.push(file.name+': 文件已上传，但作品信息保存失败：'+error.message);}
+      await persist();
+      status('uploadStatus','上传成功并已发布：'+name);
     }catch(error){failed.push(file.name+': '+error.message);}
   }
   $('itemTitle').value='';$('itemDescription').value='';
   setUploadProgress(null);
-  const skippedMessage=skipped?'，跳过 '+skipped+' 个不支持或超过 100 MB 的文件':'';
+  const skippedMessage=skipped?'，跳过 '+skipped+' 个不支持或过大的文件':'';
   if(failed.length)status('uploadStatus','成功 '+(valid.length-failed.length)+'/'+valid.length+' 个'+skippedMessage+'；'+failed.join('；'),true);
   else status('uploadStatus',skipped?'上传完成'+skippedMessage+'。':'全部上传完成。',skipped>0);
 }
 async function editItem(i){const it=items[i];if(!it)return;const t=prompt('修改作品名称：',title(it));if(t===null)return;const c=prompt('修改分类：',it.category||'视觉设计');if(c===null)return;const d=prompt('修改作品描述：',it.description||'');if(d===null)return;it.title=t.trim()||'未命名作品';it.category=c.trim()||'视觉设计';it.description=d.trim();if(!categories.includes(it.category))categories.push(it.category);try{await persist();}catch(e){status('uploadStatus','保存失败：'+e.message,true);}}
-async function deleteItem(i){if(!confirm('确定删除这个作品？将同时删除七牛云端里的原文件。'))return;const it=items[i];let key='';if(it&&it.media_url){const k=String(it.media_url);const a=k.indexOf('://');key=k;if(a!==-1){const b=k.indexOf('/',a+3);if(b!==-1)key=k.slice(b+1);}if(key.indexOf('media/')===0)key=key.slice(6);}let cloudDeleted=false;if(key){try{const r=await api('/delete-file',{method:'POST',body:JSON.stringify({key})});cloudDeleted=true;}catch(e){}}if(key&&!cloudDeleted&&deletedKeys.indexOf(key)<0)deletedKeys.push(key);items.splice(i,1);try{await persist();if(key&&!cloudDeleted)alert('已从作品库删除。\u000a但云端原文件未能删除（可能未翻墙或网络中断），已标记隐藏、访客不可见；该文件仍保留在七牛云端，如需彻底删除请翻墙重试或到七牛控制台删除。');}catch(e){status('uploadStatus','保存失败：'+e.message,true);}}
+async function deleteItem(i){if(!confirm('确定删除这个作品？（仓库里的图片/视频文件会一并删除）'))return;const it=items[i];items.splice(i,1);try{const u=String(it&&it.media_url||'');if(u.startsWith('assets/')){try{const cur=await gh('GET','/contents/'+u);await gh('DELETE','/contents/'+u,{message:'delete '+u,sha:cur.sha});}catch(_){}}await persist();status('uploadStatus','已删除并保存。');}catch(e){status('uploadStatus','保存失败：'+e.message,true);}}
 $('adminOpen').onclick=$('adminOpen2').onclick=()=>{if(adminToken){show('adminModal');renderAdmin()}else show('loginModal')};
-$('loginBtn').onclick=async()=>{status('loginStatus','正在验证…');try{const d=await api('/admin-login',{method:'POST',body:JSON.stringify({password:$('adminPassword').value})});adminToken=d.token;sessionStorage.setItem('portfolio_admin_token',adminToken);hide('loginModal');show('adminModal');await loadItems();renderAdmin();refreshHomeDrop();}catch(e){status('loginStatus',e.message,true)}};
+$('loginBtn').onclick=async()=>{status('loginStatus','正在验证授权码…');const tok=$('adminPassword').value.trim();if(!tok){status('loginStatus','请先粘贴 GitHub 授权码。',true);return;}try{const me=await fetch('https://api.github.com/user',{headers:{'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'}});if(!me.ok)throw new Error('授权码无效或无权限（'+me.status+'）');adminToken=tok;sessionStorage.setItem('gh_token',tok);$('adminPassword').value='';hide('loginModal');show('adminModal');await loadItems(true);renderAdmin();refreshHomeDrop();status('loginStatus','');}catch(e){status('loginStatus','登录失败：'+e.message,true)}};
 $('adminPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
-$('logoutBtn').onclick=()=>{adminToken='';sessionStorage.removeItem('portfolio_admin_token');hide('adminModal');refreshHomeDrop();};
+$('logoutBtn').onclick=()=>{adminToken='';sessionStorage.removeItem('gh_token');hide('adminModal');refreshHomeDrop();};
 $('reloadBtn').onclick=()=>loadItems(true);
 $('shareBtn').onclick=async()=>{const url=location.origin+location.pathname;try{await navigator.clipboard.writeText(url);alert('已复制访客分享链接：'+url);}catch(e){const r=prompt('复制这个访客链接发给客户：',url);if(r===null){} } };
 function catList(){const list=$('catList');const cats=categories.filter(c=>c!=='全部');if(!cats.length){list.innerHTML='<div class="hint">还没有自定义分类，输入名称点击「＋ 添加」。</div>';return;}list.innerHTML=cats.map((c,i)=>'<div class="admin-item" style="grid-template-columns:1fr auto"><div><strong>'+esc(c)+'</strong><small>'+items.filter(it=>it.category===c).length+' 个作品</small></div><div class="row"><button data-rename="'+i+'">重命名</button><button data-delcat="'+i+'">删除</button></div></div>').join('');list.querySelectorAll('[data-rename]').forEach(b=>b.onclick=()=>renameCat(cats[Number(b.dataset.rename)]));list.querySelectorAll('[data-delcat]').forEach(b=>b.onclick=()=>deleteCat(cats[Number(b.dataset.delcat)]));}
