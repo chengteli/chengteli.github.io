@@ -137,8 +137,9 @@ async function persist(onProgress){
 function uploadMime(file){const ext=String(file.name||'').toLowerCase().match(/\.([^.]+)$/)?.[1];const byExtension=({mp4:'video/mp4',m4v:'video/mp4',mov:'video/quicktime',webm:'video/webm',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',avif:'image/avif',bmp:'image/bmp'})[ext]||'';if(ext==='mp4'||ext==='m4v')return byExtension;const type=String(file.type||'').toLowerCase();if(type.startsWith('image/')||type.startsWith('video/'))return type;return byExtension;}
 async function qiniuUpload(file,token,key,mime,onProgress){
   const sdk=await qiniuReady;
+  const uploadFile=mime&&file.type!==mime?new File([file],file.name||'upload.bin',{type:mime,lastModified:file.lastModified||Date.now()}):file;
   return new Promise((resolve,reject)=>{
-    const observable=sdk.upload(file,key,token,{fname:file.name||'site-data.json',mimeType:mime||file.type||'application/octet-stream'},{useCdnDomain:true,chunkSize:4,retryCount:3});
+    const observable=sdk.upload(uploadFile,key,token,{fname:file.name||'site-data.json',mimeType:mime||file.type||'application/octet-stream'},{useCdnDomain:true,chunkSize:4,retryCount:3});
     let settled=false,subscription=null;
     const finish=(fn,value)=>{if(settled)return;settled=true;clearTimeout(timeout);fn(value);};
     const timeout=setTimeout(()=>{
