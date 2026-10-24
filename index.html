@@ -178,11 +178,11 @@ async function uploadFiles(files,fromHome){
       const t=await api('/upload-token',{method:'POST',body:JSON.stringify({fileName:file.name,size:file.size,contentType:mime})});
       await qiniuUpload(file,t.token,t.key,mime,percent=>setUploadProgress(percent));
       const key=t.key,isVideo=mime.startsWith('video/');
-      const domain=String(t.domain||'').replace(/\\/$/,'');
+      const domain=String(t.domain||'').replace(/\/$/,'');
       if(!key||!domain)throw new Error('上传令牌没有返回文件 key 或七牛访问域名；文件可能尚未上传，请检查上传服务返回值。');
       const category=(fromHome&&activeCategory&&activeCategory!=='全部')?activeCategory:($('itemCategory').value||(isVideo?'AI 短剧':'视觉设计'));
       const name=(file.name||'').replace(/\.[^.]+$/,'')||'未命名作品';
-      items.unshift({id:crypto.randomUUID(),_pkey:key,title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:String(t.domain||'').replace(/\/$/,'')+'/'+key,created_at:Date.now()});
+      items.unshift({id:crypto.randomUUID(),_pkey:key,title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:domain+'/'+key,created_at:Date.now()});
       activeCategory=category;
       localPreviews[key]=URL.createObjectURL(file);
       renderFilters();renderGrid();
