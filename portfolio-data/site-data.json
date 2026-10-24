@@ -4,7 +4,7 @@
       "id": "auto-2010fd46-0910-48e7-8a68-d89f406daba6-1-.png",
       "title": "2010fd46-0910-48e7-8a68-d89f406daba6-1-.png",
       "description": "",
-      "category": "视觉设计",
+      "category": "AIGC原画和美渲概念合集",
       "media_type": "image",
       "media_url": "https://chengteli.github.io/assets/portfolio/71809f753e7f-2010fd46-0910-48e7-8a68-d89f406daba6-1-.png",
       "created_at": 1792840232105
@@ -13,17 +13,18 @@
       "id": "auto-7485fb7e-3779-4a71-89ae-2cb8f1ebb42f-png",
       "title": "7485fb7e-3779-4a71-89ae-2cb8f1ebb42f-png",
       "description": "",
-      "category": "视觉设计",
+      "category": "AIGC原画和美渲概念合集",
       "media_type": "image",
       "media_url": "https://chengteli.github.io/assets/portfolio/e91e4267aba5-7485fb7e-3779-4a71-89ae-2cb8f1ebb42f-png",
       "created_at": 1792836928041
     }
   ],
   "categories": [
-    "视觉设计",
+    "AIGC原画和美渲概念合集",
     "AI 图片",
-    "AI 视频",
+    "AI 短剧",
     "影像创作"
   ],
-  "about": null
+  "about": null,
+  "hidden": []
 }
