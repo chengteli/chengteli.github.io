@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "id": "6caca68e-615b-42a2-8178-c191b0058239",
+      "title": "图片",
+      "description": "",
+      "category": "角色展示界面",
+      "media_type": "image",
+      "media_url": "assets/portfolio/6e55d1c5-ca92-44fa-97ca-436695e2f6ff-_.png",
+      "created_at": 1792862294604
+    },
+    {
       "id": "14862f8e-0046-4ac3-9ad4-f0069a65f24f",
       "title": "角色影视",
       "description": "",
