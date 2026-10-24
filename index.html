@@ -124,29 +124,41 @@ function makeInlineEdit(i,el,getVal,setVal,cls){const it=items[i];if(!it)return;
 function startInlineTitle(i,el){makeInlineEdit(i,el,it=>title(it),(it,v)=>{it.title=v;},'');}
 function startInlineCat(i,el){makeInlineEdit(i,el,it=>it.category||'视觉设计',(it,v)=>{it.category=v;if(!categories.includes(v))categories.push(v);},' tag-edit');}
 function renderAdmin(){const sel=$('itemCategory');const old=sel.value;const cats=categories.filter(x=>x!=='全部');sel.innerHTML=[...new Set([...cats,...items.map(i=>i.category).filter(Boolean),'视觉设计'])].map(c=>'<option>'+esc(c)+'</option>').join('');if(old)sel.value=old;const list=$('adminList');if(!items.length){list.innerHTML='<div class="hint">暂时没有作品。</div>';return;}list.innerHTML=items.map((it,i)=>'<div class="admin-item"><'+(kind(it)==='video'?'video muted':'img')+' src="'+esc((it._pkey&&localPreviews[it._pkey])||it.media_url)+'" '+(kind(it)==='video'?'preload="metadata"':'')+'></'+(kind(it)==='video'?'video':'img')+'><div><strong>'+esc(title(it))+'</strong><small>'+esc(it.category||'视觉设计')+' · '+(kind(it)==='video'?'视频':'图片')+'</small></div><div class="row"><button data-edit="'+i+'">编辑</button><button data-delete="'+i+'">删除</button></div></div>').join('');list.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editItem(Number(b.dataset.edit)));list.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteItem(Number(b.dataset.delete)));}
-async function persist(){
-  status('uploadStatus','正在保存作品列表…');
+async function persist(onProgress){
+  status('uploadStatus','正在保存作品信息…');
   const payload={items,categories:categories.filter(c=>c!=='全部'),about,hidden:deletedKeys};
   const dataFile=new File([JSON.stringify(payload)],'site-data.json',{type:'application/json'});
   const ticket=await api('/data-token',{method:'POST',body:JSON.stringify({size:dataFile.size})});
-  await qiniuUpload(dataFile,ticket.token,ticket.key,'application/json');
+  await qiniuUpload(dataFile,ticket.token,ticket.key,'application/json',onProgress);
   try{localStorage.setItem('portfolio_cache',JSON.stringify(payload));}catch(_){}
   renderFilters();renderGrid();renderAbout();refreshHomeDrop();if(adminToken)renderAdmin();
-  status('uploadStatus','作品列表已保存。');
+  status('uploadStatus','作品信息已保存。');
 }
 function uploadMime(file){const type=String(file.type||'').toLowerCase();if(type.startsWith('image/')||type.startsWith('video/'))return type;const ext=String(file.name||'').toLowerCase().match(/\.([^.]+)$/)?.[1];return ({mp4:'video/mp4',m4v:'video/x-m4v',mov:'video/quicktime',webm:'video/webm',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',avif:'image/avif',bmp:'image/bmp'})[ext]||'';}
 async function qiniuUpload(file,token,key,mime,onProgress){
   const sdk=await qiniuReady;
   return new Promise((resolve,reject)=>{
     const observable=sdk.upload(file,key,token,{fname:file.name||'site-data.json',mimeType:mime||file.type||'application/octet-stream'},{useCdnDomain:true,chunkSize:4,retryCount:3});
-    observable.subscribe({
-      next:info=>{const percent=Number(info&&info.total&&info.total.percent);if(Number.isFinite(percent)&&typeof onProgress==='function')onProgress(percent);},
+    let settled=false,subscription=null;
+    const finish=(fn,value)=>{if(settled)return;settled=true;clearTimeout(timeout);fn(value);};
+    const timeout=setTimeout(()=>{
+      if(subscription&&typeof subscription.unsubscribe==='function')subscription.unsubscribe();
+      finish(reject,new Error('七牛已接收全部数据，但 3 分钟内没有返回完成确认。请检查网络和存储空间状态；若作品未出现，请刷新后再试。'));
+    },180000);
+    subscription=observable.subscribe({
+      next:info=>{
+        const percent=Number(info&&info.total&&info.total.percent);
+        if(Number.isFinite(percent)&&typeof onProgress==='function'){
+          onProgress(percent);
+          if(percent>=100)status('uploadStatus','数据已发送，正在等待七牛确认完成…');
+        }
+      },
       error:e=>{
         const detail=e&&(e.message||e.error||e.response&&e.responseText);
         const code=e&&(e.code||e.status);
-        reject(new Error((detail||'七牛云上传失败，请检查网络、空间区域和上传配置')+(code?'（错误码 '+code+'）':'')));
+        finish(reject,new Error((detail||'七牛云上传失败，请检查网络、空间区域和上传配置')+(code?'（错误码 '+code+'）':'')));
       },
-      complete:resolve
+      complete:result=>finish(resolve,result)
     });
   });
 }
@@ -177,6 +189,7 @@ async function uploadFiles(files,fromHome){
       setUploadProgress(0);
       const t=await api('/upload-token',{method:'POST',body:JSON.stringify({fileName:file.name,size:file.size,contentType:mime})});
       await qiniuUpload(file,t.token,t.key,mime,percent=>setUploadProgress(percent));
+      status('uploadStatus','视频或图片文件已上传，正在保存作品信息…');
       const key=t.key,isVideo=mime.startsWith('video/');
       const domain=String(t.domain||'').replace(/\/$/,'');
       if(!key||!domain)throw new Error('上传令牌没有返回文件 key 或七牛访问域名；文件可能尚未上传，请检查上传服务返回值。');
@@ -186,7 +199,12 @@ async function uploadFiles(files,fromHome){
       activeCategory=category;
       localPreviews[key]=URL.createObjectURL(file);
       renderFilters();renderGrid();
-      try{await persist();}catch(error){failed.push(file.name+': 文件已上传，但作品信息保存失败：'+error.message);}
+      try{
+        status('uploadStatus','文件已上传，正在发布作品信息…');
+        setUploadProgress(0);
+        await persist(percent=>setUploadProgress(percent));
+        status('uploadStatus','上传成功并已发布：'+name);
+      }catch(error){failed.push(file.name+': 文件已上传，但作品信息保存失败：'+error.message);}
     }catch(error){failed.push(file.name+': '+error.message);}
   }
   $('itemTitle').value='';$('itemDescription').value='';
