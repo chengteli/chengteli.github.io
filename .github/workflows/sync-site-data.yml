@@ -21,27 +21,38 @@ jobs:
       - name: Sync public data and media from Worker into repo
         shell: python
         run: |
-          import json, os, hashlib, urllib.parse, urllib.request
-          # 数据源为 Cloudflare Worker 的 /items（返回最新版本化数据，实时、无 CDN 缓存）：
-          # 管理端每次保存都会写版本化 key，/items 合并媒体列举返回最新；
-          # 只需伪造 Origin 头通过校验，无需 token。媒体在七牛 portfolio-images|videos/。
+          import json, os, hashlib, urllib.parse, urllib.request, time as _time
+          # 数据源为 Cloudflare Worker 的 /items（合并媒体列举+最新版本化数据）。
+          # getData 依赖七牛 RSF 列举找最新版本化 key，RSF 有最终一致性，个别请求可能读到次新 key；
+          # 故多次读取 /items 取作品最多的一次，最大概率拿到完整最新数据。
           WORKER = "https://morning-paper-de53.1529367086.workers.dev"
           QINIU = "http://tn1tamwgn.hn-bkt.clouddn.com"
           MAX_MEDIA = 100 * 1024 * 1024  # 超过 100MB 的媒体不进仓库（GitHub 单文件硬上限）
-          try:
-              req = urllib.request.Request(
-                  WORKER + "/items",
-                  headers={
-                      "Origin": "https://chengteli.github.io",
-                      "Accept": "application/json",
-                      "User-Agent": "sync-public-data",
-                  },
-              )
-              with urllib.request.urlopen(req, timeout=40) as r:
-                  data = json.load(r)
-          except Exception as e:
-              print("FETCH_FAIL", e)
+          data = None
+          best = None
+          for attempt in range(5):
+              try:
+                  req = urllib.request.Request(
+                      WORKER + "/items",
+                      headers={
+                          "Origin": "https://chengteli.github.io",
+                          "Accept": "application/json",
+                          "User-Agent": "sync-public-data",
+                      },
+                  )
+                  with urllib.request.urlopen(req, timeout=40) as r:
+                      cand = json.load(r)
+                  n = len(cand.get("items") or [])
+                  if best is None or n > len(best.get("items") or []):
+                      best = cand
+                      print("BEST_TRY", attempt, "items", n)
+              except Exception as e:
+                  print("FETCH_FAIL", attempt, e)
+              _time.sleep(2)
+          if best is None:
+              print("FETCH_FAIL_ALL")
               raise SystemExit(0)  # 数据源暂不可达，本次跳过，不覆盖已有公共数据
+          data = best
           media_dir = "assets/portfolio"
           os.makedirs(media_dir, exist_ok=True)
           refs = set()
