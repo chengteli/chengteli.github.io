@@ -158,6 +158,7 @@ async function uploadFiles(files,fromHome){
       const category=(fromHome&&activeCategory&&activeCategory!=='全部')?activeCategory:($('itemCategory').value||(isVideo?'AI 短剧':'视觉设计'));
       const name=(file.name||'').replace(/\.[^.]+$/,'')||'未命名作品';
       items.unshift({id:crypto.randomUUID(),_pkey:key,title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:String(t.domain||'').replace(/\/$/,'')+'/'+key,created_at:Date.now()});
+      activeCategory=category;
       localPreviews[key]=URL.createObjectURL(file);
       renderFilters();renderGrid();
       try{await persist();}catch(error){failed.push(file.name+': 文件已上传，但作品信息保存失败：'+error.message);}
