@@ -1,119 +1,14 @@
 name: sync-public-data
+# 纯静态方案（方案B）：已停用自动同步。
+# 原流程每 5 分钟从失效的七牛/Cloudflare Worker 拉取数据并覆盖 portfolio-data/site-data.json，
+# 改为 GitHub 静态托管后不再自动运行，避免定时把失效数据写回、误删手动放置的媒体。
+# 本工作流仅保留手动触发入口，且为空操作；如需恢复自动同步请重新编写。
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'index.html'
-      - '.github/workflows/sync-site-data.yml'
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 permissions:
   contents: write
-concurrency:
-  group: sync-public-data
-  cancel-in-progress: false
 jobs:
-  sync:
+  noop:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Sync public data and media from Worker into repo
-        shell: python
-        run: |
-          import json, os, hashlib, urllib.parse, urllib.request, time as _time
-          # 数据源为 Cloudflare Worker 的 /items（合并媒体列举+最新版本化数据）。
-          # getData 依赖七牛 RSF 列举找最新版本化 key，RSF 有最终一致性，个别请求可能读到次新 key；
-          # 故多次读取 /items 取作品最多的一次，最大概率拿到完整最新数据。
-          WORKER = "https://morning-paper-de53.1529367086.workers.dev"
-          QINIU = "http://tn1tamwgn.hn-bkt.clouddn.com"
-          MAX_MEDIA = 100 * 1024 * 1024  # 超过 100MB 的媒体不进仓库（GitHub 单文件硬上限）
-          data = None
-          best = None
-          for attempt in range(5):
-              try:
-                  req = urllib.request.Request(
-                      WORKER + "/items",
-                      headers={
-                          "Origin": "https://chengteli.github.io",
-                          "Accept": "application/json",
-                          "User-Agent": "sync-public-data",
-                      },
-                  )
-                  with urllib.request.urlopen(req, timeout=40) as r:
-                      cand = json.load(r)
-                  n = len(cand.get("items") or [])
-                  if best is None or n > len(best.get("items") or []):
-                      best = cand
-                      print("BEST_TRY", attempt, "items", n)
-              except Exception as e:
-                  print("FETCH_FAIL", attempt, e)
-              _time.sleep(2)
-          if best is None:
-              print("FETCH_FAIL_ALL")
-              raise SystemExit(0)  # 数据源暂不可达，本次跳过，不覆盖已有公共数据
-          data = best
-          media_dir = "assets/portfolio"
-          os.makedirs(media_dir, exist_ok=True)
-          refs = set()
-          valid = []
-          for it in (data.get("items") or []):
-              u = str(it.get("media_url") or "")
-              key = ""
-              if "/media/" in u:
-                  key = u.split("/media/", 1)[1]
-              elif "clouddn.com/" in u:
-                  key = u.split("clouddn.com/", 1)[1]
-              elif "://" in u:
-                  key = u.split("://", 1)[1].split("/", 1)[-1]
-              if not key:
-                  continue
-              h = hashlib.sha1(key.encode("utf-8")).hexdigest()[:12]
-              orig = os.path.basename(key)
-              fname = h + "-" + orig
-              local = os.path.join(media_dir, fname)
-              if not os.path.exists(local) or os.path.getsize(local) == 0:
-                  try:
-                      with urllib.request.urlopen(
-                          QINIU + "/" + urllib.parse.quote(key), timeout=180
-                      ) as r:
-                          blob = r.read()
-                  except Exception as e:
-                      print("MEDIA_FAIL", key, e)
-                      continue  # 媒体取不到 = 失效条目，剔除，避免访客看到破图
-                  if len(blob) > MAX_MEDIA:
-                      print("MEDIA_TOO_BIG", key, len(blob))
-                      continue
-                  with open(local, "wb") as f:
-                      f.write(blob)
-              size = os.path.getsize(local)
-              if size <= 0 or size > MAX_MEDIA:
-                  continue
-              it["media_url"] = "https://chengteli.github.io/" + media_dir + "/" + fname
-              refs.add(local)
-              valid.append(it)
-          out = {
-              "items": valid,
-              "categories": data.get("categories") or [],
-              "about": data.get("about"),
-          }
-          os.makedirs("portfolio-data", exist_ok=True)
-          with open("portfolio-data/site-data.json", "w", encoding="utf-8") as f:
-              json.dump(out, f, ensure_ascii=False, indent=2)
-          # 清理已不再被引用的镜像媒体，保持仓库精简
-          for fn in os.listdir(media_dir):
-              p = os.path.join(media_dir, fn)
-              if os.path.isfile(p) and p not in refs:
-                  os.remove(p)
-                  print("PRUNE", p)
-      - name: Commit and push
-        run: |
-          git config user.name "chengteli"
-          git config user.email "chengteli@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "no changes"
-          else
-            git commit -m "chore: sync public portfolio data [skip ci]"
-            git push
-          fi
+      - run: echo "static mode: auto sync disabled"
