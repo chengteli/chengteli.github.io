@@ -150,7 +150,7 @@ async function qiniuUpload(file,token,key,mime,onProgress){
         const percent=Number(info&&info.total&&info.total.percent);
         if(Number.isFinite(percent)&&typeof onProgress==='function'){
           onProgress(percent);
-          if(percent>=100)status('uploadStatus','数据已发送，正在等待七牛确认完成…');
+          if(Math.round(percent)>=100)status('uploadStatus','进度已到 100%，正在等待七牛确认完成…');
         }
       },
       error:e=>{
