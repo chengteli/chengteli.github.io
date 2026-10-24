@@ -1,27 +1,38 @@
 {
   "items": [
     {
-      "id": "auto-57ae2921-87aa-4884-b97c-61da8385963b-addcecc5-ba53-4159-8c2c-c4feacbe6a43-2048x.jpg",
-      "title": "57ae2921-87aa-4884-b97c-61da8385963b-addcecc5-ba53-4159-8c2c-c4feacbe6a43-2048x.jpg",
+      "id": "auto-87d4dce5-e61e-4127-9486-1025876a04f6-1c5ddac5-af1a-44c0-bc5a-d6f85f76e408.png",
+      "title": "87d4dce5-e61e-4127-9486-1025876a04f6-1c5ddac5-af1a-44c0-bc5a-d6f85f76e408.png",
       "description": "",
       "category": "视觉设计",
       "media_type": "image",
-      "media_url": "https://chengteli.github.io/assets/portfolio/3c4baa2ce0fc-57ae2921-87aa-4884-b97c-61da8385963b-addcecc5-ba53-4159-8c2c-c4feacbe6a43-2048x.jpg",
-      "created_at": 1792689517116
+      "media_url": "https://chengteli.github.io/assets/portfolio/2c140c00c25e-87d4dce5-e61e-4127-9486-1025876a04f6-1c5ddac5-af1a-44c0-bc5a-d6f85f76e408.png",
+      "created_at": 1792817165356
+    },
+    {
+      "id": "auto-ca7c3fc4-04bc-40cc-94a3-5c663c924221-flova_-_202610200021_cda565.png",
+      "title": "ca7c3fc4-04bc-40cc-94a3-5c663c924221-flova_-_202610200021_cda565.png",
+      "description": "",
+      "category": "视觉设计",
+      "media_type": "image",
+      "media_url": "https://chengteli.github.io/assets/portfolio/601fa1539570-ca7c3fc4-04bc-40cc-94a3-5c663c924221-flova_-_202610200021_cda565.png",
+      "created_at": 1792816901211
+    },
+    {
+      "id": "auto-814789f3-e414-4261-b6ee-bdbd8289626a-2-.png",
+      "title": "814789f3-e414-4261-b6ee-bdbd8289626a-2-.png",
+      "description": "",
+      "category": "视觉设计",
+      "media_type": "image",
+      "media_url": "https://chengteli.github.io/assets/portfolio/3bfc63b3a5a7-814789f3-e414-4261-b6ee-bdbd8289626a-2-.png",
+      "created_at": 1792815262056
     }
   ],
   "categories": [
-    "原画",
-    "场景",
-    "3D角色",
-    "ai漫剧",
-    "ai短片",
-    "角色设计与展示",
-    "UI",
-    "视觉设计"
+    "视觉设计",
+    "AI 图片",
+    "AI 短剧",
+    "影像创作"
   ],
-  "about": {
-    "heroIntro": "你好，我是程特立。一名持续探索影像、视觉叙事与数字创作的创作者。这里收录了我的精选项目、视觉实验与创作过程。",
-    "aboutText": "我相信好的视觉作品不仅是画面的呈现，更是对世界的一次重新观察。这里是我的视觉实验与创作记录，欢迎一起交流。"
-  }
+  "about": null
 }
