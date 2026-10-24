@@ -12,15 +12,15 @@ a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}b
 .home-drop span{font-size:15px;font-weight:650;letter-spacing:.02em}
 .home-drop small{font-size:12px;color:var(--muted);font-weight:400}
 .home-drop:hover,.home-drop.drag{border-color:var(--green);background:#dfe8dc}
-.vnav{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:72px;border:0;background:transparent;color:#fff;font-size:38px;z-index:6;opacity:.5;line-height:1}
-.vnav:hover{opacity:1}
-#vPrev{left:14px}
-#vNext{right:14px}
+.vnav{position:fixed;top:50%;transform:translateY(-50%);width:56px;height:84px;border:0;background:rgba(20,26,22,.5);color:#fff;font-size:52px;z-index:6;opacity:.92;line-height:1;border-radius:10px;display:grid;place-items:center;padding:0;box-shadow:0 4px 18px #0003}
+.vnav:hover{opacity:1;background:rgba(20,26,22,.75)}
+#vPrev{left:16px}
+#vNext{right:16px}
 #dropHint{position:fixed;inset:0;z-index:30;background:#3d5b48e6;color:#fff;display:none;align-items:center;justify-content:center;font-size:22px;letter-spacing:.06em;pointer-events:none;text-align:center}
 #dropHint.show{display:flex}
 #dropHint small{display:block;font-size:13px;color:#dfe8dc;margin-top:10px;letter-spacing:.02em}
 @media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:55px}.hero-side{border-left:0;border-top:1px solid var(--line);padding:20px 0 0;display:flex;gap:18px;align-items:center}.hero-side .num{font-size:48px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.about{grid-template-columns:1fr;gap:20px}.nav{gap:13px}.nav .optional{display:none}}
-@media(max-width:520px){.wrap{width:calc(100% - 28px)}.topbar{height:66px}.brand{font-size:17px}.hero h1{font-size:54px}.intro{font-size:14px}.grid{grid-template-columns:1fr;gap:12px}.section-head h2{font-size:26px}.about{padding:30px 0 55px}.footer{gap:12px;flex-wrap:wrap}.panel{padding:18px}.admin-item{grid-template-columns:48px 1fr}.admin-item img,.admin-item video{width:48px;height:40px}.admin-item .row{grid-column:1/-1}.vnav{width:34px;font-size:26px}}
+@media(max-width:520px){.wrap{width:calc(100% - 28px)}.topbar{height:66px}.brand{font-size:17px}.hero h1{font-size:54px}.intro{font-size:14px}.grid{grid-template-columns:1fr;gap:12px}.section-head h2{font-size:26px}.about{padding:30px 0 55px}.footer{gap:12px;flex-wrap:wrap}.panel{padding:18px}.admin-item{grid-template-columns:48px 1fr}.admin-item img,.admin-item video{width:48px;height:40px}.admin-item .row{grid-column:1/-1}.vnav{width:44px;height:64px;font-size:38px}}
 .work.admin .editable{cursor:text;border-bottom:1px dashed transparent;transition:border-color .15s}.work.admin .editable:hover{border-bottom-color:var(--green)}.inline-edit{font:inherit;font-size:17px;font-weight:600;letter-spacing:-.03em;width:100%;padding:4px 6px;border:1px solid var(--green);border-radius:4px;background:#fff;outline:none;color:var(--ink)}.inline-edit.tag-edit{font-size:11px;text-transform:uppercase;letter-spacing:.13em;width:auto;min-width:80px;font-weight:400}.inline-edit:focus{border-color:var(--green);box-shadow:0 0 0 2px #3d5b481f}
 </style>
 <script src="https://unpkg.com/qiniu-js@3.4.1/dist/qiniu.min.js"></script>
