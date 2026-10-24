@@ -23,7 +23,26 @@ a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}b
 @media(max-width:520px){.wrap{width:calc(100% - 28px)}.topbar{height:66px}.brand{font-size:17px}.hero h1{font-size:54px}.intro{font-size:14px}.grid{grid-template-columns:1fr;gap:12px}.section-head h2{font-size:26px}.about{padding:30px 0 55px}.footer{gap:12px;flex-wrap:wrap}.panel{padding:18px}.admin-item{grid-template-columns:48px 1fr}.admin-item img,.admin-item video{width:48px;height:40px}.admin-item .row{grid-column:1/-1}.vnav{width:44px;height:64px;font-size:38px}}
 .work.admin .editable{cursor:text;border-bottom:1px dashed transparent;transition:border-color .15s}.work.admin .editable:hover{border-bottom-color:var(--green)}.inline-edit{font:inherit;font-size:17px;font-weight:600;letter-spacing:-.03em;width:100%;padding:4px 6px;border:1px solid var(--green);border-radius:4px;background:#fff;outline:none;color:var(--ink)}.inline-edit.tag-edit{font-size:11px;text-transform:uppercase;letter-spacing:.13em;width:auto;min-width:80px;font-weight:400}.inline-edit:focus{border-color:var(--green);box-shadow:0 0 0 2px #3d5b481f}
 </style>
-<script src="https://unpkg.com/qiniu-js@3.4.1/dist/qiniu.min.js"></script>
+<script>
+const qiniuReady=new Promise((resolve,reject)=>{
+  const urls=[
+    'https://cdnjs.cloudflare.com/ajax/libs/qiniu-js/3.4.1/qiniu.min.js',
+    'https://cdn.jsdelivr.net/npm/qiniu-js@3.4.1/dist/qiniu.min.js',
+    'https://unpkg.com/qiniu-js@3.4.1/dist/qiniu.min.js'
+  ];
+  let index=0;
+  const loadNext=()=>{
+    if(window.qiniu&&window.qiniu.upload){resolve(window.qiniu);return;}
+    if(index>=urls.length){reject(new Error('七牛上传组件加载失败：当前网络无法连接可用 CDN，请切换网络后重试。'));return;}
+    const script=document.createElement('script');
+    script.src=urls[index++];
+    script.onload=()=>window.qiniu&&window.qiniu.upload?resolve(window.qiniu):loadNext();
+    script.onerror=loadNext;
+    document.head.appendChild(script);
+  };
+  loadNext();
+});
+</script>
 </head>
 <body>
 <header class="wrap topbar"><a class="brand" href="#top">程特立<small>VISUAL PORTFOLIO · 2026</small></a><nav class="nav"><a href="#works">作品</a><a href="#about">关于</a><a href="#contact">联系</a><button class="btn light" id="adminOpen">管理入口</button></nav></header>
@@ -116,13 +135,17 @@ async function persist(){
   status('uploadStatus','作品列表已保存。');
 }
 function uploadMime(file){const type=String(file.type||'').toLowerCase();if(type.startsWith('image/')||type.startsWith('video/'))return type;const ext=String(file.name||'').toLowerCase().match(/\.([^.]+)$/)?.[1];return ({mp4:'video/mp4',m4v:'video/x-m4v',mov:'video/quicktime',webm:'video/webm',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',avif:'image/avif',bmp:'image/bmp'})[ext]||'';}
-function qiniuUpload(file,token,key,mime,onProgress){
+async function qiniuUpload(file,token,key,mime,onProgress){
+  const sdk=await qiniuReady;
   return new Promise((resolve,reject)=>{
-    if(!window.qiniu||!window.qiniu.upload)return reject(new Error('七牛云上传组件加载失败，请刷新页面'));
-    const observable=window.qiniu.upload(file,key,token,{fname:file.name||'site-data.json',mimeType:mime||file.type||'application/octet-stream'},{useCdnDomain:true,chunkSize:4});
+    const observable=sdk.upload(file,key,token,{fname:file.name||'site-data.json',mimeType:mime||file.type||'application/octet-stream'},{useCdnDomain:true,chunkSize:4,retryCount:3});
     observable.subscribe({
       next:info=>{const percent=Number(info&&info.total&&info.total.percent);if(Number.isFinite(percent)&&typeof onProgress==='function')onProgress(percent);},
-      error:e=>reject(new Error(e.message||e.error||'七牛云上传失败，请检查网络或云存储配置')),
+      error:e=>{
+        const detail=e&&(e.message||e.error||e.response&&e.responseText);
+        const code=e&&(e.code||e.status);
+        reject(new Error((detail||'七牛云上传失败，请检查网络、空间区域和上传配置')+(code?'（错误码 '+code+'）':'')));
+      },
       complete:resolve
     });
   });
@@ -155,9 +178,11 @@ async function uploadFiles(files,fromHome){
       const t=await api('/upload-token',{method:'POST',body:JSON.stringify({fileName:file.name,size:file.size,contentType:mime})});
       await qiniuUpload(file,t.token,t.key,mime,percent=>setUploadProgress(percent));
       const key=t.key,isVideo=mime.startsWith('video/');
+      const domain=String(t.domain||'').replace(/\/$/,'');
+      if(!key||!domain)throw new Error('上传令牌没有返回文件 key 或七牛访问域名；文件可能尚未上传，请检查上传服务返回值。');
       const category=(fromHome&&activeCategory&&activeCategory!=='全部')?activeCategory:($('itemCategory').value||(isVideo?'AI 短剧':'视觉设计'));
       const name=(file.name||'').replace(/\.[^.]+$/,'')||'未命名作品';
-      items.unshift({id:crypto.randomUUID(),_pkey:key,title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:String(t.domain||'').replace(/\/$/,'')+'/'+key,created_at:Date.now()});
+      items.unshift({id:crypto.randomUUID(),_pkey:key,title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:domain+'/'+key,created_at:Date.now()});
       activeCategory=category;
       localPreviews[key]=URL.createObjectURL(file);
       renderFilters();renderGrid();
