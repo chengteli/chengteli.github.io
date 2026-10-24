@@ -8,42 +8,36 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
-
 permissions:
   contents: write
-
 concurrency:
   group: sync-public-data
   cancel-in-progress: false
-
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Sync public data and media from Qiniu into repo
         shell: python
         run: |
-          import json, os, hashlib, urllib.parse, urllib.request
-
+          import json, os, hashlib, time, urllib.parse, urllib.request
           # 数据源为七牛国内 CDN（测试域名），绕过被 Cloudflare 拦截的 Worker：
-          # Worker 每次保存都会写 portfolio-data/current.json，媒体在 portfolio-images|videos/
+          # 管理端每次保存都会把最新数据直传 site-data-v2.json（固定 key，供访客同步）；
+          # 媒体在 portfolio-images|videos/。带随机 cb 参数绕过 CDN 缓存，确保读到最新。
           QINIU = "http://tn1tamwgn.hn-bkt.clouddn.com"
           MAX_MEDIA = 100 * 1024 * 1024  # 超过 100MB 的媒体不进仓库（GitHub 单文件硬上限）
-
+          src = QINIU + "/portfolio-data/site-data-v2.json?cb=" + str(int(time.time() * 1000))
           try:
-              with urllib.request.urlopen(QINIU + "/portfolio-data/current.json", timeout=40) as r:
+              with urllib.request.urlopen(src, timeout=40) as r:
                   data = json.load(r)
           except Exception as e:
               print("FETCH_FAIL", e)
               raise SystemExit(0)  # 数据源暂不可达，本次跳过，不覆盖已有公共数据
-
           media_dir = "assets/portfolio"
           os.makedirs(media_dir, exist_ok=True)
           refs = set()
           valid = []
-
           for it in (data.get("items") or []):
               u = str(it.get("media_url") or "")
               key = ""
@@ -79,7 +73,6 @@ jobs:
               it["media_url"] = "https://chengteli.github.io/" + media_dir + "/" + fname
               refs.add(local)
               valid.append(it)
-
           out = {
               "items": valid,
               "categories": data.get("categories") or [],
@@ -88,14 +81,12 @@ jobs:
           os.makedirs("portfolio-data", exist_ok=True)
           with open("portfolio-data/site-data.json", "w", encoding="utf-8") as f:
               json.dump(out, f, ensure_ascii=False, indent=2)
-
           # 清理已不再被引用的镜像媒体，保持仓库精简
           for fn in os.listdir(media_dir):
               p = os.path.join(media_dir, fn)
               if os.path.isfile(p) and p not in refs:
                   os.remove(p)
                   print("PRUNE", p)
-
       - name: Commit and push
         run: |
           git config user.name "chengteli"
