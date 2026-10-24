@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "id": "14862f8e-0046-4ac3-9ad4-f0069a65f24f",
+      "title": "角色影视",
+      "description": "",
+      "category": "角色展示界面",
+      "media_type": "video",
+      "media_url": "assets/portfolio/7fab6162-6bb3-406c-a334-7ba097f86110-_.mp4",
+      "created_at": 1792862288412
+    },
+    {
       "id": "645dc59f-adcf-489f-8114-f13c1a49b502",
       "title": "jimeng-2026-09-26-5728-上半身不变，下半身穿黑色裙子，脚穿长筒白袜子，水晶高跟鞋",
       "description": "",
