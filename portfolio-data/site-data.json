@@ -1,38 +1,21 @@
 {
   "items": [
     {
-      "id": "auto-814789f3-e414-4261-b6ee-bdbd8289626a-2-.png",
-      "title": "555",
+      "id": "0cc4bea4-f074-460e-acca-3e95727dfeba",
+      "title": "图片",
       "description": "",
-      "category": "视觉设计",
+      "category": "AICG角色展示",
       "media_type": "image",
-      "media_url": "https://chengteli.github.io/assets/portfolio/3bfc63b3a5a7-814789f3-e414-4261-b6ee-bdbd8289626a-2-.png",
-      "created_at": 1792835604927
-    },
-    {
-      "id": "auto-5eaad9f1-2217-45c3-a53b-6b5ac8fcaf7e-redoca7c.png",
-      "title": "作品2",
-      "description": "",
-      "category": "视觉设计",
-      "media_type": "image",
-      "media_url": "https://chengteli.github.io/assets/portfolio/33ec3a5d3bd1-5eaad9f1-2217-45c3-a53b-6b5ac8fcaf7e-redoca7c.png",
-      "created_at": 1792835603927
-    },
-    {
-      "id": "auto-d723d959-affd-4f3a-b383-650520abb761-redo87d4.png",
-      "title": "作品1",
-      "description": "",
-      "category": "视觉设计",
-      "media_type": "image",
-      "media_url": "https://chengteli.github.io/assets/portfolio/f751b8a62b4d-d723d959-affd-4f3a-b383-650520abb761-redo87d4.png",
-      "created_at": 1792835602927
+      "media_url": "https://chengteli.github.io/assets/portfolio/e91e4267aba5-7485fb7e-3779-4a71-89ae-2cb8f1ebb42f-png",
+      "created_at": 1792836928418
     }
   ],
   "categories": [
-    "视觉设计",
-    "AI 图片",
-    "AI 短剧",
-    "影像创作"
+    "AICG原画",
+    "项目3D角色",
+    "AICG场景",
+    "AI3D角色",
+    "AICG角色展示"
   ],
   "about": null
 }
