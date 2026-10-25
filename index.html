@@ -129,7 +129,7 @@ function startInlineCat(i,el){makeInlineEdit(i,el,it=>it.category||'视觉设计
 function renderAdmin(){const sel=$('itemCategory');const old=sel.value;const cats=categories.filter(x=>x!=='全部');sel.innerHTML=[...new Set([...cats,...items.map(i=>i.category).filter(Boolean),'视觉设计'])].map(c=>'<option>'+esc(c)+'</option>').join('');if(old)sel.value=old;const list=$('adminList');if(!items.length){list.innerHTML='<div class="hint">暂时没有作品。</div>';return;}list.innerHTML=items.map((it,i)=>'<div class="admin-item"><'+(kind(it)==='video'?'video muted':'img')+' src="'+esc((it._pkey&&localPreviews[it._pkey])||it.media_url)+'" '+(kind(it)==='video'?'preload="metadata"':'')+'></'+(kind(it)==='video'?'video':'img')+'><div><strong>'+esc(title(it))+'</strong><small>'+esc(it.category||'视觉设计')+' · '+(kind(it)==='video'?'视频':'图片')+'</small></div><div class="row"><button data-edit="'+i+'">编辑</button><button data-delete="'+i+'">删除</button></div></div>').join('');list.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editItem(Number(b.dataset.edit)));list.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteItem(Number(b.dataset.delete)));}
 async function persist(){
   status('uploadStatus','正在保存到 GitHub…');
-  const payload={items,categories:categories.filter(c=>c!=='全部'),about,hidden:deletedKeys};
+  const payload={items:items.map(({_pkey,...rest})=>rest),categories:categories.filter(c=>c!=='全部'),about,hidden:deletedKeys};
   const content=b64Text(payload);
   try{
     const cur=await gh('GET','/contents/portfolio-data/site-data.json');
@@ -173,7 +173,9 @@ async function uploadFiles(files,fromHome){
       const isVideo=mime.startsWith('video/');
       const category=(fromHome&&activeCategory&&activeCategory!=='全部')?activeCategory:($('itemCategory').value||(isVideo?'AI 短剧':'视觉设计'));
       const name=(file.name||'').replace(/\.[^.]+$/,'')||'未命名作品';
-      inserted={id:crypto.randomUUID(),title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:path,created_at:Date.now()};
+      const pkey=crypto.randomUUID();
+      try{localPreviews[pkey]=URL.createObjectURL(file);}catch(_){}
+      inserted={id:crypto.randomUUID(),_pkey:pkey,title:$('itemTitle').value.trim()||name,description:$('itemDescription').value.trim(),category,media_type:isVideo?'video':'image',media_url:path,created_at:Date.now()};
       items.unshift(inserted);
       activeCategory=category;
       renderFilters();renderGrid();renderAdmin();
