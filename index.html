@@ -122,7 +122,7 @@ function setZoom(z){vZoom=Math.min(8,Math.max(1,z));if(vZoom===1){vPX=0;vPY=0;}a
 function stopViewerMedia(){const v=document.querySelector('#viewerStage video');if(v){try{const p=v.pause();if(p&&p.catch)p.catch(()=>{});v.currentTime=0;}catch(_){}}}
 function closeViewer(){stopViewerMedia();resetZoom();$('viewerContent').innerHTML='';hide('viewerModal');}
 function openViewer(it){if(!it)return;viewerList=visibleList();viewerIdx=Math.max(0,viewerList.indexOf(it));resetZoom();renderViewer();show('viewerModal');}
-function renderViewer(){const it=viewerList[viewerIdx];if(!it)return;stopViewerMedia();const u=(it._pkey&&localPreviews[it._pkey])||it.media_url;const isVid=kind(it)==='video';const media=isVid?'<video class="viewer-media" src="'+esc(u)+'" controls autoplay playsinline></video>':'<img id="vImg" src="'+esc(u)+'" alt="">';$('viewerContent').innerHTML=media;$('viewerTitle').textContent=title(it);$('viewerDescription').textContent=it.description||'';$('vFull').style.display=isVid?'grid':'none';$('vPrev').style.opacity=viewerIdx>0?1:.18;$('vNext').style.opacity=viewerIdx<viewerList.length-1?1:.18;resetZoom();}
+function renderViewer(){const it=viewerList[viewerIdx];if(!it)return;stopViewerMedia();const u=(it._pkey&&localPreviews[it._pkey])||it.media_url;const isVid=kind(it)==='video';const media=isVid?'<video class="viewer-media" src="'+esc(u)+'" controls autoplay playsinline draggable="false"></video>':'<img id="vImg" src="'+esc(u)+'" alt="" draggable="false" ondragstart="return false">';$('viewerContent').innerHTML=media;$('viewerTitle').textContent=title(it);$('viewerDescription').textContent=it.description||'';$('vFull').style.display=isVid?'grid':'none';$('vPrev').style.opacity=viewerIdx>0?1:.18;$('vNext').style.opacity=viewerIdx<viewerList.length-1?1:.18;resetZoom();}
 function nextViewer(){if(viewerIdx<viewerList.length-1){viewerIdx++;renderViewer();}}
 function prevViewer(){if(viewerIdx>0){viewerIdx--;renderViewer();}}
 function makeInlineEdit(i,el,getVal,setVal,cls){const it=items[i];if(!it)return;const inp=document.createElement('input');inp.className='inline-edit'+(cls||'');inp.setAttribute('autocomplete','off');inp.value=getVal(it);inp.onclick=e=>e.stopPropagation();const commit=()=>{const v=inp.value.trim();if(v&&v!==getVal(it)){setVal(it,v);persist().catch(err=>status('uploadStatus','保存失败：'+err.message,true));}else renderGrid();};inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();inp.blur();}else if(e.key==='Escape')renderGrid();};inp.onblur=commit;el.replaceWith(inp);inp.focus();inp.select();}
@@ -238,6 +238,8 @@ stage.addEventListener('mousedown',e=>{if(e.target.closest('button'))return;cons
 stage.addEventListener('mousemove',e=>{if(!pDrag)return;vPX=pOX+(e.clientX-pSX);vPY=pOY+(e.clientY-pSY);applyZoom();});
 window.addEventListener('mouseup',()=>{pDrag=false;const img=document.querySelector('#vImg');if(img)img.classList.remove('dragging');stage.style.cursor='grab';});
 document.addEventListener('keydown',e=>{if($('viewerModal').classList.contains('show')){if(e.key==='ArrowRight')nextViewer();else if(e.key==='ArrowLeft')prevViewer();else if(e.key==='Escape')closeViewer();}});
+document.addEventListener('contextmenu',e=>{if(e.target.closest('#viewerModal')||e.target.closest('#grid'))e.preventDefault();});
+document.addEventListener('dragstart',e=>{if(e.target.closest('#viewerModal')&&(e.target.tagName==='IMG'||e.target.tagName==='VIDEO'))e.preventDefault();});
 loadItems();
 </script></body></html>
 
