@@ -46,15 +46,6 @@
       "created_at": 1793004667978
     },
     {
-      "id": "5f0838fd-dfe6-47e2-8344-fc6d59fcb219",
-      "title": "维京战士蓄力技能",
-      "description": "",
-      "category": "角色展示界面",
-      "media_type": "video",
-      "media_url": "assets/portfolio/05f6a8b3-7cd2-4365-861e-259ea91c67e0-_1_.mp4",
-      "created_at": 1793004715739
-    },
-    {
       "id": "4f4e1424-7f93-4376-9cd1-9220b41ecbf5",
       "title": "jimeng-2026-10-09-1473-补全这个人物全身体，在给我一个三视图",
       "description": "",
@@ -62,6 +53,15 @@
       "media_type": "image",
       "media_url": "assets/portfolio/e3330c66-0747-453b-821b-0df4c0939d7e-jimeng-2026-10-09-1473-_.png",
       "created_at": 1793007381353
+    },
+    {
+      "id": "5f0838fd-dfe6-47e2-8344-fc6d59fcb219",
+      "title": "维京战士蓄力技能",
+      "description": "",
+      "category": "角色展示界面",
+      "media_type": "video",
+      "media_url": "assets/portfolio/05f6a8b3-7cd2-4365-861e-259ea91c67e0-_1_.mp4",
+      "created_at": 1793004715739
     },
     {
       "id": "2ff063a0-52dd-43b3-8072-f74d5628cdfd",
@@ -488,6 +488,7 @@
     "AI漫剧",
     "表情包制作"
   ],
+  "subgroups": {},
   "about": {
     "heroIntro": "你好，我叫程特立，这是我个人制作的作品网页，我是一名游戏数字美术创作者，擅长方向涵盖AIGC 原画美宣、3D角色制作、场景概念设计、UI 界面以及 AI 漫剧。这里收录了我的精选项目、视觉实验与创作过程。",
     "aboutText": "我相信好的视觉作品不仅是画面的呈现，更是想法、情绪与细节的共同表达。这个作品集会持续更新个人项目、影像实验与 AI 创作内容。欢迎浏览，也欢迎交流合作。",
