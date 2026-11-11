@@ -193,10 +193,13 @@ async function uploadFiles(files,fromHome){
     return;
   }
   const failed=[];
-  for(const {file,mime} of valid){
+  setUploadProgress(0);
+  for(let idx=0;idx<valid.length;idx++){
+    const {file,mime}=valid[idx];
     let inserted=null;
     try{
-      status('uploadStatus','正在上传：'+file.name+'（'+(file.size/1024/1024).toFixed(1)+' MB）');
+      status('uploadStatus','正在上传 第'+(idx+1)+'/'+valid.length+' 个：'+file.name+'（'+(file.size/1024/1024).toFixed(1)+' MB）');
+      setUploadProgress(valid.length>1?idx/valid.length*100:50);
       const safe=String(file.name||'media').replace(/[^\w.\-]+/g,'_');
       const path='assets/portfolio/'+crypto.randomUUID()+'-'+safe;
       const content=await fileToB64(file);
@@ -211,6 +214,7 @@ async function uploadFiles(files,fromHome){
       activeCategory=category;
       renderFilters();renderGrid();renderAdmin();
       await persist();
+      setUploadProgress((idx+1)/valid.length*100);
       status('uploadStatus','上传成功并已发布：'+name);
     }catch(error){
       if(inserted){const k=items.indexOf(inserted);if(k>-1)items.splice(k,1);renderFilters();renderGrid();renderAdmin();}
