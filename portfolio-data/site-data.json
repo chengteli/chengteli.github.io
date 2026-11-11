@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "id": "8a2bd525-e94b-4e00-ace2-a30bc56e7cac",
+      "title": "图片",
+      "description": "",
+      "category": "角色展示界面",
+      "media_type": "image",
+      "media_url": "assets/portfolio/f77494e8-77ea-4133-b867-3877fca26ffa-_.png",
+      "created_at": 1794383312010
+    },
+    {
       "id": "68be7b3a-d568-4926-8f83-053411ad4fd7",
       "title": "几分钟生成，还未修改状态",
       "description": "",
