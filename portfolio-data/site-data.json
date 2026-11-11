@@ -1,46 +1,10 @@
 {
   "items": [
     {
-      "id": "32b6a895-3efe-4efa-8fe9-52e44f9bfec9",
-      "title": "短剧：广州2087年--压缩版本",
-      "description": "",
-      "category": "AI漫剧",
-      "media_type": "video",
-      "media_url": "assets/portfolio/e98c66e3-dfd4-4e15-9613-8a778973249a-ca3404338cb2edb829e9ca9d988aeedd.mp4",
-      "created_at": 1792950409056
-    },
-    {
-      "id": "d58331b9-126c-4d08-803d-c259fd023553",
-      "title": "主角设计",
-      "description": "",
-      "category": "AI漫剧",
-      "media_type": "image",
-      "media_url": "assets/portfolio/c5701712-d9dc-48a3-935e-154a141f9558-2.png",
-      "created_at": 1792950430098
-    },
-    {
-      "id": "81ccb8c2-4a87-4fbc-87c1-a267b1644f1d",
-      "title": "工作流部分截图",
-      "description": "",
-      "category": "AI漫剧",
-      "media_type": "image",
-      "media_url": "assets/portfolio/0b79104b-fc6a-47ae-a5b0-53a1a577aecb-afbd8617db64b3a33b0078a25646239d.png",
-      "created_at": 1792950688198
-    },
-    {
-      "id": "e041075e-a3bc-4dae-8694-d15b8ecb27a5",
-      "title": "comfy ui工作流截图",
-      "description": "",
-      "category": "AI漫剧",
-      "media_type": "image",
-      "media_url": "assets/portfolio/2af4a89a-d7e0-49ec-b704-4f58bfe979cb-comfy_ui.png",
-      "created_at": 1794384017611
-    },
-    {
       "id": "32cc4f86-df79-4e8d-8f24-9e4090705112",
       "title": "盛宴",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/aeda3031-1c3d-4339-a490-dbbc65d88bd0-_.png",
       "created_at": 1794384907665
@@ -49,7 +13,7 @@
       "id": "7e96d8a8-889c-49a2-b818-b7a969571923",
       "title": "盛宴展示",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "video",
       "media_url": "assets/portfolio/50a4e390-e884-43d4-82d8-551ff9f5da09-_.mp4",
       "created_at": 1794384918222
@@ -58,7 +22,7 @@
       "id": "ea765548-f599-49fa-a839-b8a2191d2042",
       "title": "T pose造型",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/7af236d1-e199-4d68-933e-1be285152576-Meshy_AI_ba31b17b324fec049b31d358b9b838d2a2c74e3ba717b227d28e709c566c7cca.png",
       "created_at": 1794383345389
@@ -67,7 +31,7 @@
       "id": "8a2bd525-e94b-4e00-ace2-a30bc56e7cac",
       "title": "个人设计女孩",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/f77494e8-77ea-4133-b867-3877fca26ffa-_.png",
       "created_at": 1794383312010
@@ -76,7 +40,7 @@
       "id": "2423d1c1-0085-421b-b589-ee65cdb930c9",
       "title": "女孩展示",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "video",
       "media_url": "assets/portfolio/b4f9d3e4-496a-4120-ade8-cc6548e9ec72-_.mp4",
       "created_at": 1794383551885
@@ -139,7 +103,7 @@
       "id": "3eb34348-a846-4e4e-86a7-f40658eaca00",
       "title": "二次元写实卡通",
       "description": "",
-      "category": "工作项目3D角色",
+      "category": "项目3D角色",
       "media_type": "image",
       "media_url": "assets/portfolio/0b056064-066c-4d28-9b77-fa56dfc58f18-_.PNG",
       "created_at": 1793773497814
@@ -148,7 +112,7 @@
       "id": "bcced254-624d-40ac-a0dd-c83680efbfdf",
       "title": "暗黑卡通二次元",
       "description": "",
-      "category": "工作项目3D角色",
+      "category": "项目3D角色",
       "media_type": "image",
       "media_url": "assets/portfolio/fd3acb6d-1850-479c-b383-6af52f067395-_.png",
       "created_at": 1793773352464
@@ -157,7 +121,7 @@
       "id": "22ade6b8-7ec5-4342-8de5-7fd09f20720d",
       "title": "欧美写实",
       "description": "",
-      "category": "工作项目3D角色",
+      "category": "项目3D角色",
       "media_type": "image",
       "media_url": "assets/portfolio/983eaca7-1d68-41ca-94d9-3b0ea2a9ff15-_.png",
       "created_at": 1793773407860
@@ -166,7 +130,7 @@
       "id": "3264295c-cd97-4c53-bda6-417c19e62ab5",
       "title": "二次元1",
       "description": "",
-      "category": "工作项目3D角色",
+      "category": "项目3D角色",
       "media_type": "image",
       "media_url": "assets/portfolio/c7ec1054-9e11-4b35-ba6b-97bd24de9d2b-_1.png",
       "created_at": 1793773714463
@@ -175,7 +139,7 @@
       "id": "2d526ec4-ace2-4034-9204-566d127c8867",
       "title": "二次元2",
       "description": "",
-      "category": "工作项目3D角色",
+      "category": "项目3D角色",
       "media_type": "image",
       "media_url": "assets/portfolio/3c2a6f5a-7c88-4819-86fc-f7b728fa6105-_2.png",
       "created_at": 1793773723512
@@ -184,7 +148,7 @@
       "id": "1803e572-ad44-4777-884f-3b7149d4f219",
       "title": "二次元3",
       "description": "",
-      "category": "工作项目3D角色",
+      "category": "项目3D角色",
       "media_type": "image",
       "media_url": "assets/portfolio/d2456b4c-e6e7-49f3-94a2-3427414b1604-_3.png",
       "created_at": 1793773740374
@@ -193,7 +157,7 @@
       "id": "5b64fb7b-42f0-46f5-93fd-0fb03847534c",
       "title": "手绘次时代",
       "description": "",
-      "category": "工作项目3D角色",
+      "category": "项目3D角色",
       "media_type": "video",
       "media_url": "assets/portfolio/444ae1b1-1577-4d91-a1c5-5d64c29500f2-_.mp4",
       "created_at": 1793773445055
@@ -208,6 +172,15 @@
       "created_at": 1793006509056
     },
     {
+      "id": "e041075e-a3bc-4dae-8694-d15b8ecb27a5",
+      "title": "comfy ui工作流",
+      "description": "",
+      "category": "AI漫剧",
+      "media_type": "image",
+      "media_url": "assets/portfolio/2af4a89a-d7e0-49ec-b704-4f58bfe979cb-comfy_ui.png",
+      "created_at": 1794384017611
+    },
+    {
       "id": "5e8266f6-f39b-4683-a863-772f06e565bd",
       "title": "二次元男孩三视图",
       "description": "",
@@ -217,10 +190,19 @@
       "created_at": 1793006503108
     },
     {
+      "id": "32b6a895-3efe-4efa-8fe9-52e44f9bfec9",
+      "title": "短剧：广州2087年--压缩版本",
+      "description": "",
+      "category": "AI漫剧",
+      "media_type": "video",
+      "media_url": "assets/portfolio/e98c66e3-dfd4-4e15-9613-8a778973249a-ca3404338cb2edb829e9ca9d988aeedd.mp4",
+      "created_at": 1792950409056
+    },
+    {
       "id": "9b32ff44-d191-4ac3-896e-dd3c92848bf5",
       "title": "维京战士立绘",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/c22b6414-2ccc-4953-9ca4-ec66af1e5371-flova___202610180444_d5ce46.png",
       "created_at": 1793004667978
@@ -229,7 +211,7 @@
       "id": "5f0838fd-dfe6-47e2-8344-fc6d59fcb219",
       "title": "维京战士蓄力技能",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "video",
       "media_url": "assets/portfolio/05f6a8b3-7cd2-4365-861e-259ea91c67e0-_1_.mp4",
       "created_at": 1793004715739
@@ -242,6 +224,24 @@
       "media_type": "image",
       "media_url": "assets/portfolio/84f5b39a-1fe7-4ada-a775-0230b68f96eb-_1_.png",
       "created_at": 1792951001104
+    },
+    {
+      "id": "d58331b9-126c-4d08-803d-c259fd023553",
+      "title": "主角设计",
+      "description": "",
+      "category": "AI漫剧",
+      "media_type": "image",
+      "media_url": "assets/portfolio/c5701712-d9dc-48a3-935e-154a141f9558-2.png",
+      "created_at": 1792950430098
+    },
+    {
+      "id": "81ccb8c2-4a87-4fbc-87c1-a267b1644f1d",
+      "title": "工作流部分截图",
+      "description": "",
+      "category": "AI漫剧",
+      "media_type": "image",
+      "media_url": "assets/portfolio/0b79104b-fc6a-47ae-a5b0-53a1a577aecb-afbd8617db64b3a33b0078a25646239d.png",
+      "created_at": 1792950688198
     },
     {
       "id": "7a639193-f39f-4e4d-892d-d5f247997c40",
@@ -301,7 +301,7 @@
       "id": "4e4c15ce-7b1f-473f-a693-a6301c614632",
       "title": "竹林剑客意境图",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/c20eedeb-3224-47bc-a62f-b7d6698fbbf3-flova___202610180408_ec5fee.png",
       "created_at": 1792890761992
@@ -319,7 +319,7 @@
       "id": "39bc861b-3c49-4193-acbd-1c6dca7de9d6",
       "title": "骑虎美女意境图",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/b9611d99-f98b-450b-a676-79d18a43b373-flova___202610180424_c65b71.png",
       "created_at": 1792890754189
@@ -328,7 +328,7 @@
       "id": "963e39b5-a563-4ba5-9b51-09d6e69e0560",
       "title": "剑客和骑虎美女",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "video",
       "media_url": "assets/portfolio/ae9e376e-6aea-4e59-b9e9-d59d9f162849-HighResBaseline_4plus6_Dense_SolTau08_00001_p85-audio_bxpko_1792343742.mp4",
       "created_at": 1792890730298
@@ -508,7 +508,7 @@
       "id": "6caca68e-615b-42a2-8178-c191b0058239",
       "title": "女孩三视图",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/6e55d1c5-ca92-44fa-97ca-436695e2f6ff-_.png",
       "created_at": 1792862294604
@@ -526,7 +526,7 @@
       "id": "c5df98ac-20c1-4c51-9dee-028d5cf8bcbc",
       "title": "二次元风格",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/1d3574ad-db1a-46cb-ba80-65c1817f9d6c-huaban-6703931740.png",
       "created_at": 1792862265298
@@ -535,7 +535,7 @@
       "id": "b7ca7c6a-22b9-4a6c-838b-377e4969f390",
       "title": "3D效果",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/188fd938-ca7f-4ae2-8e7b-43ca64ae602d-3D_.png",
       "created_at": 1792862260291
@@ -544,7 +544,7 @@
       "id": "aa1b0c58-57c9-4e04-a864-67b6b63451ec",
       "title": "3D写实效果",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/df5a1acf-308b-4a27-a576-aab93e349e0b-3D_.png",
       "created_at": 1792862255033
@@ -553,7 +553,7 @@
       "id": "14862f8e-0046-4ac3-9ad4-f0069a65f24f",
       "title": "角色展示画面",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "video",
       "media_url": "assets/portfolio/7fab6162-6bb3-406c-a334-7ba097f86110-_.mp4",
       "created_at": 1792862288412
@@ -580,7 +580,7 @@
       "id": "d8d52360-504f-4f6d-9706-c9b2ff2a7a1a",
       "title": "带耳机女孩三视图",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "image",
       "media_url": "assets/portfolio/b21037c4-3c88-4dd1-bf62-ede7fb37b554-_1_.png",
       "created_at": 1792857103371
@@ -589,7 +589,7 @@
       "id": "370e2971-391f-43e9-be29-ef90c3147f07",
       "title": "带耳机女孩展示",
       "description": "",
-      "category": "角色展示界面",
+      "category": "角色设计与展示界面",
       "media_type": "video",
       "media_url": "assets/portfolio/dbe9367a-5d79-4033-9687-442ea4d9f173-3342.mp4",
       "created_at": 1792857153437
@@ -597,11 +597,11 @@
   ],
   "categories": [
     "AIGC角色原画和美渲概念合集",
-    "工作项目3D角色",
+    "项目3D角色",
     "ai3D角色制作",
     "AIGC场景原画和概念",
     "游戏demo",
-    "角色展示界面",
+    "角色设计与展示界面",
     "UI设计界面",
     "AI漫剧"
   ],
