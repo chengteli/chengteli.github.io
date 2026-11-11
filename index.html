@@ -215,7 +215,8 @@ async function uploadFiles(files,fromHome){
     }catch(error){
       if(inserted){const k=items.indexOf(inserted);if(k>-1)items.splice(k,1);renderFilters();renderGrid();renderAdmin();}
       const msg=String(error.message||error);
-      failed.push(file.name+': '+(/(401|Bad credentials)/.test(msg)?'授权码已失效，请重新登录粘贴新的 GitHub 授权码':msg));
+      const tip=/(401|Bad credentials)/.test(msg)?'授权码已失效，请重新登录粘贴新的 GitHub 授权码':(/Failed to fetch|NetworkError|Load failed|ERR_/i.test(msg)?'网络连接中断，请检查代理/网络后重试':msg);
+      failed.push(file.name+': '+tip);
     }
   }
   $('itemTitle').value='';$('itemDescription').value='';
