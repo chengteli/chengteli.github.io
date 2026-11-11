@@ -73,7 +73,7 @@ document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if
 function status(id,msg,error=false){const target=$(id);if(target){target.textContent=msg;target.classList.toggle('error',error);}if(id==='uploadStatus'){const home=$('homeUploadStatus');if(home){home.textContent=msg;home.classList.toggle('error',error);home.classList.toggle('hidden',!msg);}}}
 let toastTimer=null;
 function toast(msg,ok=true){const t=$('toast');if(!t)return;t.textContent=msg;t.className='show '+(ok?'ok':'err');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.className='';},2600);}
-async function gh(method,path,body){const headers={'Authorization':'Bearer '+adminToken,'Accept':'application/vnd.github+json'};const opt={method,headers};if(body!==undefined){headers['Content-Type']='application/json';opt.body=JSON.stringify(body);}const r=await fetch(GH_API+path,opt);let d=null;try{d=await r.json()}catch(_){}if(!r.ok){if(r.status===401)throw new Error('授权码已失效或无效，请重新登录粘贴新的 GitHub 授权码');throw new Error((d&&d.message)||('GitHub 请求失败 ('+r.status+')'));}return d;}
+async function gh(method,path,body){const headers={'Authorization':'Bearer '+adminToken,'Accept':'application/vnd.github+json'};const opt={method,headers};if(body!==undefined){headers['Content-Type']='application/json';opt.body=JSON.stringify(body);}const r=await fetch(GH_API+path,opt);let d=null;try{d=await r.json()}catch(_){}if(!r.ok){if(r.status===401)throw new Error('授权码已失效或无效，请重新登录粘贴新的 GitHub 授权码');const em=new Error('GitHub 错误 '+r.status+'：'+((d&&d.message)||('请求被拒绝 ('+r.status+')')));em.status=r.status;throw em;}return d;}
 function b64Text(obj){return btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,2))));}
 async function fileToB64(file){const buf=await file.arrayBuffer();const bytes=new Uint8Array(buf);let bin='',chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));}return btoa(bin);}
 function setItems(d){
@@ -203,6 +203,7 @@ async function uploadFiles(files,fromHome){
       const safe=String(file.name||'media').replace(/[^\w.\-]+/g,'_');
       const path='assets/portfolio/'+crypto.randomUUID()+'-'+safe;
       const content=await fileToB64(file);
+      let stage='上传文件';
       await gh('PUT','/contents/'+path,{message:'add '+file.name,content});
       const isVideo=mime.startsWith('video/');
       const category=(fromHome&&activeCategory&&activeCategory!=='全部')?activeCategory:($('itemCategory').value||(isVideo?'AI 短剧':'视觉设计'));
@@ -213,14 +214,16 @@ async function uploadFiles(files,fromHome){
       items.unshift(inserted);
       activeCategory=category;
       renderFilters();renderGrid();renderAdmin();
+      stage='保存清单';
       await persist();
       setUploadProgress((idx+1)/valid.length*100);
       status('uploadStatus','上传成功并已发布：'+name);
     }catch(error){
       if(inserted){const k=items.indexOf(inserted);if(k>-1)items.splice(k,1);renderFilters();renderGrid();renderAdmin();}
-      const msg=String(error.message||error);
-      const tip=/(401|Bad credentials)/.test(msg)?'授权码已失效，请重新登录粘贴新的 GitHub 授权码':(/Failed to fetch|NetworkError|Load failed|ERR_/i.test(msg)?'网络连接中断，请检查代理/网络后重试':msg);
-      failed.push(file.name+': '+tip);
+      const raw=String(error.message||error);
+      const en=error&&error.name?error.name:'';
+      const tip=/(401|Bad credentials)/.test(raw)?'授权码已失效，请重新登录粘贴新的 GitHub 授权码':(/Failed to fetch|NetworkError|Load failed|ERR_/i.test(raw)?'网络连接中断（'+(en||'网络')+'），请检查代理/网络后重试':raw);
+      failed.push(file.name+'｜'+stage+'：'+tip);
     }
   }
   $('itemTitle').value='';$('itemDescription').value='';
