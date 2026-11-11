@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "id": "c7d3f612-34d9-4e33-9583-5605da8b099d",
+      "title": "角色设计",
+      "description": "",
+      "category": "AIGC原画和美渲概念合集",
+      "media_type": "image",
+      "media_url": "assets/portfolio/2fc525f5-08bf-4a09-826d-e7713f749b28-_.png",
+      "created_at": 1794381633926
+    },
+    {
       "id": "2047e8a3-5c5f-4004-8fcb-20f78f04c28d",
       "title": "展示效果",
       "description": "",
