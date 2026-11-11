@@ -163,8 +163,19 @@ async function persist(){
   const payload={items:items.map(({_pkey,...rest})=>rest),categories:categories.filter(c=>c!=='全部'),subgroups,about,hidden:deletedKeys};
   const content=b64Text(payload);
   try{
-    const cur=await gh('GET','/contents/portfolio-data/site-data.json');
-    await gh('PUT','/contents/portfolio-data/site-data.json',{message:'update portfolio data',content,sha:cur.sha});
+    let saved=false,lastErr=null;
+    for(let attempt=0;attempt<3&&!saved;attempt++){
+      try{
+        const cur=await gh('GET','/contents/portfolio-data/site-data.json');
+        await gh('PUT','/contents/portfolio-data/site-data.json',{message:'update portfolio data',content,sha:cur.sha});
+        saved=true;
+      }catch(err){
+        lastErr=err;
+        if(err.status===409&&attempt<2){await new Promise(r=>setTimeout(r,700));continue;}
+        throw err;
+      }
+    }
+    if(!saved)throw lastErr;
     try{localStorage.setItem('portfolio_cache',JSON.stringify(payload));}catch(_){}
     renderFilters();renderGrid();renderAbout();refreshHomeDrop();if(adminToken)renderAdmin();
     status('uploadStatus','已保存到 GitHub。');
@@ -196,14 +207,13 @@ async function uploadFiles(files,fromHome){
   setUploadProgress(0);
   for(let idx=0;idx<valid.length;idx++){
     const {file,mime}=valid[idx];
-    let inserted=null;
+    let inserted=null,stageName='上传文件';
     try{
       status('uploadStatus','正在上传 第'+(idx+1)+'/'+valid.length+' 个：'+file.name+'（'+(file.size/1024/1024).toFixed(1)+' MB）');
       setUploadProgress(valid.length>1?idx/valid.length*100:50);
       const safe=String(file.name||'media').replace(/[^\w.\-]+/g,'_');
       const path='assets/portfolio/'+crypto.randomUUID()+'-'+safe;
       const content=await fileToB64(file);
-      let stage='上传文件';
       await gh('PUT','/contents/'+path,{message:'add '+file.name,content});
       const isVideo=mime.startsWith('video/');
       const category=(fromHome&&activeCategory&&activeCategory!=='全部')?activeCategory:($('itemCategory').value||(isVideo?'AI 短剧':'视觉设计'));
@@ -214,7 +224,7 @@ async function uploadFiles(files,fromHome){
       items.unshift(inserted);
       activeCategory=category;
       renderFilters();renderGrid();renderAdmin();
-      stage='保存清单';
+      stageName='保存清单';
       await persist();
       setUploadProgress((idx+1)/valid.length*100);
       status('uploadStatus','上传成功并已发布：'+name);
@@ -223,7 +233,7 @@ async function uploadFiles(files,fromHome){
       const raw=String(error.message||error);
       const en=error&&error.name?error.name:'';
       const tip=/(401|Bad credentials)/.test(raw)?'授权码已失效，请重新登录粘贴新的 GitHub 授权码':(/Failed to fetch|NetworkError|Load failed|ERR_/i.test(raw)?'网络连接中断（'+(en||'网络')+'），请检查代理/网络后重试':raw);
-      failed.push(file.name+'｜'+stage+'：'+tip);
+      failed.push(file.name+'｜'+stageName+'：'+tip);
     }
   }
   $('itemTitle').value='';$('itemDescription').value='';
