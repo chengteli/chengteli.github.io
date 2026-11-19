@@ -113,6 +113,8 @@ async function loadItems(forceFromServer){
       }catch(fallbackError){console.warn('公共作品服务暂不可达，使用内置默认数据。',e,fallbackError);setItems(DEFAULT_DATA);}
     }
   }
+  const firstCat=categories.find(c=>c!=='全部');
+  if((activeCategory==='全部'||!categories.includes(activeCategory))&&firstCat){activeCategory=firstCat;activeSub='全部';}
   renderFilters();renderGrid();renderAbout();refreshHomeDrop();if(adminToken)renderAdmin();
 }
 function deriveCategories(){const a=[...new Set(items.map(i=>i.category).filter(Boolean))];return ['全部',...a,'视觉设计','AI 图片','AI 短剧','影像创作'].filter((v,i,x)=>x.indexOf(v)===i);}
